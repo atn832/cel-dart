@@ -6,3 +6,6 @@ antlr4-parse FirestoreRules.g4 rulesDefinition -tree -tokens -lexer 2_service.tx
 echo 
 echo 3
 antlr4-parse FirestoreRules.g4 rulesDefinition -tree -tokens -trace 3_empty_match.txt
+echo 
+echo 4
+antlr4-parse FirestoreRules.g4 rulesDefinition -tree -tokens -lexer -trace 4_match.txt
