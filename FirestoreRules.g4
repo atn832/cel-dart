@@ -12,7 +12,7 @@ pathSegment: '/' (NAME|variable);
 NAME: [a-z0-9]+;
 variable: '{' NAME '=**'? '}';
 STRING: '\'' .*? '\'';
-CES_EXPRESSION: 'if' (~'\n')+;
+CES_EXPRESSION: 'if' (~'\n')+ | ('true'|'false') ';';
 
 WHITESPACE: (' ' | '\t' | '\r' | '\n')+ -> skip;
 COMMENT: '//' (~'\n')* -> skip;

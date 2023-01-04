@@ -1,0 +1,7 @@
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // For attribute-based access control, check for an admin claim
+    allow write: false;
+    allow read: true;
+  }
+}
