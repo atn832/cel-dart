@@ -2,6 +2,39 @@ import 'package:antlr4/antlr4.dart';
 import 'package:firestore_rules/FirestoreRulesLexer.dart';
 import 'package:firestore_rules/FirestoreRulesParser.dart';
 
+bool match(ParserRuleContext pathRule, String concreteDocumentPath) {
+  print('matching ${pathRule.text} against $concreteDocumentPath');
+  Map<String, String> variables = {};
+  final concreteSegments = concreteDocumentPath.split('/');
+  if (concreteSegments.length != pathRule.childCount) {
+    return false;
+  }
+  for (var i = 0; i < pathRule.childCount; i++) {
+    final segment = pathRule.getChild(i)!;
+    final concreteSegment = concreteSegments[i];
+    final nameOrVariable = segment.getChild(1)!;
+    final text = nameOrVariable.text;
+    if (nameOrVariable is TerminalNode) {
+      // Token ==> NAME.
+      print('name $text');
+      if (text != concreteSegment) {
+        return false;
+      }
+    } else {
+      // Rule ==> VARIABLE.
+      // No check. We populate the map.
+      print('variable $text');
+      final variable = nameOrVariable;
+      // This is the name without the { }.
+      final variableName = variable.getChild(1)!.text!;
+      variables[variableName] = concreteSegment;
+    }
+    // final type = nameOrVariable.symbol.type == print(nameOrVariable.text);
+  }
+  print(variables);
+  return true;
+}
+
 class TreeShapeListener implements ParseTreeListener {
   TreeShapeListener(this.ruleNames, this.tokenTypeNames);
 
@@ -20,6 +53,9 @@ class TreeShapeListener implements ParseTreeListener {
         continue;
       }
       print('Token ${tokenTypeNames[s.type - 1]} ${s.text}');
+    }
+    if (ctx.ruleIndex == RULE_path) {
+      print(match(ctx, 'databases/mydb/documents'));
     }
   }
 
@@ -45,4 +81,6 @@ void main(List<String> args) async {
   final tree = parser.rulesDefinition();
   ParseTreeWalker.DEFAULT
       .walk(TreeShapeListener(parser.ruleNames, lexer.ruleNames), tree);
+
+  // Given a concrete path, find the first match whose path pattern matches.
 }
