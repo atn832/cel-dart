@@ -29,7 +29,6 @@ bool match(ParserRuleContext pathRule, String concreteDocumentPath) {
       final variableName = variable.getChild(1)!.text!;
       variables[variableName] = concreteSegment;
     }
-    // final type = nameOrVariable.symbol.type == print(nameOrVariable.text);
   }
   print(variables);
   return true;
@@ -56,6 +55,7 @@ class TreeShapeListener implements ParseTreeListener {
     }
     if (ctx.ruleIndex == RULE_path) {
       print(match(ctx, 'databases/mydb/documents'));
+      print(match(ctx, 'users/abcd'));
     }
   }
 
