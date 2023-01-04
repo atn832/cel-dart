@@ -1,0 +1,10 @@
+// From https://firebase.google.com/docs/rules/rules-behavior.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /cities/{city} {
+      // Explicitly define rules for the 'landmarks' subcollection
+      match /landmarks/{landmark} {
+      }
+    }
+  }
+}
