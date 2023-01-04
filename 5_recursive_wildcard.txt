@@ -1,0 +1,9 @@
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Matches any document in the cities collection as well as any document
+    // in a subcollection.
+    match /cities/{document=**} {
+      allow read, write: if <condition>;
+    }
+  }
+}

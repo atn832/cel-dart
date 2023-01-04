@@ -9,3 +9,6 @@ antlr4-parse FirestoreRules.g4 rulesDefinition -tree -tokens -trace 3_empty_matc
 echo 
 echo 4
 antlr4-parse FirestoreRules.g4 rulesDefinition -tree -tokens -lexer -trace 4_match.txt
+# echo 
+# echo 5
+# antlr4-parse FirestoreRules.g4 rulesDefinition -tree -tokens -lexer -trace 5_recursive_wildcard.txt
