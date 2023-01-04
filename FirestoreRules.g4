@@ -7,10 +7,10 @@ allow: 'allow' ACCESS (',' ACCESS)* ':' CES_EXPRESSION;
 
 ACCESS: 'read' | 'write';
 path: pathSegment+;
-pathSegment: '/' (NAME|VARIABLE);
+pathSegment: '/' (NAME|variable);
 // TODO: support underscores etc.
 NAME: [a-z0-9]+;
-VARIABLE: '{' NAME '}';
+variable: '{' NAME '}';
 STRING: '\'' .*? '\'';
 CES_EXPRESSION: 'if' (~'\n')+;
 
