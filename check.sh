@@ -1,0 +1,1 @@
+antlr4-parse FirestoreRules.g4 service -tree sample_rules_version.txt
