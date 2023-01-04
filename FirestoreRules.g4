@@ -10,7 +10,7 @@ path: pathSegment+;
 pathSegment: '/' (NAME|variable);
 // TODO: support underscores etc.
 NAME: [a-z0-9]+;
-variable: '{' NAME '}';
+variable: '{' NAME '=**'? '}';
 STRING: '\'' .*? '\'';
 CES_EXPRESSION: 'if' (~'\n')+;
 
