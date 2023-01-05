@@ -168,5 +168,11 @@ void main() {
         expect(p.evaluate({'value': 2}), false);
       });
     });
+    test('+', () {
+      final environment = Environment();
+      final ast = environment.compile('1 + 1');
+      final p = Program(environment, ast, StdLibrary().programOptions);
+      expect(p.evaluate({}), 2);
+    });
   });
 }

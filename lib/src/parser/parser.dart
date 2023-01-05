@@ -75,6 +75,7 @@ Expr visit(ParseTree tree) {
   if (tree is IdentOrGlobalCallContext) {
     return visitIdentOrGlobalCall(tree);
   }
+
   throw UnsupportedError(
       'Unknown parse element ${tree.text} of type ${tree.runtimeType}');
 }
@@ -155,7 +156,7 @@ Expr visitConditionalAnd(ConditionalAndContext tree) {
 Expr visitCalc(CalcContext tree) {
   return CallExpr(
       function: findOperator(tree.op!.text!),
-      args: [visit(tree.getChild(0)!), visit(tree.getChild(1)!)]);
+      args: [visit(tree.calc(0)!), visit(tree.calc(1)!)]);
 }
 
 Expr visitUnary(UnaryContext tree) {
