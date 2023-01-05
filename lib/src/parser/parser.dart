@@ -55,12 +55,19 @@ Expr visit(ParseTree tree) {
   if (tree is BoolFalseContext) {
     return visitBoolFalse(tree);
   }
+  if (tree is NullContext) {
+    return visitNull(tree);
+  }
   if (tree is IdentOrGlobalCallContext) {
     return visitIdentOrGlobalCall(tree);
   }
   print('Unknown parse element ${tree.text}');
   print(tree.runtimeType);
   return Expr();
+}
+
+Expr visitNull(NullContext tree) {
+  return NullLiteralExpr();
 }
 
 Expr visitBoolTrue(BoolTrueContext tree) {

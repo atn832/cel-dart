@@ -16,8 +16,12 @@ void main() {
     });
 
     test('Booleans', () {
-      expect(p.parse("true"), BoolLiteralExpr()..value = true);
-      expect(p.parse("false"), BoolLiteralExpr()..value = false);
+      expect(p.parse('true'), BoolLiteralExpr()..value = true);
+      expect(p.parse('false'), BoolLiteralExpr()..value = false);
+    });
+
+    test('Null', () {
+      expect(p.parse(('null')), NullLiteralExpr());
     });
 
     test('ConditionalOr', () {
