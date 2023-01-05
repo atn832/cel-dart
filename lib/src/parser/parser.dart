@@ -49,12 +49,26 @@ Expr visit(ParseTree tree) {
   if (tree is StringContext) {
     return visitString(tree);
   }
+  if (tree is BoolTrueContext) {
+    return visitBoolTrue(tree);
+  }
+  if (tree is BoolFalseContext) {
+    return visitBoolFalse(tree);
+  }
   if (tree is IdentOrGlobalCallContext) {
     return visitIdentOrGlobalCall(tree);
   }
   print('Unknown parse element ${tree.text}');
   print(tree.runtimeType);
   return Expr();
+}
+
+Expr visitBoolTrue(BoolTrueContext tree) {
+  return BoolLiteralExpr()..value = true;
+}
+
+Expr visitBoolFalse(BoolFalseContext tree) {
+  return BoolLiteralExpr()..value = false;
 }
 
 Expr visitStart(StartContext c) {

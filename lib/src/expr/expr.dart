@@ -36,6 +36,16 @@ class StringLiteralExpr extends Equatable implements Expr {
   bool? get stringify => true;
 }
 
+class BoolLiteralExpr extends Equatable implements Expr {
+  late final bool value;
+
+  @override
+  List<Object?> get props => [value];
+
+  @override
+  bool? get stringify => true;
+}
+
 class IdentExpr extends Equatable implements Expr {
   late final String name;
 

@@ -15,10 +15,9 @@ void main() {
       expect(expression, StringLiteralExpr()..value = 'Hello World!');
     });
 
-    // TODO: Support BoolTrueContext.
     test('Booleans', () {
-      final expression = p.parse("true");
-      print(expression);
+      expect(p.parse("true"), BoolLiteralExpr()..value = true);
+      expect(p.parse("false"), BoolLiteralExpr()..value = false);
     });
 
     test('ConditionalOr', () {
