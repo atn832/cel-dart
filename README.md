@@ -25,8 +25,8 @@ The main difference besides being incomplete is that cel-go defines the `Expr` a
 
 | Feature | Supported |
 | --- | --- |
-| Null, Bool, String, Int (including Hex) Literals | ✅ |
-| Double, Bytes, UInt Literals | ❌ |
+| Null, Bool, String, Int (including Hex), Double Literals | ✅ |
+| Bytes, UInt Literals | ❌ |
 | Operators | See table below |
 | Parses to Expr Protobuf | ❌ |
 

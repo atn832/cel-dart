@@ -60,6 +60,9 @@ Expr visit(ParseTree tree) {
   if (tree is IntContext) {
     return visitInt(tree);
   }
+  if (tree is DoubleContext) {
+    return visitDouble(tree);
+  }
   if (tree is NullContext) {
     return visitNull(tree);
   }
@@ -68,6 +71,10 @@ Expr visit(ParseTree tree) {
   }
   throw UnsupportedError(
       'Unknown parse element ${tree.text} of type ${tree.runtimeType}');
+}
+
+Expr visitDouble(DoubleContext tree) {
+  return DoubleLiteralExpr((double.parse(tree.text)));
 }
 
 Expr visitInt(IntContext tree) {

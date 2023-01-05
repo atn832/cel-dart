@@ -56,6 +56,19 @@ class IntLiteralExpr extends Equatable implements ConstExpression {
   bool? get stringify => true;
 }
 
+class DoubleLiteralExpr extends Equatable implements ConstExpression {
+  DoubleLiteralExpr(this.value);
+
+  @override
+  final double value;
+
+  @override
+  List<Object?> get props => [value];
+
+  @override
+  bool? get stringify => true;
+}
+
 abstract class ConstExpression extends Expr {
   dynamic get value;
 }
