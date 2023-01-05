@@ -36,14 +36,17 @@ class Planner {
     final functionName = expression.function;
     // Skip target, p.resolveFunction.
     final interpretableArguments = expression.args.map((e) => plan(e)).toList();
+    if (functionName == Operators.LogicalAnd.name) {
+      return planCallLogicalAnd(expression, interpretableArguments);
+    }
+    if (functionName == Operators.LogicalOr.name) {
+      return planCallLogicalOr(expression, interpretableArguments);
+    }
     if (functionName == Operators.Equals.name) {
       return planCallEqual(expression, interpretableArguments);
     }
     if (functionName == Operators.NotEquals.name) {
       return planCallNotEqual(expression, interpretableArguments);
-    }
-    if (functionName == Operators.LogicalAnd.name) {
-      return planCallLogicalAnd(expression, interpretableArguments);
     }
     throw UnsupportedError("Function $functionName");
   }
@@ -51,6 +54,12 @@ class Planner {
   Interpretable planCallLogicalAnd(
       CallExpr expression, List<Interpretable> interpretableArguments) {
     return LogicalAndInterpretable(
+        interpretableArguments[0], interpretableArguments[1]);
+  }
+
+  Interpretable planCallLogicalOr(
+      CallExpr expression, List<Interpretable> interpretableArguments) {
+    return LogicalOrInterpretable(
         interpretableArguments[0], interpretableArguments[1]);
   }
 

@@ -70,3 +70,16 @@ class LogicalAndInterpretable implements Interpretable {
         rightHandSide.evaluate(activation);
   }
 }
+
+class LogicalOrInterpretable implements Interpretable {
+  LogicalOrInterpretable(this.leftHandSide, this.rightHandSide);
+
+  final Interpretable leftHandSide;
+  final Interpretable rightHandSide;
+
+  @override
+  evaluate(Activation activation) {
+    return leftHandSide.evaluate(activation) ||
+        rightHandSide.evaluate(activation);
+  }
+}

@@ -37,6 +37,17 @@ class StringLiteralExpr extends Equatable implements ConstExpression {
   bool? get stringify => true;
 }
 
+class IntLiteralExpr extends Equatable implements ConstExpression {
+  @override
+  late final int value;
+
+  @override
+  List<Object?> get props => [value];
+
+  @override
+  bool? get stringify => true;
+}
+
 abstract class ConstExpression extends Expr {
   dynamic get value;
 }

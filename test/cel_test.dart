@@ -17,6 +17,12 @@ void main() {
       expect(p.parse('false'), BoolLiteralExpr()..value = false);
     });
 
+    test('Int', () {
+      expect(p.parse('13'), IntLiteralExpr()..value = 13);
+      expect(p.parse('-4'), IntLiteralExpr()..value = -4);
+      expect(p.parse('0xa'), IntLiteralExpr()..value = 10);
+    });
+
     test('Null', () {
       expect(p.parse(('null')), NullLiteralExpr());
     });
@@ -148,6 +154,12 @@ void main() {
             }
           }),
           true);
+    });
+    test('LogicalOr', () {
+      final environment = Environment();
+      final ast = environment.compile('0 == 1 || true');
+      final p = Program(environment, ast);
+      expect(p.evaluate({}), true);
     });
   });
 }

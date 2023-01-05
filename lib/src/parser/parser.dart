@@ -57,15 +57,21 @@ Expr visit(ParseTree tree) {
   if (tree is BoolFalseContext) {
     return visitBoolFalse(tree);
   }
+  if (tree is IntContext) {
+    return visitInt(tree);
+  }
   if (tree is NullContext) {
     return visitNull(tree);
   }
   if (tree is IdentOrGlobalCallContext) {
     return visitIdentOrGlobalCall(tree);
   }
-  print('Unknown parse element ${tree.text}');
-  print(tree.runtimeType);
-  return Expr();
+  throw UnsupportedError(
+      'Unknown parse element ${tree.text} of type ${tree.runtimeType}');
+}
+
+Expr visitInt(IntContext tree) {
+  return IntLiteralExpr()..value = int.parse(tree.text);
 }
 
 Expr visitNull(NullContext tree) {
