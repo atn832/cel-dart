@@ -4,5 +4,4 @@
 library cel;
 
 export 'src/cel_base.dart';
-
-// TODO: Export any libraries intended for clients of this package.
+export 'src/parser/parser.dart';
