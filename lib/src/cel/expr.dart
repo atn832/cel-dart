@@ -4,9 +4,11 @@ class Expr {}
 
 // Based on https://github.com/googleapis/googleapis/blob/870a5ed7e141b4faf70e2a0858854e9b5bb18612/google/api/expr/v1beta1/expr.proto#L89-L99.
 class CallExpr extends Equatable implements Expr {
-  late final String function;
-  late final Expr? target;
-  late final List<Expr> args;
+  CallExpr({required this.function, this.target, required this.args});
+
+  final String function;
+  final Expr? target;
+  final List<Expr> args;
 
   @override
   List<Object?> get props => [function, target, args];
@@ -16,8 +18,10 @@ class CallExpr extends Equatable implements Expr {
 }
 
 class SelectExpr extends Equatable implements Expr {
-  late final Expr operand;
-  late final String field;
+  SelectExpr({required this.operand, required this.field});
+
+  final Expr operand;
+  final String field;
 
   @override
   List<Object?> get props => [operand, field];
@@ -27,8 +31,10 @@ class SelectExpr extends Equatable implements Expr {
 }
 
 class StringLiteralExpr extends Equatable implements ConstExpression {
+  StringLiteralExpr(this.value);
+
   @override
-  late final String value;
+  final String value;
 
   @override
   List<Object?> get props => [value];
@@ -38,8 +44,10 @@ class StringLiteralExpr extends Equatable implements ConstExpression {
 }
 
 class IntLiteralExpr extends Equatable implements ConstExpression {
+  IntLiteralExpr(this.value);
+
   @override
-  late final int value;
+  final int value;
 
   @override
   List<Object?> get props => [value];
@@ -53,8 +61,10 @@ abstract class ConstExpression extends Expr {
 }
 
 class BoolLiteralExpr extends Equatable implements ConstExpression {
+  BoolLiteralExpr(this.value);
+
   @override
-  late final bool value;
+  final bool value;
 
   @override
   List<Object?> get props => [value];
@@ -75,7 +85,9 @@ class NullLiteralExpr extends Equatable implements ConstExpression {
 }
 
 class IdentExpr extends Equatable implements Expr {
-  late final String name;
+  IdentExpr(this.name);
+
+  final String name;
 
   @override
   List<Object?> get props => [name];

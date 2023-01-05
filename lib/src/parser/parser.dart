@@ -71,7 +71,7 @@ Expr visit(ParseTree tree) {
 }
 
 Expr visitInt(IntContext tree) {
-  return IntLiteralExpr()..value = int.parse(tree.text);
+  return IntLiteralExpr((int.parse(tree.text)));
 }
 
 Expr visitNull(NullContext tree) {
@@ -79,11 +79,11 @@ Expr visitNull(NullContext tree) {
 }
 
 Expr visitBoolTrue(BoolTrueContext tree) {
-  return BoolLiteralExpr()..value = true;
+  return BoolLiteralExpr((true));
 }
 
 Expr visitBoolFalse(BoolFalseContext tree) {
-  return BoolLiteralExpr()..value = false;
+  return BoolLiteralExpr((false));
 }
 
 Expr visitStart(StartContext c) {
@@ -100,10 +100,7 @@ Expr visitExpr(ExprContext c) {
   // TODO: convert op using the same mapping as https://github.com/google/cel-go/blob/master/common/operators/operators.go.
   // TODO: support `e ? e1 : e2`. See https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/parser/gen/CEL.g4#L25
   // and https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/parser/parser.go#L459.
-  return CallExpr()
-    ..function = c.op!.text!
-    ..target = null
-    ..args = [ifTrue, ifFalse];
+  return CallExpr(function: c.op!.text!, target: null, args: [ifTrue, ifFalse]);
 }
 
 Expr visitConditionalOr(ConditionalOrContext tree) {
@@ -117,14 +114,11 @@ Expr conditionalOrFromConditionalAndContexts(
   if (conditionalAndContexts.length == 1) {
     return visit(conditionalAndContexts.first);
   }
-  return CallExpr()
-    ..function = function
-    ..target = null
-    ..args = [
-      visit(conditionalAndContexts.first),
-      conditionalOrFromConditionalAndContexts(
-          function, conditionalAndContexts.sublist(1))
-    ];
+  return CallExpr(function: function, args: [
+    visit(conditionalAndContexts.first),
+    conditionalOrFromConditionalAndContexts(
+        function, conditionalAndContexts.sublist(1))
+  ]);
 }
 
 Expr visitConditionalAnd(ConditionalAndContext tree) {
@@ -133,14 +127,13 @@ Expr visitConditionalAnd(ConditionalAndContext tree) {
 }
 
 Expr visitCalc(CalcContext tree) {
-  return CallExpr()
-    ..function = findOperator(tree.op!.text!)
-    ..target = null
-    ..args = [visit(tree.getChild(0)!), visit(tree.getChild(1)!)];
+  return CallExpr(
+      function: findOperator(tree.op!.text!),
+      args: [visit(tree.getChild(0)!), visit(tree.getChild(1)!)]);
 }
 
 Expr visitUnary(UnaryContext tree) {
-  return StringLiteralExpr()..value = '<<error>>';
+  return StringLiteralExpr(('<<error>>'));
 }
 
 Expr visitMemberCall(MemberCallContext tree) {
@@ -148,33 +141,27 @@ Expr visitMemberCall(MemberCallContext tree) {
   final id = tree.id!.text!;
   // TODO: I'm assuming it is a Select. Not parsing Member properly. See
   // https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/parser/parser.go#L387-L396.
-  return SelectExpr()
-    ..field = id
-    ..operand = operand;
+  return SelectExpr(field: id, operand: operand);
 }
 
 Expr visitSelect(SelectContext tree) {
   final operand = visit(tree.member()!);
   final id = tree.id!.text!;
-  return SelectExpr()
-    ..field = id
-    ..operand = operand;
+  return SelectExpr(field: id, operand: operand);
 }
 
 Expr visitRelation(RelationContext tree) {
   final op = findOperator(tree.op!.text!);
-  return CallExpr()
-    ..function = op
-    ..target = null
-    ..args = [visit(tree.relation(0)!), visit(tree.relation(1)!)];
+  return CallExpr(
+      function: op, args: [visit(tree.relation(0)!), visit(tree.relation(1)!)]);
 }
 
 Expr visitString(StringContext tree) {
-  return StringLiteralExpr()
-    // Unquote.
-    // TODO: implement unescape in the unquote. See
-    // https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/parser/parser.go#L843.
-    ..value = tree.text.substring(1, tree.text.length - 1);
+  return StringLiteralExpr(
+      // Unquote.
+      // TODO: implement unescape in the unquote. See
+      // https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/parser/parser.go#L843.
+      tree.text.substring(1, tree.text.length - 1));
 }
 
 // Based on
@@ -233,7 +220,7 @@ Expr visitIdentOrGlobalCall(IdentOrGlobalCallContext tree) {
   }
   // TODO: Check for reserved identifiers and throw errors.
 
-  return IdentExpr()..name = '${tree.leadingDot?.text ?? ''}${tree.id!.text!}';
+  return IdentExpr('${tree.leadingDot?.text ?? ''}${tree.id!.text!}');
 }
 
 // TODO: instead, check against the map of operators. For example in becomes

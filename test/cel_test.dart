@@ -8,19 +8,18 @@ void main() {
     final p = Parser();
 
     test('String', () {
-      expect(p.parse('"Hello World!"'),
-          StringLiteralExpr()..value = 'Hello World!');
+      expect(p.parse('"Hello World!"'), StringLiteralExpr('Hello World!'));
     });
 
     test('Booleans', () {
-      expect(p.parse('true'), BoolLiteralExpr()..value = true);
-      expect(p.parse('false'), BoolLiteralExpr()..value = false);
+      expect(p.parse('true'), BoolLiteralExpr(true));
+      expect(p.parse('false'), BoolLiteralExpr(false));
     });
 
     test('Int', () {
-      expect(p.parse('13'), IntLiteralExpr()..value = 13);
-      expect(p.parse('-4'), IntLiteralExpr()..value = -4);
-      expect(p.parse('0xa'), IntLiteralExpr()..value = 10);
+      expect(p.parse('13'), IntLiteralExpr(13));
+      expect(p.parse('-4'), IntLiteralExpr(-4));
+      expect(p.parse('0xa'), IntLiteralExpr(10));
     });
 
     test('Null', () {
@@ -30,75 +29,54 @@ void main() {
     test('ConditionalOr', () {
       expect(
           p.parse('"admin" || "test"'),
-          CallExpr()
-            ..function = '_||_'
-            ..target = null
-            ..args = [
-              StringLiteralExpr()..value = 'admin',
-              StringLiteralExpr()..value = 'test'
-            ]);
+          CallExpr(
+              function: '_||_',
+              args: [StringLiteralExpr('admin'), StringLiteralExpr('test')]));
     });
 
     test('Ident', () {
-      expect(p.parse('request'), IdentExpr()..name = 'request');
+      expect(p.parse('request'), IdentExpr('request'));
     });
 
     test('Select', () {
       expect(
           p.parse('request.auth.claims.group'),
-          SelectExpr()
-            ..field = 'group'
-            ..operand = (SelectExpr()
-              ..field = 'claims'
-              ..operand = (SelectExpr()
-                ..field = 'auth'
-                ..operand = (IdentExpr()..name = 'request'))));
+          SelectExpr(
+              field: 'group',
+              operand: (SelectExpr(
+                  field: 'claims',
+                  operand: (SelectExpr(
+                      field: 'auth', operand: (IdentExpr('request'))))))));
     });
 
     test('Operators', () {
       expect(
           p.parse("request.auth.uid == 'abc'"),
-          CallExpr()
-            ..function = '_==_'
-            ..target = null
-            ..args = [
-              SelectExpr()
-                ..field = 'uid'
-                ..operand = (SelectExpr()
-                  ..field = 'auth'
-                  ..operand = (IdentExpr()..name = 'request')),
-              StringLiteralExpr()..value = 'abc'
-            ]);
+          CallExpr(function: '_==_', args: [
+            SelectExpr(
+                field: 'uid',
+                operand:
+                    (SelectExpr(field: 'auth', operand: IdentExpr('request')))),
+            StringLiteralExpr('abc')
+          ]));
     });
 
     test('LogicalAnd', () {
       expect(
           p.parse('request.auth != null && request.auth.uid == userId'),
-          CallExpr()
-            ..function = '_&&_'
-            ..target = null
-            ..args = [
-              CallExpr()
-                ..function = '_!=_'
-                ..target = null
-                ..args = [
-                  SelectExpr()
-                    ..field = 'auth'
-                    ..operand = (IdentExpr()..name = 'request'),
-                  NullLiteralExpr()
-                ],
-              CallExpr()
-                ..function = '_==_'
-                ..target = null
-                ..args = [
-                  SelectExpr()
-                    ..field = 'uid'
-                    ..operand = (SelectExpr()
-                      ..field = 'auth'
-                      ..operand = (IdentExpr()..name = 'request')),
-                  IdentExpr()..name = 'userId'
-                ]
-            ]);
+          CallExpr(function: '_&&_', args: [
+            CallExpr(function: '_!=_', args: [
+              SelectExpr(field: 'auth', operand: IdentExpr('request')),
+              NullLiteralExpr()
+            ]),
+            CallExpr(function: '_==_', args: [
+              SelectExpr(
+                  field: 'uid',
+                  operand:
+                      SelectExpr(field: 'auth', operand: IdentExpr('request'))),
+              IdentExpr('userId')
+            ])
+          ]));
     });
   });
 
