@@ -1,19 +1,23 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# cel-dart
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages). 
+This project parses and evaluates Common Expression Language (CEL) programs. For example based on the input `request.auth.claims.group=='admin'` and a `request` object, the library will evaluate whether the stattement is `true` or `false`. CEL (see the [spec](https://github.com/google/cel-spec)) is a language used by many security projects such as Firestore and Firebase Storage. This project is a simplified port of <https://github.com/google/cel-go>.
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages). 
--->
+## Architecture
+
+Here's the mechanism from CEL code (a `String`) to evaluation:
+
+1. The user sets up an Environment. An Environment is a map that declares custom functions and types.
+1. The CEL code is parsed into a CEL tree by a Parser.
+1. The CEL tree is traversed and converted into an Abstract Syntax Tree (AST). The type name of that AST is `Expr`.
+1. The AST and the Environment are wrapped into a Program.
+1. The Program gets evaluated into a Value. Evaluation is done in two steps
+   1. A Planner traverses the AST and converts it into an Interpretable.
+   1. Program evaluates the Interpretable into a Value.
 
 ## From CEL to Expr
 
-- Exercise 2: `request.auth.claims.group == 'admin'` gets parsed to the following CEL:
+- Exercise 2 (from <https://codelabs.developers.google.com/codelabs/cel-go/>): `request.auth.claims.group == 'admin'` gets parsed to the following CEL:
+
 ```
   Rule start: request.auth.claims.group=='admin'<EOF>
    Rule expr: request.auth.claims.group=='admin'
@@ -113,7 +117,7 @@ start using the package.
 ## Usage
 
 TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
+to `/example` folder.
 
 ```dart
 const like = 'sample';
