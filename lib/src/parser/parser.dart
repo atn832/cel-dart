@@ -60,6 +60,9 @@ Expr visit(ParseTree tree) {
   if (tree is IntContext) {
     return visitInt(tree);
   }
+  if (tree is UintContext) {
+    return visitUint(tree);
+  }
   if (tree is DoubleContext) {
     return visitDouble(tree);
   }
@@ -79,6 +82,13 @@ Expr visitDouble(DoubleContext tree) {
 
 Expr visitInt(IntContext tree) {
   return IntLiteralExpr((int.parse(tree.text)));
+}
+
+Expr visitUint(UintContext tree) {
+  // trim the 'u' designator included in the uint literal.
+  final text = tree.text.substring(0, tree.text.length - 1);
+  // Small shortcut: reuse IntLiteralExpr.
+  return IntLiteralExpr((int.parse(text)));
 }
 
 Expr visitNull(NullContext tree) {

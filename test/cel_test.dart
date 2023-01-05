@@ -21,6 +21,10 @@ void main() {
       expect(p.parse('0xa'), IntLiteralExpr(10));
     });
 
+    test('Uint', () {
+      expect(p.parse('13u'), IntLiteralExpr(13));
+    });
+
     test('Double', () {
       expect(p.parse('13.3'), DoubleLiteralExpr(13.3));
     });
