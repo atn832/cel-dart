@@ -66,6 +66,9 @@ Expr visit(ParseTree tree) {
   if (tree is DoubleContext) {
     return visitDouble(tree);
   }
+  if (tree is BytesContext) {
+    return visitBytes(tree);
+  }
   if (tree is NullContext) {
     return visitNull(tree);
   }
@@ -74,6 +77,12 @@ Expr visit(ParseTree tree) {
   }
   throw UnsupportedError(
       'Unknown parse element ${tree.text} of type ${tree.runtimeType}');
+}
+
+Expr visitBytes(BytesContext tree) {
+  // Looks like `b"abc"`.
+  // Gotta remove the starting 'b' and unquote the rest.
+  return BytesLiteralExpr(unquote(tree.text.substring(1)).codeUnits);
 }
 
 Expr visitDouble(DoubleContext tree) {
@@ -174,11 +183,7 @@ Expr visitRelation(RelationContext tree) {
 }
 
 Expr visitString(StringContext tree) {
-  return StringLiteralExpr(
-      // Unquote.
-      // TODO: implement unescape in the unquote. See
-      // https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/parser/parser.go#L843.
-      tree.text.substring(1, tree.text.length - 1));
+  return StringLiteralExpr(unquote(tree.text));
 }
 
 // Based on
@@ -244,3 +249,7 @@ Expr visitIdentOrGlobalCall(IdentOrGlobalCallContext tree) {
 // @in, not _in_. See
 // https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/parser/parser.go#L515.
 String findOperator(String operator) => '_${operator}_';
+
+// TODO: implement unescape in the unquote. See
+// https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/parser/parser.go#L843.
+String unquote(String text) => text.substring(1, text.length - 1);

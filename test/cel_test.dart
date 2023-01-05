@@ -33,6 +33,10 @@ void main() {
       expect(p.parse(('null')), NullLiteralExpr());
     });
 
+    test('Bytes', () {
+      expect(p.parse('b"abc"'), BytesLiteralExpr([97, 98, 99]));
+    });
+
     test('ConditionalOr', () {
       expect(
           p.parse('"admin" || "test"'),
