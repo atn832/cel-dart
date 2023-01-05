@@ -55,7 +55,7 @@ This table comes from https://firebase.google.com/docs/rules/rules-language#oper
 | !a -a | Unary negation | ❌ |
 | a/b a%b a*b | Multiplicative operators | ❌ |
 | a+b a-b | Additive operators | ❌ |
-| a>b a>=b a | Relational operators | ❌ |
+| a>b a>=b a | Relational operators | ✅ for a<b, ❌ for the rest |
 | a in b | Existence in list or map | ❌ |
 | a is type | Type comparison, where type can be bool, int, float, number, string, list, map, timestamp, duration, path or latlng | ❌ |
 | a==b a!=b | Comparison operators | ✅ |
@@ -72,7 +72,7 @@ void main() {
   final input = "request.auth.claims.group == 'admin'";
   final e = Environment();
   final ast = e.compile(input);
-  final p = Program(e, ast);
+  final p = Program(e, ast, StdLibrary().programOptions);
   print(p.evaluate({
     'request': {
       'auth': {

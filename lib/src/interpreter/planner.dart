@@ -1,15 +1,17 @@
-import 'package:cel/src/interpreter/attribute_factory.dart';
-
 import '../cel/expr.dart';
 import '../operators/operators.dart';
+import 'attribute_factory.dart';
+import 'dispatcher.dart';
+import 'functions/functions.dart';
 import 'interpretable.dart';
 
 // Port of
 // https://github.com/google/cel-go/blob/32ac6133c6b8eca8bb76e17e6ad50a1eb757778a/interpreter/planner.go.
 class Planner {
-  Planner({required this.attributeFactory});
+  Planner({required this.attributeFactory, required this.dispatcher});
 
   final AttributeFactory attributeFactory;
+  final Dispatcher dispatcher;
 
   Interpretable plan(Expr expression) {
     if (expression is ConstExpression) {
@@ -32,6 +34,7 @@ class Planner {
         attributeFactory.maybeAttribute(ident.name));
   }
 
+  // https://github.com/google/cel-go/blob/32ac6133c6b8eca8bb76e17e6ad50a1eb757778a/interpreter/planner.go#L239
   Interpretable planCall(CallExpr expression) {
     final functionName = expression.function;
     // Skip target, p.resolveFunction.
@@ -48,7 +51,21 @@ class Planner {
     if (functionName == Operators.notEquals.name) {
       return planCallNotEqual(expression, interpretableArguments);
     }
-    throw UnsupportedError("Function $functionName");
+    // TODO: implement indexer, optSelect, optIndex.
+
+    final functionImplementation = dispatcher.findOverload(functionName);
+    if (functionImplementation == null) {
+      throw StateError('Missing function $functionName');
+    }
+    switch (expression.args.length) {
+      // TODO: handle zero and unary functions.
+      case 2:
+        return planCallBinary(expression, functionName, functionImplementation,
+            interpretableArguments);
+      default:
+        throw UnsupportedError(
+            "Function $functionName. Only Binary functions are supported for now.");
+    }
   }
 
   Interpretable planCallLogicalAnd(
@@ -92,6 +109,12 @@ class Planner {
   AttributeValueInterpretable relativeAttribute(Interpretable eval) {
     return AttributeValueInterpretable(
         attributeFactory.relativeAttribute(eval));
+  }
+
+  Interpretable planCallBinary(CallExpr expression, String functionName,
+      Overload functionImplementation, List<Interpretable> args) {
+    return BinaryInterpretable(
+        functionImplementation.binaryOperator!, args[0], args[1]);
   }
 }
 

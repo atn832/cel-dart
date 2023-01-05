@@ -1,5 +1,6 @@
 import 'activation.dart';
 import 'attribute.dart';
+import 'functions/functions.dart';
 
 abstract class Interpretable {
   dynamic evaluate(Activation activation);
@@ -81,5 +82,23 @@ class LogicalOrInterpretable implements Interpretable {
   evaluate(Activation activation) {
     return leftHandSide.evaluate(activation) ||
         rightHandSide.evaluate(activation);
+  }
+}
+
+class BinaryInterpretable implements Interpretable {
+  BinaryInterpretable(
+      this.binaryOperator, this.leftHandSide, this.rightHandSide);
+
+  final BinaryOperator binaryOperator;
+  final Interpretable leftHandSide;
+  final Interpretable rightHandSide;
+
+  // https://github.com/google/cel-go/blob/32ac6133c6b8eca8bb76e17e6ad50a1eb757778a/interpreter/interpretable.go#L499
+  @override
+  evaluate(Activation activation) {
+    final leftValue = leftHandSide.evaluate(activation);
+    final rightValue = rightHandSide.evaluate(activation);
+    // Skipped porting ReceiverType.
+    return binaryOperator(leftValue, rightValue);
   }
 }
