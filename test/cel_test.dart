@@ -200,5 +200,11 @@ void main() {
         expect(p.evaluate({}), 7);
       });
     });
+    test('list', () {
+      final environment = Environment();
+      final ast = environment.compile('[1, 2, value]');
+      final p = Program(environment, ast, StdLibrary().programOptions);
+      expect(p.evaluate({'value': 3}), [1, 2, 3]);
+    });
   });
 }

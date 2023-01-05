@@ -75,9 +75,27 @@ Expr visit(ParseTree tree) {
   if (tree is IdentOrGlobalCallContext) {
     return visitIdentOrGlobalCall(tree);
   }
+  if (tree is CreateListContext) {
+    return visitCreateList(tree);
+  }
 
   throw UnsupportedError(
       'Unknown parse element ${tree.text} of type ${tree.runtimeType}');
+}
+
+Expr visitCreateList(CreateListContext tree) {
+  final elements = visitListInit(tree.elems);
+  return ListExpr(elements);
+}
+
+// https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/parser/parser.go#L807
+List<Expr> visitListInit(ListInitContext? elems) {
+  if (elems == null) {
+    return [];
+  }
+  // Skipped porting of Optionals.
+
+  return elems.elems.map((e) => visit(e.e!)).toList();
 }
 
 Expr visitBytes(BytesContext tree) {

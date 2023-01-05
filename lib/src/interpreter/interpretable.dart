@@ -102,3 +102,14 @@ class BinaryInterpretable implements Interpretable {
     return binaryOperator(leftValue, rightValue);
   }
 }
+
+class ListInterpretable implements Interpretable {
+  ListInterpretable(this.elements);
+
+  final List<Interpretable> elements;
+
+  @override
+  evaluate(Activation activation) {
+    return elements.map((e) => e.evaluate(activation)).toList();
+  }
+}

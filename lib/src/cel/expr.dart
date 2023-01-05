@@ -121,3 +121,12 @@ class IdentExpr extends Equatable implements Expr {
   @override
   bool? get stringify => true;
 }
+
+class ListExpr extends Equatable implements Expr {
+  ListExpr(this.elements);
+
+  final List<Expr> elements;
+
+  @override
+  List<Object?> get props => [elements];
+}

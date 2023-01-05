@@ -36,6 +36,10 @@ This table is based on https://github.com/google/cel-spec/blob/master/doc/langde
 | `b"abc"` | Bytes Literals | ✅ |
 | `user.id == "abc"` | Operators | See table below |
 
+| Structures | Description | Supported
+| --- | --- | --- |
+| [a, b] | List | ✅ |
+
 | Feature | Supported |
 | --- | --- |
 | Properly unescapes all strings | ❌ |

@@ -26,6 +26,9 @@ class Planner {
     if (expression is SelectExpr) {
       return planSelect(expression);
     }
+    if (expression is ListExpr) {
+      return planCreateList(expression);
+    }
     throw Exception('Unsupported Expression type: ${expression.runtimeType}.');
   }
 
@@ -115,6 +118,12 @@ class Planner {
       Overload functionImplementation, List<Interpretable> args) {
     return BinaryInterpretable(
         functionImplementation.binaryOperator!, args[0], args[1]);
+  }
+
+  // https://github.com/google/cel-go/blob/32ac6133c6b8eca8bb76e17e6ad50a1eb757778a/interpreter/planner.go#L516
+  Interpretable planCreateList(ListExpr expression) {
+    final elements = expression.elements.map((e) => plan(e)).toList();
+    return ListInterpretable(elements);
   }
 }
 
