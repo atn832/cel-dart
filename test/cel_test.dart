@@ -168,11 +168,37 @@ void main() {
         expect(p.evaluate({'value': 2}), false);
       });
     });
-    test('+', () {
-      final environment = Environment();
-      final ast = environment.compile('1 + 1');
-      final p = Program(environment, ast, StdLibrary().programOptions);
-      expect(p.evaluate({}), 2);
+    group('arithmetic operations', () {
+      test('+', () {
+        final environment = Environment();
+        final ast = environment.compile('1 + 1');
+        final p = Program(environment, ast, StdLibrary().programOptions);
+        expect(p.evaluate({}), 2);
+      });
+      test('-', () {
+        final environment = Environment();
+        final ast = environment.compile('1.5 - 2');
+        final p = Program(environment, ast, StdLibrary().programOptions);
+        expect(p.evaluate({}), -.5);
+      });
+      test('Multiply', () {
+        final environment = Environment();
+        final ast = environment.compile('-1.5 * 2');
+        final p = Program(environment, ast, StdLibrary().programOptions);
+        expect(p.evaluate({}), -3);
+      });
+      test('Divide', () {
+        final environment = Environment();
+        final ast = environment.compile('27 / 10');
+        final p = Program(environment, ast, StdLibrary().programOptions);
+        expect(p.evaluate({}), 2.7);
+      });
+      test('Modulo', () {
+        final environment = Environment();
+        final ast = environment.compile('27 % 10');
+        final p = Program(environment, ast, StdLibrary().programOptions);
+        expect(p.evaluate({}), 7);
+      });
     });
   });
 }

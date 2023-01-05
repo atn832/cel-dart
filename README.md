@@ -53,8 +53,8 @@ This table comes from <https://firebase.google.com/docs/rules/rules-language#ope
 | a() | call | ❌ |
 | a[i] | Index | ❌ |
 | !a -a | Unary negation | ❌ |
-| a/b a%b a*b | Multiplicative operators | ❌ |
-| a+b a-b | Additive operators | ❌ |
+| a/b a%b a*b | Multiplicative operators | ✅ |
+| a+b a-b | Additive operators | ✅ |
 | a>b a>=b | Relational operators | ✅ |
 | a in b | Existence in list or map | ❌ |
 | a is type | Type comparison, where type can be bool, int, float, number, string, list, map, timestamp, duration, path or latlng | ❌ |

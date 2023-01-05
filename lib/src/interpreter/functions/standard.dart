@@ -43,5 +43,29 @@ List<Overload> standardOverloads() {
     Overload(Operators.add.name, binaryOperator: (leftHandSide, rightHandSide) {
       return leftHandSide + rightHandSide;
     }),
+
+    // Subtract operators
+    Overload(Operators.subtract.name,
+        binaryOperator: (leftHandSide, rightHandSide) {
+      return leftHandSide - rightHandSide;
+    }),
+
+    // Multiply operator
+    Overload(Operators.multiply.name,
+        binaryOperator: (leftHandSide, rightHandSide) {
+      return leftHandSide * rightHandSide;
+    }),
+
+    // Divide operator
+    Overload(Operators.divide.name,
+        binaryOperator: (leftHandSide, rightHandSide) {
+      return leftHandSide / rightHandSide;
+    }),
+
+    // Modulo operator
+    Overload(Operators.modulo.name,
+        binaryOperator: (leftHandSide, rightHandSide) {
+      return leftHandSide % rightHandSide;
+    }),
   ];
 }
