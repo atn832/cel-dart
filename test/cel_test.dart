@@ -71,5 +71,35 @@ void main() {
               StringLiteralExpr()..value = 'abc'
             ]);
     });
+
+    test('LogicalAnd', () {
+      expect(
+          p.parse('request.auth != null && request.auth.uid == userId'),
+          CallExpr()
+            ..function = '_&&_'
+            ..target = null
+            ..args = [
+              CallExpr()
+                ..function = '_!=_'
+                ..target = null
+                ..args = [
+                  SelectExpr()
+                    ..field = 'auth'
+                    ..operand = (IdentExpr()..name = 'request'),
+                  NullLiteralExpr()
+                ],
+              CallExpr()
+                ..function = '_==_'
+                ..target = null
+                ..args = [
+                  SelectExpr()
+                    ..field = 'uid'
+                    ..operand = (SelectExpr()
+                      ..field = 'auth'
+                      ..operand = (IdentExpr()..name = 'request')),
+                  IdentExpr()..name = 'userId'
+                ]
+            ]);
+    });
   });
 }
