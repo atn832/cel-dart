@@ -51,5 +51,22 @@ void main() {
                 ..field = 'auth'
                 ..operand = (IdentExpr()..name = 'request'))));
     });
+
+    test('Operators', () {
+      final expression = p.parse("request.auth.uid == 'abc'");
+      expect(
+          expression,
+          CallExpr()
+            ..function = '_==_'
+            ..target = null
+            ..args = [
+              SelectExpr()
+                ..field = 'uid'
+                ..operand = (SelectExpr()
+                  ..field = 'auth'
+                  ..operand = (IdentExpr()..name = 'request')),
+              StringLiteralExpr()..value = 'abc'
+            ]);
+    });
   });
 }

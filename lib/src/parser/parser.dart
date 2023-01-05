@@ -79,7 +79,8 @@ Expr visitExpr(ExprContext c) {
 
 Expr visitConditionalOr(ConditionalOrContext tree) {
   // TODO: use a balancer like in https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/parser/parser.go#L463-L476.
-  return conditionalOrFromConditionalAndContexts('_||_', [tree.e!, ...tree.e1]);
+  return conditionalOrFromConditionalAndContexts(
+      findOperator('||'), [tree.e!, ...tree.e1]);
 }
 
 Expr conditionalOrFromConditionalAndContexts(
@@ -98,15 +99,13 @@ Expr conditionalOrFromConditionalAndContexts(
 }
 
 Expr visitConditionalAnd(ConditionalAndContext tree) {
-  return conditionalOrFromConditionalAndContexts('_&&_', [tree.e!, ...tree.e1]);
+  return conditionalOrFromConditionalAndContexts(
+      findOperator('&&'), [tree.e!, ...tree.e1]);
 }
 
 Expr visitCalc(CalcContext tree) {
-  // TODO: check against the map of operators. For example in becomes @in, not
-  // _in_. See
-  // https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/parser/parser.go#L515.
   return CallExpr()
-    ..function = '_${tree.op!.text!}_'
+    ..function = findOperator(tree.op!.text!)
     ..target = null
     ..args = [visit(tree.getChild(0)!), visit(tree.getChild(1)!)];
 }
@@ -134,8 +133,7 @@ Expr visitSelect(SelectContext tree) {
 }
 
 Expr visitRelation(RelationContext tree) {
-  // TODO: convert to the Operator name properly.
-  final op = tree.op!.text!;
+  final op = findOperator(tree.op!.text!);
   return CallExpr()
     ..function = op
     ..target = null
@@ -208,3 +206,8 @@ Expr visitIdentOrGlobalCall(IdentOrGlobalCallContext tree) {
 
   return IdentExpr()..name = '${tree.leadingDot?.text ?? ''}${tree.id!.text!}';
 }
+
+// TODO: instead, check against the map of operators. For example in becomes
+// @in, not _in_. See
+// https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/parser/parser.go#L515.
+String findOperator(String operator) => '_${operator}_';
