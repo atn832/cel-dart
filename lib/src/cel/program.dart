@@ -1,3 +1,5 @@
+import 'package:cel/src/cel/checked_expression.dart';
+
 import 'ast.dart';
 import 'environment.dart';
 import 'interpretable.dart';
@@ -22,6 +24,11 @@ class Program {
   late Interpretable interpretable;
 
   void _initInterpretable() {
-    interpretable = interpreter.interpet();
+    final checkedExpression = astToCheckedExpr(ast);
+    interpretable = interpreter.interpet(checkedExpression);
   }
+}
+
+CheckedExpression astToCheckedExpr(Ast ast) {
+  return CheckedExpression()..expression = ast.expression;
 }
