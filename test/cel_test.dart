@@ -1,5 +1,4 @@
 import 'package:cel/cel.dart';
-import 'package:cel/src/cel/environment.dart';
 import 'package:cel/src/cel/expr.dart';
 import 'package:test/test.dart';
 
