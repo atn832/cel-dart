@@ -4,7 +4,9 @@ import '../cel/expr.dart';
 import 'gen/CELLexer.dart';
 import 'gen/CELParser.dart';
 
-// Based on https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/parser/parser.go#L359-L443.
+/// Low-level Parser that parses CEL code into an [Expr]. Exposed for testing
+/// purposes. Most users should use [Environment.compile] insetad. Based on
+/// https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/parser/parser.go#L359-L443.
 class Parser {
   Expr parse(String input) {
     final lexer = CELLexer(InputStream.fromString(input));
