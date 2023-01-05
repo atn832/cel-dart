@@ -14,6 +14,10 @@ Here's the mechanism from CEL code (a `String`) to evaluation:
    1. A Planner traverses the AST and converts it into an Interpretable.
    1. Program evaluates the Interpretable into a Value.
 
+## Differences with cel-go
+
+The main difference besides being incomplete is that cel-go defines the `Expr` architecture with Protobuf, while this project defines `Expr` as native Dart. This is mostly for convenience, but we might integrate Protobuf later for feature parity.
+
 ## From CEL to Expr
 
 - Exercise 2 (from <https://codelabs.developers.google.com/codelabs/cel-go/>): `request.auth.claims.group == 'admin'` gets parsed to the following CEL:
