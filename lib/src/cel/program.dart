@@ -1,3 +1,4 @@
+import 'package:cel/src/cel/activation.dart';
 import 'package:cel/src/cel/checked_expression.dart';
 
 import 'ast.dart';
@@ -22,6 +23,12 @@ class Program {
   final Ast ast;
   late Interpreter interpreter;
   late Interpretable interpretable;
+
+  dynamic evaluate(Map<String, dynamic> input) {
+    // Skipped Pools since there is no concurrency in this implementation.
+    final Activation vars = EvalActivation()..input = input;
+    return interpretable.evaluate(vars);
+  }
 
   void _initInterpretable() {
     final checkedExpression = astToCheckedExpr(ast);
