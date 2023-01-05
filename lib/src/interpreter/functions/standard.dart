@@ -38,5 +38,10 @@ List<Overload> standardOverloads() {
       }
       return leftHandSide.compareTo(rightHandSide) >= 0;
     }),
+
+    // Add operator
+    Overload(Operators.add.name, binaryOperator: (leftHandSide, rightHandSide) {
+      return leftHandSide + rightHandSide;
+    }),
   ];
 }
