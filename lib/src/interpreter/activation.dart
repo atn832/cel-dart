@@ -3,7 +3,9 @@ abstract class Activation {
 }
 
 class EvalActivation extends Activation {
-  late final Map<String, dynamic> input;
+  EvalActivation(this.input);
+
+  final Map<String, dynamic> input;
 
   @override
   resolveName(namespaceName) {

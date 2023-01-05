@@ -31,7 +31,7 @@ class Program {
 
   dynamic evaluate(Map<String, dynamic> input) {
     // Skipped Pools since there is no concurrency in this implementation.
-    final Activation vars = EvalActivation()..input = input;
+    final Activation vars = EvalActivation(input);
     return interpretable.evaluate(vars);
   }
 
@@ -42,5 +42,5 @@ class Program {
 }
 
 CheckedExpression astToCheckedExpr(Ast ast) {
-  return CheckedExpression()..expression = ast.expression;
+  return CheckedExpression(ast.expression);
 }
