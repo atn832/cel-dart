@@ -99,9 +99,17 @@ void main() {
 
   group('program', () {
     test('Const', () {
-      final ast = Environment().compile('true');
-      final p = Program(Environment(), ast);
+      final environment = Environment();
+      final ast = environment.compile('true');
+      final p = Program(environment, ast);
       expect(p.evaluate({}), true);
+    });
+
+    test('Ident', () {
+      final environment = Environment();
+      final ast = environment.compile('animal');
+      final p = Program(environment, ast);
+      expect(p.evaluate({'animal': 'elephant'}), 'elephant');
     });
   });
 }
