@@ -36,16 +36,16 @@ class Planner {
     final functionName = expression.function;
     // Skip target, p.resolveFunction.
     final interpretableArguments = expression.args.map((e) => plan(e)).toList();
-    if (functionName == Operators.LogicalAnd.name) {
+    if (functionName == Operators.logicalAnd.name) {
       return planCallLogicalAnd(expression, interpretableArguments);
     }
-    if (functionName == Operators.LogicalOr.name) {
+    if (functionName == Operators.logicalOr.name) {
       return planCallLogicalOr(expression, interpretableArguments);
     }
-    if (functionName == Operators.Equals.name) {
+    if (functionName == Operators.equals.name) {
       return planCallEqual(expression, interpretableArguments);
     }
-    if (functionName == Operators.NotEquals.name) {
+    if (functionName == Operators.notEquals.name) {
       return planCallNotEqual(expression, interpretableArguments);
     }
     throw UnsupportedError("Function $functionName");
