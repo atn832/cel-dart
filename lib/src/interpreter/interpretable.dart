@@ -26,6 +26,10 @@ class AttributeValueInterpretable implements Interpretable {
   evaluate(Activation activation) {
     return attribute.resolve(activation);
   }
+
+  void addQualifier(Qualifier qualifier) {
+    attribute.addQualifier(qualifier);
+  }
 }
 
 class EqualInterpretable implements Interpretable {

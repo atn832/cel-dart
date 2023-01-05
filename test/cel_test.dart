@@ -116,6 +116,17 @@ void main() {
       final ast = environment.compile('uid=="abc"');
       final p = Program(environment, ast);
       expect(p.evaluate({'uid': 'abc'}), true);
+      expect(p.evaluate({'uid': 'def'}), false);
+    });
+    test('Select and Qualifiers', () {
+      final environment = Environment();
+      final ast = environment.compile('user.uid=="abc"');
+      final p = Program(environment, ast);
+      expect(
+          p.evaluate({
+            'user': {'uid': 'abc'}
+          }),
+          true);
     });
   });
 }

@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cel/src/interpreter/attribute_factory.dart';
 
 import '../cel/expr.dart';
@@ -23,6 +21,9 @@ class Planner {
     if (expression is CallExpr) {
       return planCall(expression);
     }
+    if (expression is SelectExpr) {
+      return planSelect(expression);
+    }
     throw Exception('Unsupported Expression type: ${expression.runtimeType}.');
   }
 
@@ -45,6 +46,25 @@ class Planner {
       CallExpr expression, List<Interpretable> interpretableArguments) {
     return EqualInterpretable(
         interpretableArguments[0], interpretableArguments[1]);
+  }
+
+  // https://github.com/google/cel-go/blob/32ac6133c6b8eca8bb76e17e6ad50a1eb757778a/interpreter/planner.go#L179
+  Interpretable planSelect(SelectExpr select) {
+    final operand = plan(select.operand);
+
+    var attribute = operand;
+    if (attribute is! AttributeValueInterpretable) {
+      // Set up a relative attribute.
+      attribute = relativeAttribute(operand);
+    }
+    final qualifier = attributeFactory.qualifier(select.field);
+    attribute.addQualifier(qualifier);
+    return attribute;
+  }
+
+  AttributeValueInterpretable relativeAttribute(Interpretable eval) {
+    return AttributeValueInterpretable(
+        attributeFactory.relativeAttribute(eval));
   }
 }
 

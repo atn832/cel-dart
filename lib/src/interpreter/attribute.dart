@@ -1,13 +1,23 @@
 import 'package:cel/src/interpreter/activation.dart';
+import 'package:cel/src/interpreter/interpretable.dart';
 
 abstract class Attribute {
-  resolve(Activation activation);
+  dynamic resolve(Activation activation);
+  void addQualifier(Qualifier qualifier);
 }
 
-class MaybeAttribute implements Attribute {
+class MaybeAttribute extends Attribute {
   MaybeAttribute(this.namespaceAttributes);
 
   final List<NamespaceAttribute> namespaceAttributes;
+
+  // Very simplified compared to https://github.com/google/cel-go/blob/32ac6133c6b8eca8bb76e17e6ad50a1eb757778a/interpreter/attributes.go#L451.
+  @override
+  void addQualifier(Qualifier qualifier) {
+    for (final attribute in namespaceAttributes) {
+      attribute.addQualifier(qualifier);
+    }
+  }
 
   // https://github.com/google/cel-go/blob/32ac6133c6b8eca8bb76e17e6ad50a1eb757778a/interpreter/attributes.go#L490
   @override
@@ -23,20 +33,69 @@ class MaybeAttribute implements Attribute {
   }
 }
 
-abstract class NamespaceAttribute implements Attribute {}
+abstract class NamespaceAttribute extends Attribute {}
 
 class AbsoluteAttribute extends NamespaceAttribute {
   AbsoluteAttribute(this.namespaceName);
 
   final String namespaceName;
+  final List<Qualifier> qualifiers = [];
 
   // See https://github.com/google/cel-go/blob/32ac6133c6b8eca8bb76e17e6ad50a1eb757778a/interpreter/attributes.go#L294.
   @override
   resolve(Activation activation) {
     try {
-      return activation.resolveName(namespaceName);
+      // https://github.com/google/cel-go/blob/32ac6133c6b8eca8bb76e17e6ad50a1eb757778a/interpreter/attributes.go#L300
+      final object = activation.resolveName(namespaceName);
+      return applyQualifiers(activation, object, qualifiers);
     } catch (e) {
       throw Exception("Missing attribute $this.");
     }
+  }
+
+  @override
+  void addQualifier(Qualifier qualifier) {
+    qualifiers.add(qualifier);
+  }
+
+  dynamic applyQualifiers(
+      Activation activation, object, List<Qualifier> qualifiers) {
+    var result = object;
+    for (final qualifier in qualifiers) {
+      result = qualifier.qualify(activation, result);
+    }
+    return result;
+  }
+}
+
+class RelativeAttribute extends Attribute {
+  RelativeAttribute(this.operand);
+
+  Interpretable operand;
+
+  @override
+  resolve(Activation activation) {
+    // TODO: implement resolve
+    throw UnimplementedError();
+  }
+
+  @override
+  void addQualifier(Qualifier qualifier) {
+    // TODO: implement addQualifier
+  }
+}
+
+abstract class Qualifier {
+  qualify(Activation activation, object);
+}
+
+class StringQualifier extends Qualifier {
+  StringQualifier(this.value);
+
+  final String value;
+
+  @override
+  qualify(Activation activation, object) {
+    return object[value];
   }
 }
