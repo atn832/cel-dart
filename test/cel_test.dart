@@ -1,16 +1,17 @@
 import 'package:cel/cel.dart';
+import 'package:cel/src/expr/expr.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('A group of tests', () {
-    final awesome = Awesome();
+  group('parser', () {
+    final p = Parser();
 
     setUp(() {
       // Additional setup goes here.
     });
 
-    test('First Test', () {
-      expect(awesome.isAwesome, isTrue);
+    test('String', () {
+      expect(p.parse('"Hello World!"'), isA<StringLiteralExpr>());
     });
   });
 }
