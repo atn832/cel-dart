@@ -15,9 +15,15 @@ class CallExpr extends Equatable implements Expr {
   bool? get stringify => true;
 }
 
-class SelectExpr extends Expr {
+class SelectExpr extends Equatable implements Expr {
   late final Expr operand;
   late final String field;
+
+  @override
+  List<Object?> get props => [operand, field];
+
+  @override
+  bool? get stringify => true;
 }
 
 class StringLiteralExpr extends Equatable implements Expr {
@@ -30,6 +36,12 @@ class StringLiteralExpr extends Equatable implements Expr {
   bool? get stringify => true;
 }
 
-class IdentExpr extends Expr {
+class IdentExpr extends Equatable implements Expr {
   late final String name;
+
+  @override
+  List<Object?> get props => [name];
+
+  @override
+  bool? get stringify => true;
 }

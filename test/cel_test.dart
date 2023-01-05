@@ -33,5 +33,23 @@ void main() {
               StringLiteralExpr()..value = 'test'
             ]);
     });
+
+    test('Ident', () {
+      final expression = p.parse('request');
+      expect(expression, IdentExpr()..name = 'request');
+    });
+
+    test('Select', () {
+      final expression = p.parse('request.auth.claims.group');
+      expect(
+          expression,
+          SelectExpr()
+            ..field = 'group'
+            ..operand = (SelectExpr()
+              ..field = 'claims'
+              ..operand = (SelectExpr()
+                ..field = 'auth'
+                ..operand = (IdentExpr()..name = 'request'))));
+    });
   });
 }
