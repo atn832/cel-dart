@@ -6,13 +6,9 @@ void main() {
   group('parser', () {
     final p = Parser();
 
-    setUp(() {
-      // Additional setup goes here.
-    });
-
     test('String', () {
-      final expression = p.parse('"Hello World!"');
-      expect(expression, StringLiteralExpr()..value = 'Hello World!');
+      expect(p.parse('"Hello World!"'),
+          StringLiteralExpr()..value = 'Hello World!');
     });
 
     test('Booleans', () {
@@ -25,9 +21,8 @@ void main() {
     });
 
     test('ConditionalOr', () {
-      final expression = p.parse('"admin" || "test"');
       expect(
-          expression,
+          p.parse('"admin" || "test"'),
           CallExpr()
             ..function = '_||_'
             ..target = null
@@ -38,14 +33,12 @@ void main() {
     });
 
     test('Ident', () {
-      final expression = p.parse('request');
-      expect(expression, IdentExpr()..name = 'request');
+      expect(p.parse('request'), IdentExpr()..name = 'request');
     });
 
     test('Select', () {
-      final expression = p.parse('request.auth.claims.group');
       expect(
-          expression,
+          p.parse('request.auth.claims.group'),
           SelectExpr()
             ..field = 'group'
             ..operand = (SelectExpr()
@@ -56,9 +49,8 @@ void main() {
     });
 
     test('Operators', () {
-      final expression = p.parse("request.auth.uid == 'abc'");
       expect(
-          expression,
+          p.parse("request.auth.uid == 'abc'"),
           CallExpr()
             ..function = '_==_'
             ..target = null
