@@ -23,11 +23,22 @@ The main difference besides being incomplete is that cel-go defines the `Expr` a
 
 ## Features
 
+This table is based on https://github.com/google/cel-spec/blob/master/doc/langdef.md.
+
+| CEL Literal | Description | Supported |
+| --- | --- | --- |
+| `null` | Null Literal | ✅ |
+| `true` and `false` | Bool Literal | ✅ |
+| `"abc"` | String Literal | ✅ |
+| `-13`, `0xff` | Int Literal | ✅ |
+| `12u` | Uint Literal | ✅ |
+| `12.6` | Double Literal | ✅ |
+| `b"abc"` | Bytes Literals | ✅ |
+| `user.id == "abc"` | Operators | See table below |
+
 | Feature | Supported |
 | --- | --- |
-| Null, Bool, String, Int (including Hex), Uint, Double Literals | ✅ |
-| Bytes Literals | ❌ |
-| Operators | See table below |
+| Properly unescapes all strings | ❌ |
 | Parses to Expr Protobuf | ❌ |
 
 ### Operators
