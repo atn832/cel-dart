@@ -1,6 +1,6 @@
 import 'package:antlr4/antlr4.dart';
-import 'package:cel/CELLexer.dart';
-import 'package:cel/CELParser.dart';
+import 'package:cel/src/parser/gen/CELLexer.dart';
+import 'package:cel/src/parser/gen/CELParser.dart';
 
 class TreeShapeListener implements ParseTreeListener {
   TreeShapeListener(this.ruleNames, this.tokenTypeNames);
