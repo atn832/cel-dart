@@ -18,100 +18,23 @@ Here's the mechanism from CEL code (a `String`) to evaluation:
 
 The main difference besides being incomplete is that cel-go defines the `Expr` architecture with Protobuf, while this project defines `Expr` as native Dart. This is mostly for convenience, but we might integrate Protobuf later for feature parity.
 
-## From CEL to Expr
-
-- Exercise 2 (from <https://codelabs.developers.google.com/codelabs/cel-go/>): `request.auth.claims.group == 'admin'` gets parsed to the following CEL:
-
-```
-  Rule start: request.auth.claims.group=='admin'<EOF>
-   Rule expr: request.auth.claims.group=='admin'
-    Rule conditionalOr: request.auth.claims.group=='admin'
-     Rule conditionalAnd: request.auth.claims.group=='admin'
-      Rule relation: request.auth.claims.group=='admin'
-Token EQUALS ==
-       Rule relation: request.auth.claims.group
-        Rule calc: request.auth.claims.group
-         Rule unary: request.auth.claims.group
-          Rule member: request.auth.claims.group
-Token DOT .
-Token ESC_CHAR_SEQ group
-           Rule member: request.auth.claims
-Token DOT .
-Token ESC_CHAR_SEQ claims
-            Rule member: request.auth
-Token DOT .
-Token ESC_CHAR_SEQ auth
-             Rule member: request
-              Rule primary: request
-Token ESC_CHAR_SEQ request
-       Rule relation: 'admin'
-        Rule calc: 'admin'
-         Rule unary: 'admin'
-          Rule member: 'admin'
-           Rule primary: 'admin'
-            Rule literal: 'admin'
-Token RAW 'admin'
-```
-
-It then gets compiled to this Expr:
-```
-{
-  "id": 5,
-  "ExprKind": {
-    "CallExpr": {
-      "function": "_==_",
-      "args": [
-        {
-          "id": 4,
-          "ExprKind": {
-            "SelectExpr": {
-              "operand": {
-                "id": 3,
-                "ExprKind": {
-                  "SelectExpr": {
-                    "operand": {
-                      "id": 2,
-                      "ExprKind": {
-                        "SelectExpr": {
-                          "operand": {
-                            "id": 1,
-                            "ExprKind": {
-                              "IdentExpr": {
-                                "name": "request"
-                              }
-                            }
-                          },
-                          "field": "auth"
-                        }
-                      }
-                    },
-                    "field": "claims"
-                  }
-                }
-              },
-              "field": "group"
-            }
-          }
-        },
-        {
-          "id": 6,
-          "ExprKind": {
-            "ConstExpr": {
-              "ConstantKind": {
-                "StringValue": "admin"
-              }
-            }
-          }
-        }
-      ]
-    }
-  }
-}
-```
-
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+| Operator | Description | Supported |
+| --- | --- | --- |
+| a.f | field access | ✅ |
+| a() | call | ❌ |
+| a[i] | Index | ❌ |
+| !a -a | Unary negation | ❌ |
+| a/b a%b a*b | Multiplicative operators | ❌ |
+| a+b a-b | Additive operators | ❌ |
+| a>b a>=b a | Relational operators | ❌ |
+| a in b | Existence in list or map | ❌ |
+| a is type | Type comparison, where type can be bool, int, float, number, string, list, map, timestamp, duration, path or latlng | ❌ |
+| a==b a!=b | Comparison operators | ✅ |
+| a && b | Conditional AND | ✅ |
+| a \|\| b | Conditional OR | ✅ |
+| a ? true_value : false_value | Ternary expression | ❌ |
 
 ## Getting started
 
