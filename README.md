@@ -45,7 +45,7 @@ This table is based on https://github.com/google/cel-spec/blob/master/doc/langde
 
 ### Operators
 
-This table comes from https://firebase.google.com/docs/rules/rules-language#operators_and_operator_precedence.
+This table comes from <https://firebase.google.com/docs/rules/rules-language#operators_and_operator_precedence>.
 
 | Operator | Description | Supported |
 | --- | --- | --- |
@@ -55,7 +55,7 @@ This table comes from https://firebase.google.com/docs/rules/rules-language#oper
 | !a -a | Unary negation | ❌ |
 | a/b a%b a*b | Multiplicative operators | ❌ |
 | a+b a-b | Additive operators | ❌ |
-| a>b a>=b a | Relational operators | ✅ for a<b, ❌ for the rest |
+| a>b a>=b | Relational operators | ✅ |
 | a in b | Existence in list or map | ❌ |
 | a is type | Type comparison, where type can be bool, int, float, number, string, list, map, timestamp, duration, path or latlng | ❌ |
 | a==b a!=b | Comparison operators | ✅ |

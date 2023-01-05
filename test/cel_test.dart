@@ -150,13 +150,23 @@ void main() {
       final p = Program(environment, ast);
       expect(p.evaluate({}), true);
     });
-    test('Comparisons', () {
-      final environment = Environment();
-      final ast = environment.compile('value < 1');
-      final p = Program(environment, ast, StdLibrary().programOptions);
-      expect(p.evaluate({'value': 0}), true);
-      expect(p.evaluate({'value': 1}), false);
-      expect(p.evaluate({'value': 2}), false);
+    group('Comparisons', () {
+      test('<', () {
+        final environment = Environment();
+        final ast = environment.compile('value < 1');
+        final p = Program(environment, ast, StdLibrary().programOptions);
+        expect(p.evaluate({'value': 0}), true);
+        expect(p.evaluate({'value': 1}), false);
+        expect(p.evaluate({'value': 2}), false);
+      });
+      test('<=', () {
+        final environment = Environment();
+        final ast = environment.compile('value <= 1.5');
+        final p = Program(environment, ast, StdLibrary().programOptions);
+        expect(p.evaluate({'value': 1.4}), true);
+        expect(p.evaluate({'value': 1.5}), true);
+        expect(p.evaluate({'value': 2}), false);
+      });
     });
   });
 }
