@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cel/cel.dart';
 import 'package:cel/src/expr/expr.dart';
 import 'package:test/test.dart';
@@ -11,7 +13,9 @@ void main() {
     });
 
     test('String', () {
-      expect(p.parse('"Hello World!"'), isA<StringLiteralExpr>());
+      final expression = p.parse('"Hello World!"');
+      expect(expression, isA<StringLiteralExpr>());
+      expect((expression as StringLiteralExpr).value, 'Hello World!');
     });
   });
 }
