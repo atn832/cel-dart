@@ -1,6 +1,6 @@
 import 'package:antlr4/antlr4.dart';
 
-import '../expr/expr.dart';
+import '../cel/expr.dart';
 import 'gen/CELLexer.dart';
 import 'gen/CELParser.dart';
 
