@@ -1,10 +1,9 @@
-import 'package:cel/src/cel/activation.dart';
-import 'package:cel/src/cel/checked_expression.dart';
-
+import '../interpreter/activation.dart';
+import '../interpreter/interpretable.dart';
+import '../interpreter/interpreter.dart';
 import 'ast.dart';
+import 'checked_expression.dart';
 import 'environment.dart';
-import 'interpretable.dart';
-import 'interpreter.dart';
 
 class Program {
   // Port of

@@ -2,5 +2,7 @@
 import 'expr.dart';
 
 class Ast {
-  late final Expr expression;
+  Ast(this.expression);
+
+  final Expr expression;
 }

@@ -1,4 +1,6 @@
 import 'package:cel/cel.dart';
+import 'package:cel/src/cel/ast.dart';
+import 'package:cel/src/cel/environment.dart';
 import 'package:cel/src/cel/expr.dart';
 import 'package:test/test.dart';
 
@@ -92,6 +94,14 @@ void main() {
                   IdentExpr()..name = 'userId'
                 ]
             ]);
+    });
+  });
+
+  group('program', () {
+    test('Const', () {
+      final ast = Environment().compile('true');
+      final p = Program(Environment(), ast);
+      expect(p.evaluate({}), true);
     });
   });
 }

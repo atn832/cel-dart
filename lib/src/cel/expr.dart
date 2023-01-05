@@ -1,4 +1,3 @@
-
 import 'package:equatable/equatable.dart';
 
 class Expr {}
@@ -37,7 +36,12 @@ class StringLiteralExpr extends Equatable implements Expr {
   bool? get stringify => true;
 }
 
-class BoolLiteralExpr extends Equatable implements Expr {
+abstract class ConstExpression extends Expr {
+  dynamic get value;
+}
+
+class BoolLiteralExpr extends Equatable implements Expr, ConstExpression {
+  @override
   late final bool value;
 
   @override
@@ -47,7 +51,10 @@ class BoolLiteralExpr extends Equatable implements Expr {
   bool? get stringify => true;
 }
 
-class NullLiteralExpr extends Equatable implements Expr {
+class NullLiteralExpr extends Equatable implements Expr, ConstExpression {
+  @override
+  get value => null;
+
   @override
   List<Object?> get props => [];
 

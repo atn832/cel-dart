@@ -1,7 +1,6 @@
-import 'package:cel/src/cel/interpretable.dart';
-import 'package:cel/src/cel/planner.dart';
-
-import 'checked_expression.dart';
+import '../cel/checked_expression.dart';
+import 'interpretable.dart';
+import 'planner.dart';
 
 class Interpreter {
   Interpretable interpet(CheckedExpression checkedExpression) {
