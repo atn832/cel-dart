@@ -39,6 +39,8 @@ This table is based on https://github.com/google/cel-spec/blob/master/doc/langde
 | Feature | Supported |
 | --- | --- |
 | Properly unescapes all strings | ❌ |
+| Custom functions | ❌ |
+| Type checking | ❌ |
 | Parses to Expr Protobuf | ❌ |
 
 ### Operators
