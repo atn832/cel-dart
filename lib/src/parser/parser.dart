@@ -73,6 +73,7 @@ Expr visitExpr(ExprContext c) {
   // and https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/parser/parser.go#L459.
   return CallExpr()
     ..function = c.op!.text!
+    ..target = null
     ..args = [ifTrue, ifFalse];
 }
 
@@ -88,8 +89,9 @@ Expr conditionalOrFromConditionalAndContexts(
   }
   return CallExpr()
     ..function = function
+    ..target = null
     ..args = [
-      conditionalAndContexts.first,
+      visit(conditionalAndContexts.first),
       conditionalOrFromConditionalAndContexts(
           function, conditionalAndContexts.sublist(1))
     ];
@@ -105,6 +107,7 @@ Expr visitCalc(CalcContext tree) {
   // https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/parser/parser.go#L515.
   return CallExpr()
     ..function = '_${tree.op!.text!}_'
+    ..target = null
     ..args = [visit(tree.getChild(0)!), visit(tree.getChild(1)!)];
 }
 
@@ -135,6 +138,7 @@ Expr visitRelation(RelationContext tree) {
   final op = tree.op!.text!;
   return CallExpr()
     ..function = op
+    ..target = null
     ..args = [visit(tree.relation(0)!), visit(tree.relation(1)!)];
 }
 
