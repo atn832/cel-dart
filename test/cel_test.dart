@@ -14,8 +14,7 @@ void main() {
 
     test('String', () {
       final expression = p.parse('"Hello World!"');
-      expect(expression, isA<StringLiteralExpr>());
-      expect((expression as StringLiteralExpr).value, 'Hello World!');
+      expect(expression, StringLiteralExpr()..value = 'Hello World!');
     });
   });
 }
