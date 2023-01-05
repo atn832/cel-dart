@@ -111,5 +111,11 @@ void main() {
       final p = Program(environment, ast);
       expect(p.evaluate({'animal': 'elephant'}), 'elephant');
     });
+    test('==', () {
+      final environment = Environment();
+      final ast = environment.compile('uid=="abc"');
+      final p = Program(environment, ast);
+      expect(p.evaluate({'uid': 'abc'}), true);
+    });
   });
 }

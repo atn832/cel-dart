@@ -27,3 +27,16 @@ class AttributeValueInterpretable implements Interpretable {
     return attribute.resolve(activation);
   }
 }
+
+class EqualInterpretable implements Interpretable {
+  EqualInterpretable(this.leftHandSide, this.rightHandSide);
+
+  final Interpretable leftHandSide;
+  final Interpretable rightHandSide;
+
+  @override
+  evaluate(Activation activation) {
+    return leftHandSide.evaluate(activation) ==
+        rightHandSide.evaluate(activation);
+  }
+}

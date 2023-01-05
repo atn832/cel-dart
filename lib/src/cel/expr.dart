@@ -6,7 +6,7 @@ class Expr {}
 class CallExpr extends Equatable implements Expr {
   late final String function;
   late final Expr? target;
-  late final List<dynamic> args;
+  late final List<Expr> args;
 
   @override
   List<Object?> get props => [function, target, args];
@@ -26,7 +26,8 @@ class SelectExpr extends Equatable implements Expr {
   bool? get stringify => true;
 }
 
-class StringLiteralExpr extends Equatable implements Expr {
+class StringLiteralExpr extends Equatable implements ConstExpression {
+  @override
   late final String value;
 
   @override
@@ -40,7 +41,7 @@ abstract class ConstExpression extends Expr {
   dynamic get value;
 }
 
-class BoolLiteralExpr extends Equatable implements Expr, ConstExpression {
+class BoolLiteralExpr extends Equatable implements ConstExpression {
   @override
   late final bool value;
 
@@ -51,7 +52,7 @@ class BoolLiteralExpr extends Equatable implements Expr, ConstExpression {
   bool? get stringify => true;
 }
 
-class NullLiteralExpr extends Equatable implements Expr, ConstExpression {
+class NullLiteralExpr extends Equatable implements ConstExpression {
   @override
   get value => null;
 
