@@ -7,3 +7,6 @@
 pubspec.lock
 
 .antlr/
+
+# Created by `dart doc`.
+doc/

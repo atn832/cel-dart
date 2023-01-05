@@ -1,24 +1,38 @@
 # cel-dart
 
-This project parses and evaluates Common Expression Language (CEL) programs. For example based on the input `request.auth.claims.group=='admin'` and a `request` object, the library will evaluate whether the stattement is `true` or `false`. CEL (see the [spec](https://github.com/google/cel-spec)) is a language used by many security projects such as Firestore and Firebase Storage. This project is a simplified port of <https://github.com/google/cel-go>.
+This project parses and evaluates Common Expression Language (CEL) programs against some inputs. For example based on the input `request.auth.claims.group=='admin'` and a `request` object, the library will evaluate whether the statement is `true` or `false`. CEL (see the [spec](https://github.com/google/cel-spec)) is a language used by many security projects such as Firestore and Firebase Storage. This project is a simplified port of <https://github.com/google/cel-go>.
 
 ## Architecture
 
 Here's the mechanism from CEL code (a `String`) to evaluation:
 
-1. The user sets up an Environment. An Environment is a map that declares custom functions and types.
-1. The CEL code is parsed into a CEL tree by a Parser.
-1. The CEL tree is traversed and converted into an Abstract Syntax Tree (AST). The type name of that AST is `Expr`.
-1. The AST and the Environment are wrapped into a Program.
-1. The Program gets evaluated into a Value. Evaluation is done in two steps
-   1. A Planner traverses the AST and converts it into an Interpretable.
-   1. Program evaluates the Interpretable into a Value.
+1. The user instantiates an [Environment]. In cel-go, they can pass some environment variables. We have skipped porting this so far.
+1. The user calls [Environment.compile] with CEL code (a `String`), and gets back an Abstract Syntax Tree (AST).
+    1. Under the hood, [Environment.compile] relies on [Parser], which itself uses [CELParser], an ANTLR generated Parser for CEL.
+    1. [CELParser] converts the CEL code into a CEL tree (a [StartContext]).
+    1. Then Parser traverses the CEL tree into an [Expr], which is the actual AST.
+    1. Finally Environment wraps the [Expr] into an [Ast].
+1. The user instnatiates a [Program] by passing the Environment and the AST. Upon initialization, the Program calls [Planner.plan], which traverses the AST and converts it into an [Interpretable] for later use.
+1. Whenever the user wants to evaluate the Program, they call [Program.evaluate] with some inputs (eg a [Map]), and get a value as a result. It evaluates the Interpretable using the inputs into a return value.
+
+The meat of the code is in [Parser.visit] and [Planner.plan].
 
 ## Differences with cel-go
 
 The main difference besides being incomplete is that cel-go defines the `Expr` architecture with Protobuf, while this project defines `Expr` as native Dart. This is mostly for convenience, but we might integrate Protobuf later for feature parity.
 
 ## Features
+
+| Feature | Supported |
+| --- | --- |
+| Null, Bool, String, Int (including Hex) Literals | ✅ |
+| Double, Bytes, UInt Literals | ❌ |
+| Operators | See table below |
+| Parses to Expr Protobuf | ❌ |
+
+### Operators
+
+This table comes from https://firebase.google.com/docs/rules/rules-language#operators_and_operator_precedence.
 
 | Operator | Description | Supported |
 | --- | --- | --- |
@@ -36,22 +50,32 @@ The main difference besides being incomplete is that cel-go defines the `Expr` a
 | a \|\| b | Conditional OR | ✅ |
 | a ? true_value : false_value | Ternary expression | ❌ |
 
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
-
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
-
 ```dart
-const like = 'sample';
+import 'package:cel/cel.dart';
+
+void main() {
+  final input = "request.auth.claims.group == 'admin'";
+  final e = Environment();
+  final ast = e.compile(input);
+  final p = Program(e, ast);
+  print(p.evaluate({
+    'request': {
+      'auth': {
+        'claims': {'group': 'admin'}
+      }
+    }
+  }));
+}
 ```
 
 ## Additional information
 
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+If you are curious how it was made, or want to contribute, you may find this reading list useful:
+
+* <https://firebase.google.com/docs/rules>
+* <https://codelabs.developers.google.com/codelabs/cel-go/>
+* [CEL language definition](https://github.com/google/cel-go/blob/master/parser/gen/CEL.g4)
+* [Expr protobuf](https://github.com/googleapis/googleapis/tree/master/google/api/expr/v1beta1)
+* <https://github.com/google/cel-go>
