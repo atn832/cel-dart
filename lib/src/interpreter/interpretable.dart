@@ -44,3 +44,29 @@ class EqualInterpretable implements Interpretable {
         rightHandSide.evaluate(activation);
   }
 }
+
+class NotEqualInterpretable implements Interpretable {
+  NotEqualInterpretable(this.leftHandSide, this.rightHandSide);
+
+  final Interpretable leftHandSide;
+  final Interpretable rightHandSide;
+
+  @override
+  evaluate(Activation activation) {
+    return leftHandSide.evaluate(activation) !=
+        rightHandSide.evaluate(activation);
+  }
+}
+
+class LogicalAndInterpretable implements Interpretable {
+  LogicalAndInterpretable(this.leftHandSide, this.rightHandSide);
+
+  final Interpretable leftHandSide;
+  final Interpretable rightHandSide;
+
+  @override
+  evaluate(Activation activation) {
+    return leftHandSide.evaluate(activation) &&
+        rightHandSide.evaluate(activation);
+  }
+}

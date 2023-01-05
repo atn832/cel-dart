@@ -39,12 +39,30 @@ class Planner {
     if (functionName == Operators.Equals.name) {
       return planCallEqual(expression, interpretableArguments);
     }
+    if (functionName == Operators.NotEquals.name) {
+      return planCallNotEqual(expression, interpretableArguments);
+    }
+    if (functionName == Operators.LogicalAnd.name) {
+      return planCallLogicalAnd(expression, interpretableArguments);
+    }
     throw UnsupportedError("Function $functionName");
+  }
+
+  Interpretable planCallLogicalAnd(
+      CallExpr expression, List<Interpretable> interpretableArguments) {
+    return LogicalAndInterpretable(
+        interpretableArguments[0], interpretableArguments[1]);
   }
 
   Interpretable planCallEqual(
       CallExpr expression, List<Interpretable> interpretableArguments) {
     return EqualInterpretable(
+        interpretableArguments[0], interpretableArguments[1]);
+  }
+
+  Interpretable planCallNotEqual(
+      CallExpr expression, List<Interpretable> interpretableArguments) {
+    return NotEqualInterpretable(
         interpretableArguments[0], interpretableArguments[1]);
   }
 

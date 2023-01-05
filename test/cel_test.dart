@@ -1,5 +1,4 @@
 import 'package:cel/cel.dart';
-import 'package:cel/src/cel/ast.dart';
 import 'package:cel/src/cel/environment.dart';
 import 'package:cel/src/cel/expr.dart';
 import 'package:test/test.dart';
@@ -125,6 +124,28 @@ void main() {
       expect(
           p.evaluate({
             'user': {'uid': 'abc'}
+          }),
+          true);
+    });
+    test('Null and LogicalAnd', () {
+      final environment = Environment();
+      final ast = environment
+          .compile('request.auth != null && request.auth.uid == "abc"');
+      final p = Program(environment, ast);
+
+      expect(p.evaluate({'request': {}}), false);
+      expect(
+          p.evaluate({
+            'request': {
+              'auth': {'uid': 'DEF'}
+            }
+          }),
+          false);
+      expect(
+          p.evaluate({
+            'request': {
+              'auth': {'uid': 'abc'}
+            }
           }),
           true);
     });
