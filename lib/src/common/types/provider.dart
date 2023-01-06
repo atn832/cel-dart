@@ -1,4 +1,5 @@
 import 'package:cel/src/common/types/bool.dart';
+import 'package:cel/src/common/types/double.dart';
 import 'package:cel/src/common/types/int.dart';
 import 'package:cel/src/common/types/null.dart';
 import 'package:cel/src/common/types/ref/provider.dart';
@@ -47,6 +48,9 @@ _nativeToValue(TypeAdapter adapter, dynamic value) {
   }
   if (value is int) {
     return IntValue(value);
+  }
+  if (value is double) {
+    return DoubleValue(value);
   }
   if (value is String) {
     return StringValue(value);
