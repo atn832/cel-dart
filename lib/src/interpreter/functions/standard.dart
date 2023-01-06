@@ -1,3 +1,4 @@
+import '../../common/overloads/overloads.dart';
 import '../../operators/operators.dart';
 import 'functions.dart';
 
@@ -93,6 +94,9 @@ List<Overload> standardOverloads() {
               : throw StateError('in works only on lists and maps');
     }),
 
-    // TODO: implement matches.
+    // Matches function
+    Overload(Overloads.matches.name, binaryOperator: (string, regExp) {
+      return RegExp(regExp).hasMatch(string);
+    }),
   ];
 }

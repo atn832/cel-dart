@@ -241,7 +241,13 @@ Expr visitMemberCall(MemberCallContext tree) {
   final id = tree.id!.text!;
   // TODO: I'm assuming it is a Select. Not parsing Member properly. See
   // https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/parser/parser.go#L387-L396.
-  return SelectExpr(field: id, operand: operand);
+
+  // Skipped porting visitExprList and visitSlice. They don't seem to be useful.
+  // Skipped receiverCallOrMacro.
+  return CallExpr(
+      function: id,
+      target: operand,
+      args: tree.args!.e.map((e) => visit(e)).toList());
 }
 
 Expr visitSelect(SelectContext tree) {
@@ -311,13 +317,15 @@ ParseTree unnest(ParseTree t) {
 // Based on
 // https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/parser/parser.go#L652.
 Expr visitIdentOrGlobalCall(IdentOrGlobalCallContext tree) {
+  final name = '${tree.leadingDot?.text ?? ''}${tree.id!.text!}';
   if (tree.op != null) {
-    // TODO: Handle global call or macro.
-    throw Exception();
+    // TODO: Handle global call or macro properly.
+    return CallExpr(
+        function: name, args: tree.args!.e.map((e) => visit(e)).toList());
   }
   // TODO: Check for reserved identifiers and throw errors.
 
-  return IdentExpr('${tree.leadingDot?.text ?? ''}${tree.id!.text!}');
+  return IdentExpr(name);
 }
 
 String findOperator(String operator) => Operators.operators[operator]!.name;

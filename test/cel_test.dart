@@ -252,5 +252,19 @@ void main() {
       final p = Program(environment, ast, StdLibrary().programOptions);
       expect(p.evaluate({}), 1);
     });
+    test('a.matches(b)', () {
+      final environment = Environment();
+      final ast = environment.compile("'hello'.matches('he')");
+      print(ast.expression);
+      final p = Program(environment, ast, StdLibrary().programOptions);
+      expect(p.evaluate({}), true);
+    });
+    test('matches(a, b)', () {
+      final environment = Environment();
+      final ast = environment.compile("matches('hello', 'he')");
+      print(ast.expression);
+      final p = Program(environment, ast, StdLibrary().programOptions);
+      expect(p.evaluate({}), true);
+    });
   });
 }
