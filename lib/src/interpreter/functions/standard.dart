@@ -1,8 +1,15 @@
 import '../../operators/operators.dart';
 import 'functions.dart';
 
+// https://github.com/google/cel-go/blob/master/interpreter/functions/standard.go
 List<Overload> standardOverloads() {
   return [
+    // Logical not (!a)
+    Overload(
+      Operators.logicalNot.name,
+      unaryOperator: (value) => !value,
+    ),
+
     // Less than operator
     Overload(Operators.less.name,
         binaryOperator: (leftHandSide, rightHandSide) {

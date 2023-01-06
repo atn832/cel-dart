@@ -18,11 +18,31 @@ enum Operators {
   modulo("_%_"),
   negate("-_"),
   // Renamed from index to avoid conflicting with `Enum.index`.
-  indexer("_[_]"),
+  index_("_[_]"),
   optIndex("_[?_]"),
-  optSelect("_?._");
+  optSelect("_?._"),
+
+  // Named operators, must not have be valid identifiers.
+  // Skipped porting NotStrictlyFalse.
+  // Note: Cannot use reserved keyword `in`.
+  in_("@in");
 
   const Operators(this.name);
 
   final String name;
+
+  static final operators = Map<String, Operators>.unmodifiable({
+    "+": Operators.add,
+    "/": Operators.divide,
+    "==": Operators.equals,
+    ">": Operators.greater,
+    ">=": Operators.greaterEquals,
+    "in": Operators.in_,
+    "<": Operators.less,
+    "<=": Operators.lessEquals,
+    "%": Operators.modulo,
+    "*": Operators.multiply,
+    "!=": Operators.notEquals,
+    "-": Operators.subtract,
+  });
 }

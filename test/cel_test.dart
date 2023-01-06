@@ -200,6 +200,12 @@ void main() {
         expect(p.evaluate({}), 7);
       });
     });
+    test('! unary', () {
+      final environment = Environment();
+      final ast = environment.compile('!true');
+      final p = Program(environment, ast, StdLibrary().programOptions);
+      expect(p.evaluate({}), false);
+    });
     test('list', () {
       final environment = Environment();
       final ast = environment.compile('[1, 2, value]');

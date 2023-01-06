@@ -1,4 +1,5 @@
 import 'package:antlr4/antlr4.dart';
+import 'package:cel/src/operators/operators.dart';
 
 import '../cel/expr.dart';
 import 'gen/CELLexer.dart';
@@ -32,6 +33,9 @@ Expr visit(ParseTree tree) {
   }
   if (tree is ConditionalAndContext) {
     return visitConditionalAnd(tree);
+  }
+  if (tree is LogicalNotContext) {
+    return visitLogicalNot(tree);
   }
   if (tree is RelationContext) {
     return visitRelation(tree);
@@ -81,6 +85,13 @@ Expr visit(ParseTree tree) {
 
   throw UnsupportedError(
       'Unknown parse element ${tree.text} of type ${tree.runtimeType}');
+}
+
+Expr visitLogicalNot(LogicalNotContext tree) {
+  final target = visit(tree.member()!);
+  // Skipped: global call or macro.
+
+  return CallExpr(function: Operators.logicalNot.name, args: [target]);
 }
 
 Expr visitCreateList(CreateListContext tree) {
@@ -151,7 +162,7 @@ Expr visitExpr(ExprContext c) {
 Expr visitConditionalOr(ConditionalOrContext tree) {
   // TODO: use a balancer like in https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/parser/parser.go#L463-L476.
   return conditionalOrFromConditionalAndContexts(
-      findOperator('||'), [tree.e!, ...tree.e1]);
+      Operators.logicalOr.name, [tree.e!, ...tree.e1]);
 }
 
 Expr conditionalOrFromConditionalAndContexts(
@@ -168,7 +179,7 @@ Expr conditionalOrFromConditionalAndContexts(
 
 Expr visitConditionalAnd(ConditionalAndContext tree) {
   return conditionalOrFromConditionalAndContexts(
-      findOperator('&&'), [tree.e!, ...tree.e1]);
+      Operators.logicalAnd.name, [tree.e!, ...tree.e1]);
 }
 
 Expr visitCalc(CalcContext tree) {
@@ -249,6 +260,7 @@ ParseTree unnest(ParseTree t) {
     return unnest(t.literal()!);
   }
   // TODO: port the remaining types.
+  // print('unnest: Unknown type ${t.runtimeType}');
   return t;
 }
 
@@ -264,10 +276,7 @@ Expr visitIdentOrGlobalCall(IdentOrGlobalCallContext tree) {
   return IdentExpr('${tree.leadingDot?.text ?? ''}${tree.id!.text!}');
 }
 
-// TODO: instead, check against the map of operators. For example in becomes
-// @in, not _in_. See
-// https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/parser/parser.go#L515.
-String findOperator(String operator) => '_${operator}_';
+String findOperator(String operator) => Operators.operators[operator]!.name;
 
 // TODO: implement unescape in the unquote. See
 // https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/parser/parser.go#L843.

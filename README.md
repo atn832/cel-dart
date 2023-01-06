@@ -56,7 +56,7 @@ This table comes from <https://firebase.google.com/docs/rules/rules-language#ope
 | a.f | field access | ✅ |
 | a() | call | ❌ |
 | a[i] | Index | ❌ |
-| !a -a | Unary negation | ❌ |
+| !a -a | Unary negation | ✅ |
 | a/b a%b a*b | Multiplicative operators | ✅ |
 | a+b a-b | Additive operators | ✅ |
 | a>b a>=b | Relational operators | ✅ |

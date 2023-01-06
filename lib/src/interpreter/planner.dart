@@ -61,7 +61,10 @@ class Planner {
       throw StateError('Missing function $functionName');
     }
     switch (expression.args.length) {
-      // TODO: handle zero and unary functions.
+      // TODO: handle zero functions.
+      case 1:
+        return planCallUnary(expression, functionName, functionImplementation,
+            interpretableArguments);
       case 2:
         return planCallBinary(expression, functionName, functionImplementation,
             interpretableArguments);
@@ -115,15 +118,21 @@ class Planner {
   }
 
   Interpretable planCallBinary(CallExpr expression, String functionName,
-      Overload functionImplementation, List<Interpretable> args) {
+      Overload functionImplementation, List<Interpretable> arguments) {
     return BinaryInterpretable(
-        functionImplementation.binaryOperator!, args[0], args[1]);
+        functionImplementation.binaryOperator!, arguments[0], arguments[1]);
   }
 
   // https://github.com/google/cel-go/blob/32ac6133c6b8eca8bb76e17e6ad50a1eb757778a/interpreter/planner.go#L516
   Interpretable planCreateList(ListExpr expression) {
     final elements = expression.elements.map((e) => plan(e)).toList();
     return ListInterpretable(elements);
+  }
+
+  Interpretable planCallUnary(CallExpr expression, String functionName,
+      Overload functionImplementation, List<Interpretable> arguments) {
+    return UnaryInterpretable(
+        functionImplementation.unaryOperator!, arguments[0]);
   }
 }
 

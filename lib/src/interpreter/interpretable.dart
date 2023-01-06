@@ -85,6 +85,20 @@ class LogicalOrInterpretable implements Interpretable {
   }
 }
 
+class UnaryInterpretable implements Interpretable {
+  UnaryInterpretable(this.unaryOperator, this.value);
+
+  final UnaryOperator unaryOperator;
+  final Interpretable value;
+
+  // https://github.com/google/cel-go/blob/32ac6133c6b8eca8bb76e17e6ad50a1eb757778a/interpreter/interpretable.go#L439
+  @override
+  evaluate(Activation activation) {
+    // Skipped porting Traits.
+    return unaryOperator(value.evaluate(activation));
+  }
+}
+
 class BinaryInterpretable implements Interpretable {
   BinaryInterpretable(
       this.binaryOperator, this.leftHandSide, this.rightHandSide);
