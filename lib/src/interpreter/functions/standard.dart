@@ -86,7 +86,11 @@ List<Overload> standardOverloads() {
 
     // In operator
     Overload(Operators.in_.name, binaryOperator: (element, object) {
-      return object.contains(element);
+      return object is List
+          ? object.contains(element)
+          : object is Map
+              ? object.containsKey(element)
+              : throw StateError('in works only on lists and maps');
     }),
 
     // TODO: implement matches.

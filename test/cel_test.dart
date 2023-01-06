@@ -238,5 +238,13 @@ void main() {
       expect(p.evaluate({'value': 1}), true);
       expect(p.evaluate({'value': 3}), false);
     });
+    test('existence a map', () {
+      final environment = Environment();
+      final ast =
+          environment.compile("key in {'name': 'cel', 'useful': true, 5: 7}");
+      final p = Program(environment, ast, StdLibrary().programOptions);
+      expect(p.evaluate({'key': 'name'}), true);
+      expect(p.evaluate({'key': 'description'}), false);
+    });
   });
 }
