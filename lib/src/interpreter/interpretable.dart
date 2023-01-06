@@ -100,10 +100,11 @@ class UnaryInterpretable implements Interpretable {
 }
 
 class BinaryInterpretable implements Interpretable {
-  BinaryInterpretable(
-      this.binaryOperator, this.leftHandSide, this.rightHandSide);
+  BinaryInterpretable(this.functionName, this.binaryOperator, this.leftHandSide,
+      this.rightHandSide);
 
-  final BinaryOperator binaryOperator;
+  final String functionName;
+  final BinaryOperator? binaryOperator;
   final Interpretable leftHandSide;
   final Interpretable rightHandSide;
 
@@ -112,8 +113,12 @@ class BinaryInterpretable implements Interpretable {
   evaluate(Activation activation) {
     final leftValue = leftHandSide.evaluate(activation);
     final rightValue = rightHandSide.evaluate(activation);
-    // Skipped porting ReceiverType.
-    return binaryOperator(leftValue, rightValue);
+    // Skipped porting ReceiverType. Since we can't read Traits, let's just
+    // expect it's a receiver and wildly call receive().
+    return binaryOperator != null
+        ? binaryOperator!(leftValue, rightValue)
+        : throw UnimplementedError(
+            'Should implement Value and Traits and Receiver');
   }
 }
 

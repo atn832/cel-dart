@@ -273,5 +273,12 @@ void main() {
       final p = Program(environment, ast, StdLibrary().programOptions);
       expect(p.evaluate({}), true);
     });
+    test('startsWith', () {
+      final environment = Environment();
+      final ast = environment.compile("'hello'.startsWith('he')");
+      print(ast.expression);
+      final p = Program(environment, ast, StdLibrary().programOptions);
+      expect(p.evaluate({}), true);
+    });
   });
 }

@@ -68,13 +68,10 @@ class Planner {
     // TODO: implement indexer, optSelect, optIndex.
 
     final functionImplementation = dispatcher.findOverload(functionName);
-    if (functionImplementation == null) {
-      throw StateError('Missing function $functionName');
-    }
     switch (interpretableArguments.length) {
       // TODO: handle zero functions.
       case 1:
-        return planCallUnary(expression, functionName, functionImplementation,
+        return planCallUnary(expression, functionName, functionImplementation!,
             interpretableArguments);
       case 2:
         return planCallBinary(expression, functionName, functionImplementation,
@@ -129,9 +126,9 @@ class Planner {
   }
 
   Interpretable planCallBinary(CallExpr expression, String functionName,
-      Overload functionImplementation, List<Interpretable> arguments) {
-    return BinaryInterpretable(
-        functionImplementation.binaryOperator!, arguments[0], arguments[1]);
+      Overload? functionImplementation, List<Interpretable> arguments) {
+    return BinaryInterpretable(functionName,
+        functionImplementation?.binaryOperator, arguments[0], arguments[1]);
   }
 
   // https://github.com/google/cel-go/blob/32ac6133c6b8eca8bb76e17e6ad50a1eb757778a/interpreter/planner.go#L516

@@ -22,6 +22,7 @@ class Program {
         Interpreter(attributeFactory: attributeFactory, dispatcher: dispatcher);
 
     // Configure the program via the ProgramOption values.
+    // https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/cel/program.go#L162-L169
     for (final option in options) {
       // Apply the option to this program.
       option(this);
