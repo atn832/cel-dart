@@ -1,4 +1,5 @@
 import 'package:cel/src/common/types/bool.dart';
+import 'package:cel/src/common/types/traits/receiver.dart';
 
 import '../common/types/ref/provider.dart';
 import '../common/types/ref/value.dart';
@@ -118,12 +119,10 @@ class BinaryInterpretable implements Interpretable {
   evaluate(Activation activation) {
     final leftValue = leftHandSide.evaluate(activation);
     final rightValue = rightHandSide.evaluate(activation);
-    // Skipped porting ReceiverType. Since we can't read Traits, let's just
-    // expect it's a receiver and wildly call receive().
+    assert(binaryOperator != null || leftValue is Receiver);
     return binaryOperator != null
         ? binaryOperator!(leftValue, rightValue)
-        : throw UnimplementedError(
-            'Should implement Value and Traits and Receiver');
+        : (leftValue as Receiver).receive(functionName, '', [rightValue]);
   }
 }
 

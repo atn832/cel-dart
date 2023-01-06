@@ -1,3 +1,5 @@
+import 'package:cel/src/common/types/traits/matcher.dart';
+
 import '../../common/overloads/overloads.dart';
 import '../../operators/operators.dart';
 import 'functions.dart';
@@ -96,7 +98,10 @@ List<Overload> standardOverloads() {
 
     // Matches function
     Overload(Overloads.matches.name, binaryOperator: (string, regExp) {
-      return RegExp(regExp).hasMatch(string);
+      if (string is! Matcher) {
+        throw StateError('The first parameter should be a Matcher');
+      }
+      return string.match(regExp);
     }),
   ];
 }
