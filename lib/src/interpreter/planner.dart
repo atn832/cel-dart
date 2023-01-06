@@ -44,7 +44,7 @@ class Planner {
 
   Interpretable planIdent(IdentExpr ident) {
     return AttributeValueInterpretable(
-        attributeFactory.maybeAttribute(ident.name));
+        attributeFactory.maybeAttribute(ident.name), adapter);
   }
 
   // https://github.com/google/cel-go/blob/32ac6133c6b8eca8bb76e17e6ad50a1eb757778a/interpreter/planner.go#L239
@@ -128,7 +128,7 @@ class Planner {
 
   AttributeValueInterpretable relativeAttribute(Interpretable eval) {
     return AttributeValueInterpretable(
-        attributeFactory.relativeAttribute(eval));
+        attributeFactory.relativeAttribute(eval), adapter);
   }
 
   Interpretable planCallBinary(CallExpr expression, String functionName,
@@ -161,8 +161,10 @@ class Planner {
 
   // https://github.com/google/cel-go/blob/32ac6133c6b8eca8bb76e17e6ad50a1eb757778a/interpreter/planner.go#L453
   Interpretable planCallConditional(List<Interpretable> arguments) {
-    return AttributeValueInterpretable(ConditionalAttribute(
-        condition: arguments[0], truthy: arguments[1], falsy: arguments[2]));
+    return AttributeValueInterpretable(
+        ConditionalAttribute(
+            condition: arguments[0], truthy: arguments[1], falsy: arguments[2]),
+        adapter);
   }
 
   Interpretable planConst(ConstExpression constant) {

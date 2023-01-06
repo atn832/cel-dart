@@ -23,13 +23,14 @@ class InterpretableConst implements Interpretable {
 
 // Port of https://github.com/google/cel-go/blob/32ac6133c6b8eca8bb76e17e6ad50a1eb757778a/interpreter/interpretable.go#L1219.
 class AttributeValueInterpretable implements Interpretable {
-  AttributeValueInterpretable(this.attribute);
+  AttributeValueInterpretable(this.attribute, this.typeAdapter);
 
   final Attribute attribute;
+  final TypeAdapter typeAdapter;
 
   @override
   evaluate(Activation activation) {
-    return attribute.resolve(activation);
+    return typeAdapter.nativeToValue(attribute.resolve(activation));
   }
 
   void addQualifier(Qualifier qualifier) {
