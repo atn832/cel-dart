@@ -74,5 +74,12 @@ List<Overload> standardOverloads() {
         binaryOperator: (leftHandSide, rightHandSide) {
       return leftHandSide % rightHandSide;
     }),
+
+    // TODO: implement Negate.
+
+    // Index operator
+    Overload(Operators.index_.name, binaryOperator: (target, index) {
+      return target[index];
+    }),
   ];
 }

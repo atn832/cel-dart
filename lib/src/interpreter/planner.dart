@@ -44,7 +44,11 @@ class Planner {
   Interpretable planCall(CallExpr expression) {
     final functionName = expression.function;
     // Skip target, p.resolveFunction.
-    final interpretableArguments = expression.args.map((e) => plan(e)).toList();
+    final interpretableArguments = [
+      // If there is a target, it becomes the first argument.
+      if (expression.target != null) plan(expression.target!),
+      ...expression.args.map((e) => plan(e))
+    ];
     if (functionName == Operators.logicalAnd.name) {
       return planCallLogicalAnd(expression, interpretableArguments);
     }
@@ -63,7 +67,7 @@ class Planner {
     if (functionImplementation == null) {
       throw StateError('Missing function $functionName');
     }
-    switch (expression.args.length) {
+    switch (interpretableArguments.length) {
       // TODO: handle zero functions.
       case 1:
         return planCallUnary(expression, functionName, functionImplementation,

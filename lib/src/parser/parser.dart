@@ -89,9 +89,21 @@ Expr visit(ParseTree tree) {
   if (tree is MapInitializerListContext) {
     return visitMapInitializerList(tree);
   }
+  if (tree is IndexContext) {
+    return visitIndex(tree);
+  }
 
   throw UnsupportedError(
       'Unknown parse element ${tree.text} of type ${tree.runtimeType}');
+}
+
+Expr visitIndex(IndexContext tree) {
+  // Skipped porting globalCallOrMacro.
+  final index = visit(tree.index!);
+  return CallExpr(
+      function: Operators.index_.name,
+      target: visit(tree.member()!),
+      args: [index]);
 }
 
 // https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/parser/parser.go#L692

@@ -218,5 +218,18 @@ void main() {
       final p = Program(environment, ast, StdLibrary().programOptions);
       expect(p.evaluate({}), {'name': 'cel', 'useful': true, 5: 7});
     });
+    test('index a list', () {
+      final environment = Environment();
+      final ast = environment.compile('[1, 2, value][2]');
+      final p = Program(environment, ast, StdLibrary().programOptions);
+      expect(p.evaluate({'value': 3}), 3);
+    });
+    test('index a map', () {
+      final environment = Environment();
+      final ast =
+          environment.compile("{'name': 'cel', 'useful': true, 5: 7}['name']");
+      final p = Program(environment, ast, StdLibrary().programOptions);
+      expect(p.evaluate({}), 'cel');
+    });
   });
 }
