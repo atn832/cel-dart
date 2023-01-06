@@ -67,18 +67,18 @@ From https://github.com/google/cel-spec/blob/master/doc/langdef.md#functions.
 
 | Symbol | Type | Description |  |
 |:---:|:---:|:---:|---|
-| !_ | (bool) -> bool | logical not |  |
-| -_ | (int) -> int | negation |  |
-|  | (double) -> double | negation |  |
-| _!=_ | (A, A) -> bool | inequality |  |
-| _%_ | (int, int) -> int | arithmetic |  |
-|  | (uint, uint) -> uint | arithmetic |  |
-| _&&_ | (bool, bool) -> bool | logical and |  |
+| !_ | (bool) -> bool | logical not | ✅ |
+| -_ | (int) -> int | negation | ✅ |
+|  | (double) -> double | negation | ✅ |
+| _!=_ | (A, A) -> bool | inequality | ✅ |
+| _%_ | (int, int) -> int | arithmetic | ✅ |
+|  | (uint, uint) -> uint | arithmetic | untested |
+| _&&_ | (bool, bool) -> bool | logical and | ✅ |
 |  | (bool, ...) -> bool | logical and (variadic) |  |
 | _*_ | (int, int) -> int | arithmetic |  |
 |  | (uint, uint) -> uint | arithmetic |  |
-|  | (double, double) -> double | arithmetic |  |
-| _+_ | (int, int) -> int | arithmetic |  |
+|  | (double, double) -> double | arithmetic | ✅ |
+| _+_ | (int, int) -> int | arithmetic | ✅ |
 |  | (uint, uint) -> uint | arithmetic |  |
 |  | (double, double) -> double | arithmetic |  |
 |  | (string, string) -> string | String concatenation. |  |
@@ -87,25 +87,25 @@ From https://github.com/google/cel-spec/blob/master/doc/langdef.md#functions.
 |  | (google.protobuf.Timestamp, google.protobuf.Duration) -> google.protobuf.Timestamp | arithmetic |  |
 |  | (google.protobuf.Duration, google.protobuf.Timestamp) -> google.protobuf.Timestamp | arithmetic |  |
 |  | (google.protobuf.Duration, google.protobuf.Duration) -> google.protobuf.Duration | arithmetic |  |
-| _-_ | (int, int) -> int | arithmetic |  |
+| _-_ | (int, int) -> int | arithmetic | ✅ |
 |  | (uint, uint) -> uint | arithmetic |  |
 |  | (double, double) -> double | arithmetic |  |
 |  | (google.protobuf.Timestamp, google.protobuf.Timestamp) -> google.protobuf.Duration | arithmetic |  |
 |  | (google.protobuf.Timestamp, google.protobuf.Duration) -> google.protobuf.Timestamp | arithmetic |  |
 |  | (google.protobuf.Duration, google.protobuf.Duration) -> google.protobuf.Duration | arithmetic |  |
-| _/_ | (int, int) -> int | arithmetic |  |
+| _/_ | (int, int) -> int | arithmetic | ✅ but returns a double |
 |  | (uint, uint) -> uint | arithmetic |  |
 |  | (double, double) -> double | arithmetic |  |
 | _<=_ | (bool, bool) -> bool | ordering |  |
 |  | (int, int) -> bool | ordering |  |
 |  | (uint, uint) -> bool | ordering |  |
-|  | (double, double) -> bool | ordering |  |
+|  | (double, double) -> bool | ordering | ✅ |
 |  | (string, string) -> bool | ordering |  |
 |  | (bytes, bytes) -> bool | ordering |  |
 |  | (google.protobuf.Timestamp, google.protobuf.Timestamp) -> bool | ordering |  |
 |  | (google.protobuf.Duration, google.protobuf.Duration) -> bool | ordering |  |
 | _<_ | (bool, bool) -> bool | ordering |  |
-|  | (int, int) -> bool | ordering |  |
+|  | (int, int) -> bool | ordering | ✅ |
 |  | (uint, uint) -> bool | ordering |  |
 |  | (double, double) -> bool | ordering |  |
 |  | (string, string) -> bool | ordering |  |
@@ -130,11 +130,11 @@ From https://github.com/google/cel-spec/blob/master/doc/langdef.md#functions.
 |  | (google.protobuf.Timestamp, google.protobuf.Timestamp) -> bool | ordering |  |
 |  | (google.protobuf.Duration, google.protobuf.Duration) -> bool | ordering |  |
 | _?_:_ | (bool, A, A) -> A | The conditional operator. See above for evaluation semantics. Will evaluate the test and only one of the remaining sub-expressions. |  |
-| _[_] | (list(A), int) -> A | list indexing. |  |
+| _[_] | (list(A), int) -> A | list indexing. | ✅ |
 |  | (map(A, B), A) -> B | map indexing. |  |
-| in | (A, list(A)) -> bool | list membership. |  |
-|  | (A, map(A, B)) -> bool | map key membership. |  |
-| _\|\|_ | (bool, bool) -> bool | logical or |  |
+| in | (A, list(A)) -> bool | list membership. | ✅ |
+|  | (A, map(A, B)) -> bool | map key membership. | ✅ |
+| _\|\|_ | (bool, bool) -> bool | logical or | ✅ |
 |  | (bool, ...) -> bool | logical or (variadic) |  |
 | bool | type(bool) | type denotation |  |
 | bytes | type(bytes) | type denotation |  |
