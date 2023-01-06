@@ -195,12 +195,12 @@ Expr visitExpr(ExprContext c) {
   if (c.op == null) {
     return result;
   }
+  final condition = result;
   final ifTrue = visit(c.e1!);
   final ifFalse = visit(c.e2!);
-  // TODO: convert op using the same mapping as https://github.com/google/cel-go/blob/master/common/operators/operators.go.
-  // TODO: support `e ? e1 : e2`. See https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/parser/gen/CEL.g4#L25
-  // and https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/parser/parser.go#L459.
-  return CallExpr(function: c.op!.text!, args: [ifTrue, ifFalse]);
+
+  return CallExpr(
+      function: Operators.conditional.name, args: [condition, ifTrue, ifFalse]);
 }
 
 Expr visitConditionalOr(ConditionalOrContext tree) {

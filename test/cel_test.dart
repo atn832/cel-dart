@@ -246,5 +246,11 @@ void main() {
       expect(p.evaluate({'key': 'name'}), true);
       expect(p.evaluate({'key': 'description'}), false);
     });
+    test('ternary operator', () {
+      final environment = Environment();
+      final ast = environment.compile("true ? 1: -1");
+      final p = Program(environment, ast, StdLibrary().programOptions);
+      expect(p.evaluate({}), 1);
+    });
   });
 }

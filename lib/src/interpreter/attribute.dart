@@ -99,3 +99,25 @@ class StringQualifier extends Qualifier {
     return object[value];
   }
 }
+
+class ConditionalAttribute extends Attribute {
+  ConditionalAttribute(
+      {required this.condition, required this.truthy, required this.falsy});
+
+  final Interpretable condition;
+  final Interpretable truthy;
+  final Interpretable falsy;
+
+  @override
+  void addQualifier(Qualifier qualifier) {
+    // TODO: implement addQualifier
+    throw UnimplementedError();
+  }
+
+  @override
+  resolve(Activation activation) {
+    return condition.evaluate(activation)
+        ? truthy.evaluate(activation)
+        : falsy.evaluate(activation);
+  }
+}

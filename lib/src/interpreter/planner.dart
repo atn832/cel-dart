@@ -1,5 +1,6 @@
 import '../cel/expr.dart';
 import '../operators/operators.dart';
+import 'attribute.dart';
 import 'attribute_factory.dart';
 import 'dispatcher.dart';
 import 'functions/functions.dart';
@@ -54,6 +55,9 @@ class Planner {
     }
     if (functionName == Operators.logicalOr.name) {
       return planCallLogicalOr(expression, interpretableArguments);
+    }
+    if (functionName == Operators.conditional.name) {
+      return planCallConditional(interpretableArguments);
     }
     if (functionName == Operators.equals.name) {
       return planCallEqual(expression, interpretableArguments);
@@ -150,6 +154,12 @@ class Planner {
     final keys = expression.entries.map((e) => plan(e.key)).toList();
     final values = expression.entries.map((e) => plan(e.value)).toList();
     return MapInterpretable(keys, values);
+  }
+
+  // https://github.com/google/cel-go/blob/32ac6133c6b8eca8bb76e17e6ad50a1eb757778a/interpreter/planner.go#L453
+  Interpretable planCallConditional(List<Interpretable> arguments) {
+    return AttributeValueInterpretable(ConditionalAttribute(
+        condition: arguments[0], truthy: arguments[1], falsy: arguments[2]));
   }
 }
 

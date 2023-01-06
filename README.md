@@ -59,7 +59,7 @@ This table comes from <https://firebase.google.com/docs/rules/rules-language#ope
 | a==b a!=b | Comparison operators | ✅ |
 | a && b | Conditional AND | ✅ |
 | a \|\| b | Conditional OR | ✅ |
-| a ? true_value : false_value | Ternary expression | ❌ |
+| a ? true_value : false_value | Ternary expression | ✅ |
 
 ## Usage
 
