@@ -1,4 +1,5 @@
 import 'package:cel/src/common/types/traits/matcher.dart';
+import 'package:cel/src/common/types/traits/math.dart';
 
 import '../../common/overloads/overloads.dart';
 import '../../operators/operators.dart';
@@ -10,7 +11,12 @@ List<Overload> standardOverloads() {
     // Logical not (!a)
     Overload(
       Operators.logicalNot.name,
-      unaryOperator: (value) => !value,
+      unaryOperator: (value) {
+        if (value is! Negater) {
+          throw StateError('$value should be a Negater');
+        }
+        return value.negate();
+      },
     ),
 
     // Less than operator

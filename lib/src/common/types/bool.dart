@@ -1,11 +1,12 @@
 // https://github.com/google/cel-go/blob/377a0bba20d07926e0583b4e604509ca7f3583b7/common/types/bool.go
+import 'package:cel/src/common/types/traits/math.dart';
 import 'package:cel/src/common/types/traits/traits.dart';
 
 import 'ref/value.dart';
 
 final boolType = Type_('bool', {Traits.ComparerType, Traits.NegatorType});
 
-class BooleanValue implements Value {
+class BooleanValue implements Value, Negater {
   BooleanValue(this.value);
 
   @override
@@ -13,4 +14,9 @@ class BooleanValue implements Value {
 
   @override
   Type_ get type => boolType;
+
+  @override
+  Value negate() {
+    return BooleanValue(!value);
+  }
 }
