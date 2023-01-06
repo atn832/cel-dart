@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:antlr4/antlr4.dart';
 import 'package:cel/src/operators/operators.dart';
 
@@ -82,9 +83,40 @@ Expr visit(ParseTree tree) {
   if (tree is CreateListContext) {
     return visitCreateList(tree);
   }
+  if (tree is CreateStructContext) {
+    return visitCreateStruct(tree);
+  }
+  if (tree is MapInitializerListContext) {
+    return visitMapInitializerList(tree);
+  }
 
   throw UnsupportedError(
       'Unknown parse element ${tree.text} of type ${tree.runtimeType}');
+}
+
+// https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/parser/parser.go#L692
+Expr visitMapInitializerList(MapInitializerListContext tree) {
+  assert(tree.cols.length == tree.keys.length);
+  assert(tree.cols.length == tree.values.length);
+
+  // Unlike cel-go, we wrap it in an Expr to avoid using dynamic.
+  return CreateStructEntryListExpr(
+      IterableZip([tree.keys, tree.values]).map((keyValue) {
+    final key = visit((keyValue.first as OptExprContext).e!);
+    final value = visit(keyValue.last);
+    return CreateStructEntry(key, value);
+  }).toList());
+}
+
+// https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/parser/parser.go#L682
+Expr visitCreateStruct(CreateStructContext tree) {
+  final entries = tree.entries != null
+      ? (visit(tree.entries!) as CreateStructEntryListExpr).entries
+      : <CreateStructEntry>[];
+  // For some reason, in the original, they wrap the reslult like this:
+  // Expr(exprKind: Expr_StructExpr(structExpr: Expr_CreateStruct(entries: entries))).
+  // https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/parser/helper.go#L130
+  return MapExpr(entries);
 }
 
 Expr visitLogicalNot(LogicalNotContext tree) {

@@ -29,6 +29,9 @@ class Planner {
     if (expression is ListExpr) {
       return planCreateList(expression);
     }
+    if (expression is MapExpr) {
+      return planCreateMap(expression);
+    }
     throw Exception('Unsupported Expression type: ${expression.runtimeType}.');
   }
 
@@ -133,6 +136,16 @@ class Planner {
       Overload functionImplementation, List<Interpretable> arguments) {
     return UnaryInterpretable(
         functionImplementation.unaryOperator!, arguments[0]);
+  }
+
+  // In cel-go, it's called a Struct, but that's how it is called in the
+  // Protobuf. In CEL, it's called a Map. So we use Map.
+  // https://github.com/google/cel-spec/blob/master/doc/langdef.md#dynamic-values
+  // https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/parser/parser.go#L682
+  Interpretable planCreateMap(MapExpr expression) {
+    final keys = expression.entries.map((e) => plan(e.key)).toList();
+    final values = expression.entries.map((e) => plan(e.value)).toList();
+    return MapInterpretable(keys, values);
   }
 }
 

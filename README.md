@@ -39,6 +39,7 @@ This table is based on https://github.com/google/cel-spec/blob/master/doc/langde
 | Structures | Description | Supported
 | --- | --- | --- |
 | [a, b] | List | ✅ |
+| {'name': 'cel', 35 : true} | Map | ✅ |
 
 | Feature | Supported |
 | --- | --- |

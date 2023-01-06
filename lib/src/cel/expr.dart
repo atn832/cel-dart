@@ -130,3 +130,32 @@ class ListExpr extends Equatable implements Expr {
   @override
   List<Object?> get props => [elements];
 }
+
+class CreateStructEntry {
+  CreateStructEntry(this.key, this.value);
+
+  // In the original, key is wrapped into KeyType.
+  // https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/vendor/google.golang.org/genproto/googleapis/api/expr/v1alpha1/syntax.pb.go#L1220
+  final Expr key;
+  final Expr value;
+}
+
+// My own creation, just so that parser.visit keeps returning Expr instead of
+// dynamic like in cel-go.
+class CreateStructEntryListExpr extends Equatable implements Expr {
+  CreateStructEntryListExpr(this.entries);
+
+  final List<CreateStructEntry> entries;
+
+  @override
+  List<Object?> get props => [entries];
+}
+
+class MapExpr extends Equatable implements Expr {
+  MapExpr(this.entries);
+
+  final List<CreateStructEntry> entries;
+
+  @override
+  List<Object?> get props => [entries];
+}

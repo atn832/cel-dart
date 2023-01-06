@@ -127,3 +127,16 @@ class ListInterpretable implements Interpretable {
     return elements.map((e) => e.evaluate(activation)).toList();
   }
 }
+
+class MapInterpretable implements Interpretable {
+  MapInterpretable(this.keys, this.values);
+
+  final List<Interpretable> keys;
+  final List<Interpretable> values;
+
+  @override
+  evaluate(Activation activation) {
+    return Map.fromIterables(keys.map((k) => k.evaluate(activation)),
+        values.map((v) => v.evaluate(activation)));
+  }
+}

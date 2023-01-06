@@ -212,5 +212,11 @@ void main() {
       final p = Program(environment, ast, StdLibrary().programOptions);
       expect(p.evaluate({'value': 3}), [1, 2, 3]);
     });
+    test('map', () {
+      final environment = Environment();
+      final ast = environment.compile("{'name': 'cel', 'useful': true, 5: 7}");
+      final p = Program(environment, ast, StdLibrary().programOptions);
+      expect(p.evaluate({}), {'name': 'cel', 'useful': true, 5: 7});
+    });
   });
 }
