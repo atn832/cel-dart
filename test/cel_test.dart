@@ -231,5 +231,12 @@ void main() {
       final p = Program(environment, ast, StdLibrary().programOptions);
       expect(p.evaluate({}), 'cel');
     });
+    test('existence in list', () {
+      final environment = Environment();
+      final ast = environment.compile('value in [1, 2]');
+      final p = Program(environment, ast, StdLibrary().programOptions);
+      expect(p.evaluate({'value': 1}), true);
+      expect(p.evaluate({'value': 3}), false);
+    });
   });
 }

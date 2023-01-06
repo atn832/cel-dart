@@ -81,5 +81,14 @@ List<Overload> standardOverloads() {
     Overload(Operators.index_.name, binaryOperator: (target, index) {
       return target[index];
     }),
+
+    // TODO: implement size.
+
+    // In operator
+    Overload(Operators.in_.name, binaryOperator: (element, object) {
+      return object.contains(element);
+    }),
+
+    // TODO: implement matches.
   ];
 }

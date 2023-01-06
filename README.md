@@ -41,13 +41,6 @@ This table is based on https://github.com/google/cel-spec/blob/master/doc/langde
 | [a, b] | List | ✅ |
 | {'name': 'cel', 35 : true} | Map | ✅ |
 
-| Feature | Supported |
-| --- | --- |
-| Properly unescapes all strings | ❌ |
-| Custom functions | ❌ |
-| Type checking | ❌ |
-| Parses to Expr Protobuf | ❌ |
-
 ### Operators
 
 This table comes from <https://firebase.google.com/docs/rules/rules-language#operators_and_operator_precedence>.
@@ -61,7 +54,7 @@ This table comes from <https://firebase.google.com/docs/rules/rules-language#ope
 | a/b a%b a*b | Multiplicative operators | ✅ |
 | a+b a-b | Additive operators | ✅ |
 | a>b a>=b | Relational operators | ✅ |
-| a in b | Existence in list or map | ❌ |
+| a in b | Existence in list or map | ✅ |
 | a is type | Type comparison, where type can be bool, int, float, number, string, list, map, timestamp, duration, path or latlng | ❌ |
 | a==b a!=b | Comparison operators | ✅ |
 | a && b | Conditional AND | ✅ |
