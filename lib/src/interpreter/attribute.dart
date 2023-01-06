@@ -117,9 +117,13 @@ class ConditionalAttribute extends Attribute {
     throw UnimplementedError();
   }
 
+  // https://github.com/google/cel-go/blob/32ac6133c6b8eca8bb76e17e6ad50a1eb757778a/interpreter/attributes.go#L376
   @override
   resolve(Activation activation) {
-    return condition.evaluate(activation)
+    // Note: used a shortcut. Used the raw value instead of BooleanValue.
+    // Note: cel-go uses expression.resolve. Perhaps some optimization to not
+    // evaluate everything?
+    return condition.evaluate(activation).value
         ? truthy.evaluate(activation)
         : falsy.evaluate(activation);
   }

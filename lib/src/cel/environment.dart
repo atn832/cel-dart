@@ -1,14 +1,18 @@
 import 'package:cel/src/cel/options.dart';
+import 'package:cel/src/common/types/provider.dart';
+import 'package:cel/src/common/types/ref/provider.dart';
 import '../checker/declaration.dart';
 import '../parser/parser.dart';
 import 'ast.dart';
 
 class Environment {
-  Environment({List<EnvironmentOption> environmentOptions = const []}) {
+  Environment({List<EnvironmentOption> environmentOptions = const []})
+      : adapter = newRegistry() {
     configure(environmentOptions);
   }
 
   final List<Declaration> declarations = [];
+  final TypeAdapter adapter;
 
   Ast compile(String text) {
     return Ast(Parser().parse(text));

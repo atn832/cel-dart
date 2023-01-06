@@ -1,15 +1,19 @@
+import 'package:cel/src/common/types/bool.dart';
+
+import '../common/types/ref/provider.dart';
+import '../common/types/ref/value.dart';
 import 'activation.dart';
 import 'attribute.dart';
 import 'functions/functions.dart';
 
 abstract class Interpretable {
-  dynamic evaluate(Activation activation);
+  Value evaluate(Activation activation);
 }
 
 class InterpretableConst implements Interpretable {
   InterpretableConst(this.value);
 
-  final dynamic value;
+  final Value value;
 
   @override
   evaluate(Activation activation) {
@@ -41,8 +45,8 @@ class EqualInterpretable implements Interpretable {
 
   @override
   evaluate(Activation activation) {
-    return leftHandSide.evaluate(activation) ==
-        rightHandSide.evaluate(activation);
+    return BooleanValue(leftHandSide.evaluate(activation).value ==
+        rightHandSide.evaluate(activation).value);
   }
 }
 
@@ -54,8 +58,8 @@ class NotEqualInterpretable implements Interpretable {
 
   @override
   evaluate(Activation activation) {
-    return leftHandSide.evaluate(activation) !=
-        rightHandSide.evaluate(activation);
+    return BooleanValue(leftHandSide.evaluate(activation).value !=
+        rightHandSide.evaluate(activation).value);
   }
 }
 
@@ -67,8 +71,8 @@ class LogicalAndInterpretable implements Interpretable {
 
   @override
   evaluate(Activation activation) {
-    return leftHandSide.evaluate(activation) &&
-        rightHandSide.evaluate(activation);
+    return BooleanValue(leftHandSide.evaluate(activation).value &&
+        rightHandSide.evaluate(activation).value);
   }
 }
 
@@ -80,8 +84,8 @@ class LogicalOrInterpretable implements Interpretable {
 
   @override
   evaluate(Activation activation) {
-    return leftHandSide.evaluate(activation) ||
-        rightHandSide.evaluate(activation);
+    return BooleanValue(leftHandSide.evaluate(activation).value ||
+        rightHandSide.evaluate(activation).value);
   }
 }
 
@@ -123,25 +127,30 @@ class BinaryInterpretable implements Interpretable {
 }
 
 class ListInterpretable implements Interpretable {
-  ListInterpretable(this.elements);
+  ListInterpretable(this.elements, this.adapter);
 
   final List<Interpretable> elements;
+  final TypeAdapter adapter;
 
   @override
   evaluate(Activation activation) {
-    return elements.map((e) => e.evaluate(activation)).toList();
+    final native = elements.map((e) => e.evaluate(activation)).toList();
+    return adapter.nativeToValue(native);
   }
 }
 
+// https://github.com/google/cel-go/blob/32ac6133c6b8eca8bb76e17e6ad50a1eb757778a/interpreter/interpretable.go#L669
 class MapInterpretable implements Interpretable {
-  MapInterpretable(this.keys, this.values);
+  MapInterpretable(this.keys, this.values, this.adapter);
 
   final List<Interpretable> keys;
   final List<Interpretable> values;
+  final TypeAdapter adapter;
 
   @override
   evaluate(Activation activation) {
-    return Map.fromIterables(keys.map((k) => k.evaluate(activation)),
+    final map = Map.fromIterables(keys.map((k) => k.evaluate(activation)),
         values.map((v) => v.evaluate(activation)));
+    return adapter.nativeToValue(map);
   }
 }

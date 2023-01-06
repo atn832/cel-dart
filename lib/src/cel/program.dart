@@ -1,3 +1,4 @@
+import 'package:cel/src/common/types/ref/value.dart';
 import 'package:cel/src/interpreter/attribute_factory.dart';
 import 'package:cel/src/interpreter/dispatcher.dart';
 
@@ -18,8 +19,10 @@ class Program {
 
     // https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/cel/program.go#L183-L190
     final attributeFactory = AttributeFactory();
-    interpreter =
-        Interpreter(attributeFactory: attributeFactory, dispatcher: dispatcher);
+    interpreter = Interpreter(
+        attributeFactory: attributeFactory,
+        dispatcher: dispatcher,
+        adapter: environment.adapter);
 
     // Configure the program via the ProgramOption values.
     // https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/cel/program.go#L162-L169
@@ -43,11 +46,12 @@ class Program {
   late Interpreter interpreter;
   late Interpretable interpretable;
 
+  // Shortcut: cel-go returns a Val.
   dynamic evaluate(Map<String, dynamic> input) {
     // Skipped porting Pools since there is no concurrency in this
     // implementation.
     final Activation vars = EvalActivation(input);
-    return interpretable.evaluate(vars);
+    return interpretable.evaluate(vars).value;
   }
 
   void _initInterpretable() {

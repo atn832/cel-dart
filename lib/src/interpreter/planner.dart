@@ -1,3 +1,5 @@
+import 'package:cel/src/common/types/ref/provider.dart';
+
 import '../cel/expr.dart';
 import '../operators/operators.dart';
 import 'attribute.dart';
@@ -9,10 +11,14 @@ import 'interpretable.dart';
 // Port of
 // https://github.com/google/cel-go/blob/32ac6133c6b8eca8bb76e17e6ad50a1eb757778a/interpreter/planner.go.
 class Planner {
-  Planner({required this.attributeFactory, required this.dispatcher});
+  Planner(
+      {required this.attributeFactory,
+      required this.dispatcher,
+      required this.adapter});
 
   final AttributeFactory attributeFactory;
   final Dispatcher dispatcher;
+  final TypeAdapter adapter;
 
   Interpretable plan(Expr expression) {
     if (expression is ConstExpression) {
@@ -134,7 +140,7 @@ class Planner {
   // https://github.com/google/cel-go/blob/32ac6133c6b8eca8bb76e17e6ad50a1eb757778a/interpreter/planner.go#L516
   Interpretable planCreateList(ListExpr expression) {
     final elements = expression.elements.map((e) => plan(e)).toList();
-    return ListInterpretable(elements);
+    return ListInterpretable(elements, adapter);
   }
 
   Interpretable planCallUnary(CallExpr expression, String functionName,
@@ -150,7 +156,7 @@ class Planner {
   Interpretable planCreateMap(MapExpr expression) {
     final keys = expression.entries.map((e) => plan(e.key)).toList();
     final values = expression.entries.map((e) => plan(e.value)).toList();
-    return MapInterpretable(keys, values);
+    return MapInterpretable(keys, values, adapter);
   }
 
   // https://github.com/google/cel-go/blob/32ac6133c6b8eca8bb76e17e6ad50a1eb757778a/interpreter/planner.go#L453
@@ -158,8 +164,10 @@ class Planner {
     return AttributeValueInterpretable(ConditionalAttribute(
         condition: arguments[0], truthy: arguments[1], falsy: arguments[2]));
   }
-}
 
-Interpretable planConst(ConstExpression constant) {
-  return InterpretableConst(constant.value);
+  Interpretable planConst(ConstExpression constant) {
+    // https://github.com/google/cel-go/blob/32ac6133c6b8eca8bb76e17e6ad50a1eb757778a/interpreter/planner.go#L644
+    final constantValue = adapter.nativeToValue(constant.value);
+    return InterpretableConst(constantValue);
+  }
 }
