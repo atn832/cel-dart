@@ -1,5 +1,6 @@
 import 'package:cel/src/common/types/bool.dart';
 import 'package:cel/src/common/types/traits/comparer.dart';
+import 'package:cel/src/common/types/traits/container.dart';
 import 'package:cel/src/common/types/traits/indexer.dart';
 import 'package:cel/src/common/types/traits/matcher.dart';
 import 'package:cel/src/common/types/traits/math.dart';
@@ -116,12 +117,12 @@ List<Overload> standardOverloads() {
     // TODO: implement size.
 
     // In operator
+    // https://github.com/google/cel-go/blob/92fda7d38a37f42d4154147896cfd4ebbf8f846e/interpreter/functions/standard.go#L163
     Overload(Operators.in_.name, binaryOperator: (element, object) {
-      return object is List
-          ? object.contains(element)
-          : object is Map
-              ? object.containsKey(element)
-              : throw StateError('in works only on lists and maps');
+      if (object is! Container) {
+        throw StateError('$object should be a Container');
+      }
+      return object.contains(element);
     }),
 
     // Matches function

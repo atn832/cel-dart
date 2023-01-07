@@ -1,5 +1,7 @@
+import 'package:cel/src/common/types/bool.dart';
 import 'package:cel/src/common/types/ref/provider.dart';
 import 'package:cel/src/common/types/ref/value.dart';
+import 'package:cel/src/common/types/traits/container.dart';
 import 'package:cel/src/common/types/traits/indexer.dart';
 import 'package:cel/src/common/types/traits/traits.dart';
 
@@ -13,7 +15,7 @@ final listType = Type_("list", {
   Traits.SizerType
 });
 
-class ListValue extends Value implements Indexer {
+class ListValue extends Value implements Indexer, Container {
   ListValue(this.value, this.typeAdapter);
 
   final TypeAdapter typeAdapter;
@@ -32,5 +34,10 @@ class ListValue extends Value implements Indexer {
   @override
   convertToNative() {
     return value.map((e) => e.convertToNative()).toList();
+  }
+
+  @override
+  BooleanValue contains(Value value) {
+    return BooleanValue(this.value.contains(value));
   }
 }
