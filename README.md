@@ -2,6 +2,28 @@
 
 This project parses and evaluates Common Expression Language (CEL) programs against some inputs. For example based on the input `request.auth.claims.group=='admin'` and a `request` object, the library will evaluate whether the statement is `true` or `false`. CEL (see the [spec](https://github.com/google/cel-spec)) is a language used by many security projects such as Firestore and Firebase Storage. This project is a simplified port of <https://github.com/google/cel-go>.
 
+## Usage
+
+```dart
+import 'package:cel/cel.dart';
+
+void main() {
+  final input = "request.auth.claims.group == 'admin'";
+  final e = Environment();
+  final ast = e.compile(input);
+  final p = Program(e, ast, StdLibrary().programOptions);
+  print(p.evaluate({
+    'request': {
+      'auth': {
+        'claims': {'group': 'admin'}
+      }
+    }
+  }));
+}
+```
+
+Prints out `true`.
+
 ## Architecture
 
 Here's the mechanism from CEL code (a `String`) to evaluation:
@@ -206,26 +228,6 @@ From https://github.com/google/cel-spec/blob/master/doc/langdef.md#functions.
 |  | (string) -> uint | type conversion | ❌ |
 | E (for fully-qualified enumeration E) | (int) -> enum E | type conversion when in int32 range, otherwise error | ❌ |
 |  | (string) -> enum E | type conversion for unqualified symbolic name, otherwise error | ❌ |
-
-## Usage
-
-```dart
-import 'package:cel/cel.dart';
-
-void main() {
-  final input = "request.auth.claims.group == 'admin'";
-  final e = Environment();
-  final ast = e.compile(input);
-  final p = Program(e, ast, StdLibrary().programOptions);
-  print(p.evaluate({
-    'request': {
-      'auth': {
-        'claims': {'group': 'admin'}
-      }
-    }
-  }));
-}
-```
 
 ## Additional information
 
