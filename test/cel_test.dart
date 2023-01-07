@@ -191,7 +191,7 @@ void main() {
         final environment = Environment();
         final ast = environment.compile('27 / 10');
         final p = Program(environment, ast, StdLibrary().programOptions);
-        expect(p.evaluate({}), 2.7);
+        expect(p.evaluate({}), 2);
       });
       test('Modulo', () {
         final environment = Environment();
