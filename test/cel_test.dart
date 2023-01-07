@@ -281,5 +281,13 @@ void main() {
       final p = Program(environment, ast, StdLibrary().programOptions);
       expect(p.evaluate({}), true);
     });
+    test('endsWith', () {
+      final environment = Environment();
+      final ast = environment.compile("value.endsWith('lo')");
+      print(ast.expression);
+      final p = Program(environment, ast, StdLibrary().programOptions);
+      expect(p.evaluate({'value': 'hello'}), true);
+      expect(p.evaluate({'value': 'low'}), false);
+    });
   });
 }

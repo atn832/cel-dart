@@ -147,7 +147,7 @@ From https://github.com/google/cel-spec/blob/master/doc/langdef.md#functions.
 | duration | (string) -> google.protobuf.Duration | Type conversion. Duration strings should support the following suffixes: "h" (hour), "m" (minute), "s" (second), "ms" (millisecond), "us" (microsecond), and "ns" (nanosecond). Duration strings may be zero, negative, fractional, and/or compound. Examples: "0", "-1.5h", "1m6s" |  |
 | dyn | type(dyn) | type denotation |  |
 |  | (A) -> dyn | type conversion |  |
-| endsWith | string.(string) -> bool | Tests whether the string operand ends with the suffix argument. |  |
+| endsWith | string.(string) -> bool | Tests whether the string operand ends with the suffix argument. | ✅ |
 | getDate | google.protobuf.Timestamp.() -> int | get day of month from the date in UTC, one-based indexing |  |
 |  | google.protobuf.Timestamp.(string) -> int | get day of month from the date with timezone, one-based indexing |  |
 | getDayOfMonth | google.protobuf.Timestamp.() -> int | get day of month from the date in UTC, zero-based indexing |  |
@@ -187,7 +187,7 @@ From https://github.com/google/cel-spec/blob/master/doc/langdef.md#functions.
 |  | (bytes) -> int | bytes length |  |
 |  | (list(A)) -> int | list size. |  |
 |  | (map(A, B)) -> int | map size. |  |
-| startsWith | string.(string) -> bool | Tests whether the string operand starts with the prefix argument. |  |
+| startsWith | string.(string) -> bool | Tests whether the string operand starts with the prefix argument. | ✅ |
 | string | type(string) | type denotation |  |
 |  | (int) -> string | type conversion |  |
 |  | (uint) -> string | type conversion |  |
@@ -238,3 +238,4 @@ If you are curious how it was made, or want to contribute, you may find this rea
 ### Implementation details
 
 * Difference between [Value.value] and [Value.convertToNative]. While both are the same in the case of primitive wrappers such as IntValue, DoubleValue... they are different for ListValue and MapValue. For example for a ListValue, ListValue.value is a List<Value>, while Value.convertToNative will return List<whatever>, whatever being a non-Value type.
+* environmentOptions and [standardDeclarations](https://github.com/atn832/cel-dart/blob/f40cde8793c4c5a1f16be186de3c859ff1cead0e/lib/src/checker/standard.dart) don't actually do anything yet. In the future, they may be used to check whether some function has indeed been declared in [Interpretable.planCall](https://github.com/atn832/cel-dart/blob/85646886e5c829832bed9a5e5b23a519c403e4ce/lib/src/interpreter/planner.dart#L53) when it calls resolveFunction. Doing so might help throw an Exception early if the function name is not an declared function.

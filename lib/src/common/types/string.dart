@@ -40,11 +40,15 @@ class StringValue extends Value implements Receiver, Matcher {
 // https://github.com/google/cel-go/blob/377a0bba20d07926e0583b4e604509ca7f3583b7/common/types/string.go#L47
 final stringOneArgOverloads = <String, Value Function(String, Value)>{
   // overloads.Contains: stringContains,
-  // overloads.EndsWith: stringEndsWith,
+  Overloads.endsWith.name: stringEndsWith,
   Overloads.startsWith.name: stringStartsWith,
 };
 
 // https://github.com/google/cel-go/blob/377a0bba20d07926e0583b4e604509ca7f3583b7/common/types/string.go#L217
 Value stringStartsWith(String s, Value value) {
   return BooleanValue(s.startsWith(value.value));
+}
+
+Value stringEndsWith(String s, Value value) {
+  return BooleanValue(s.endsWith(value.value));
 }
