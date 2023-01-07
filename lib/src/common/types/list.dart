@@ -16,7 +16,7 @@ final listType = Type_("list", {
 class ListValue extends Value implements Indexer {
   ListValue(this.value, this.typeAdapter);
 
-  TypeAdapter typeAdapter;
+  final TypeAdapter typeAdapter;
 
   @override
   final List<Value> value;
@@ -27,5 +27,10 @@ class ListValue extends Value implements Indexer {
   @override
   Value get(Value index) {
     return value[index.value];
+  }
+
+  @override
+  convertToNative() {
+    return value.map((e) => e.convertToNative()).toList();
   }
 }
