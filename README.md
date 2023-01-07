@@ -40,6 +40,8 @@ This table is based on https://github.com/google/cel-spec/blob/master/doc/langde
 | --- | --- | --- |
 | [a, b] | List | ✅ |
 | {'name': 'cel', 35 : true} | Map | ✅ |
+| timestamp | google.protobuf.Timestamp | ❌ |
+| duration | google.protobuf.Duration | ❌ |
 
 ### Operators
 
