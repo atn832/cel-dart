@@ -1,9 +1,12 @@
 import 'package:equatable/equatable.dart';
 
-class Expr {}
+abstract class Expr extends Equatable {
+  @override
+  bool? get stringify => true;
+}
 
 // Based on https://github.com/googleapis/googleapis/blob/870a5ed7e141b4faf70e2a0858854e9b5bb18612/google/api/expr/v1beta1/expr.proto#L89-L99.
-class CallExpr extends Equatable implements Expr {
+class CallExpr extends Expr {
   CallExpr({required this.function, this.target, required this.args});
 
   final String function;
@@ -12,12 +15,9 @@ class CallExpr extends Equatable implements Expr {
 
   @override
   List<Object?> get props => [function, target, args];
-
-  @override
-  bool? get stringify => true;
 }
 
-class SelectExpr extends Equatable implements Expr {
+class SelectExpr extends Expr {
   SelectExpr({required this.operand, required this.field});
 
   final Expr operand;
@@ -25,9 +25,6 @@ class SelectExpr extends Equatable implements Expr {
 
   @override
   List<Object?> get props => [operand, field];
-
-  @override
-  bool? get stringify => true;
 }
 
 class StringLiteralExpr extends Equatable implements ConstExpression {
@@ -38,9 +35,6 @@ class StringLiteralExpr extends Equatable implements ConstExpression {
 
   @override
   List<Object?> get props => [value];
-
-  @override
-  bool? get stringify => true;
 }
 
 class IntLiteralExpr extends Equatable implements ConstExpression {
@@ -51,9 +45,6 @@ class IntLiteralExpr extends Equatable implements ConstExpression {
 
   @override
   List<Object?> get props => [value];
-
-  @override
-  bool? get stringify => true;
 }
 
 class DoubleLiteralExpr extends Equatable implements ConstExpression {
@@ -64,9 +55,6 @@ class DoubleLiteralExpr extends Equatable implements ConstExpression {
 
   @override
   List<Object?> get props => [value];
-
-  @override
-  bool? get stringify => true;
 }
 
 class BytesLiteralExpr extends Equatable implements ConstExpression {
@@ -77,9 +65,6 @@ class BytesLiteralExpr extends Equatable implements ConstExpression {
 
   @override
   List<Object?> get props => [value];
-
-  @override
-  bool? get stringify => true;
 }
 
 abstract class ConstExpression extends Expr {
@@ -94,9 +79,6 @@ class BoolLiteralExpr extends Equatable implements ConstExpression {
 
   @override
   List<Object?> get props => [value];
-
-  @override
-  bool? get stringify => true;
 }
 
 class NullLiteralExpr extends Equatable implements ConstExpression {
@@ -105,24 +87,18 @@ class NullLiteralExpr extends Equatable implements ConstExpression {
 
   @override
   List<Object?> get props => [];
-
-  @override
-  bool? get stringify => true;
 }
 
-class IdentExpr extends Equatable implements Expr {
+class IdentExpr extends Expr {
   IdentExpr(this.name);
 
   final String name;
 
   @override
   List<Object?> get props => [name];
-
-  @override
-  bool? get stringify => true;
 }
 
-class ListExpr extends Equatable implements Expr {
+class ListExpr extends Expr {
   ListExpr(this.elements);
 
   final List<Expr> elements;
@@ -142,7 +118,7 @@ class CreateStructEntry {
 
 // My own creation, just so that parser.visit keeps returning Expr instead of
 // dynamic like in cel-go.
-class CreateStructEntryListExpr extends Equatable implements Expr {
+class CreateStructEntryListExpr extends Expr {
   CreateStructEntryListExpr(this.entries);
 
   final List<CreateStructEntry> entries;
@@ -151,7 +127,7 @@ class CreateStructEntryListExpr extends Equatable implements Expr {
   List<Object?> get props => [entries];
 }
 
-class MapExpr extends Equatable implements Expr {
+class MapExpr extends Expr {
   MapExpr(this.entries);
 
   final List<CreateStructEntry> entries;
