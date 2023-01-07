@@ -1,4 +1,5 @@
-import 'package:cel/src/common/map.dart';
+import 'package:cel/src/common/types/list.dart';
+import 'package:cel/src/common/types/map.dart';
 import 'package:cel/src/common/types/bool.dart';
 import 'package:cel/src/common/types/double.dart';
 import 'package:cel/src/common/types/int.dart';
@@ -77,6 +78,9 @@ _nativeToValue(TypeAdapter adapter, dynamic value) {
   // https://github.com/google/cel-go/blob/051835c9903525b656a438f778510d9b619b3702/common/types/provider.go#L370
   if (value is Map) {
     return MapValue(value, adapter);
+  }
+  if (value is List) {
+    return ListValue(value, adapter);
   }
   throw UnimplementedError('Unsupported type for $value: ${value.runtimeType}');
 }

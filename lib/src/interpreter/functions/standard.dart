@@ -104,6 +104,7 @@ List<Overload> standardOverloads() {
     // TODO: implement Negate.
 
     // Index operator
+    // https://github.com/google/cel-go/blob/92fda7d38a37f42d4154147896cfd4ebbf8f846e/interpreter/functions/standard.go#L149
     Overload(Operators.index_.name, binaryOperator: (target, index) {
       return target[index];
     }),
