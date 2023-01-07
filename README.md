@@ -1,6 +1,6 @@
 # cel-dart
 
-This project parses and evaluates Common Expression Language (CEL) programs against some inputs. For example based on the input `request.auth.claims.group=='admin'` and a `request` object, the library will evaluate whether the statement is `true` or `false`. CEL (see the [spec](https://github.com/google/cel-spec)) is a language used by many security projects such as Firestore and Firebase Storage. This project is a simplified port of <https://github.com/google/cel-go>.
+This project parses and evaluates Common Expression Language (CEL) programs against some inputs. For example, based on the code `request.auth.claims.group=='admin'` and a `request` object as input, the library will evaluate whether the statement is `true` or `false`. CEL (see the [spec](https://github.com/google/cel-spec)) is a language used by many security projects such as Firestore and Firebase Storage. This project is a simplified port of <https://github.com/google/cel-go>.
 
 ## Usage
 
@@ -34,7 +34,7 @@ Here's the mechanism from CEL code (a `String`) to evaluation:
     1. [CELParser] converts the CEL code into a CEL tree (a [StartContext]).
     1. Then Parser traverses the CEL tree into an [Expr], which is the actual AST.
     1. Finally Environment wraps the [Expr] into an [Ast].
-1. The user instnatiates a [Program] by passing the Environment and the AST. Upon initialization, the Program calls [Planner.plan], which traverses the AST and converts it into an [Interpretable] for later use.
+1. The user instantiates a [Program] by passing the Environment and the AST. Upon initialization, the Program calls [Planner.plan], which traverses the AST and converts it into an [Interpretable] for later use.
 1. Whenever the user wants to evaluate the Program, they call [Program.evaluate] with some inputs (eg a [Map]), and get a value as a result. It evaluates the Interpretable using the inputs into a return value.
 
 The meat of the code is in [Parser.visit] and [Planner.plan].
@@ -45,7 +45,7 @@ The main difference besides being incomplete is that cel-go defines the `Expr` a
 
 ## Features
 
-This table is based on https://github.com/google/cel-spec/blob/master/doc/langdef.md.
+This table is based on <https://github.com/google/cel-spec/blob/master/doc/langdef.md>.
 
 | CEL Literal | Description | Supported |
 | --- | --- | --- |
@@ -87,7 +87,7 @@ This table comes from <https://firebase.google.com/docs/rules/rules-language#ope
 
 ### Functions
 
-From https://github.com/google/cel-spec/blob/master/doc/langdef.md#functions.
+From <https://github.com/google/cel-spec/blob/master/doc/langdef.md#functions>.
 
 | Symbol | Type | Description |  |
 |:---:|:---:|:---:|---|
@@ -241,5 +241,6 @@ If you are curious how it was made, or want to contribute, you may find this rea
 
 ### Implementation details
 
-* Difference between [Value.value] and [Value.convertToNative]. While both are the same in the case of primitive wrappers such as IntValue, DoubleValue... they are different for ListValue and MapValue. For example for a ListValue, ListValue.value is a List<Value>, while Value.convertToNative will return List<whatever>, whatever being a non-Value type.
-* environmentOptions and [standardDeclarations](https://github.com/atn832/cel-dart/blob/f40cde8793c4c5a1f16be186de3c859ff1cead0e/lib/src/checker/standard.dart) don't actually do anything yet. In the future, they may be used to check whether some function has indeed been declared in [Interpretable.planCall](https://github.com/atn832/cel-dart/blob/85646886e5c829832bed9a5e5b23a519c403e4ce/lib/src/interpreter/planner.dart#L53) when it calls resolveFunction. Doing so might help throw an Exception early if the function name is not an declared function.
+* Difference between [Value.value] and [Value.convertToNative]: While both are the same in the case of primitive wrappers such as IntValue, DoubleValue... they are different for ListValue and MapValue. For example for a ListValue, ListValue.value is a List<Value>, while Value.convertToNative will return List<whatever>, whatever being a non-Value type.
+* `environmentOptions` and [`standardDeclarations`](https://github.com/atn832/cel-dart/blob/f40cde8793c4c5a1f16be186de3c859ff1cead0e/lib/src/checker/standard.dart) don't actually do anything yet. In the future, they may be used to check whether some function has indeed been declared in [Interpretable.planCall](https://github.com/atn832/cel-dart/blob/85646886e5c829832bed9a5e5b23a519c403e4ce/lib/src/interpreter/planner.dart#L53) when it calls resolveFunction. Doing so might help throw an Exception early if the function name is not an declared function.
+* In cel-go, [`Parser.visit`](https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/parser/parser.go#L359-L443) returns `any`. In cel-dart, we return [`Expr`](https://github.com/atn832/cel-dart/blob/a0502299bf58d0869f9620d51b6af35bf10d8f0b/lib/src/parser/parser.dart#L24), making it more type safe.
