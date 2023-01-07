@@ -1,6 +1,7 @@
 import 'package:cel/src/common/types/int.dart';
 import 'package:cel/src/common/types/ref/value.dart';
 import 'package:cel/src/common/types/traits/comparer.dart';
+import 'package:cel/src/common/types/traits/math.dart';
 import 'package:cel/src/common/types/traits/traits.dart';
 
 // https://github.com/google/cel-go/blob/377a0bba20d07926e0583b4e604509ca7f3583b7/common/types/double.go
@@ -14,7 +15,8 @@ final doubleType = Type_('double', {
   Traits.SubtractorType
 });
 
-class DoubleValue implements Value, Comparer {
+class DoubleValue
+    implements Value, Comparer, Adder, Divider, Multiplier, Subtractor, Modder {
   DoubleValue(this.value);
 
   @override
@@ -28,5 +30,30 @@ class DoubleValue implements Value, Comparer {
   Value compare(Value other) {
     // Not as exhaustive as cel-go regarding very large or very small numbers.
     return IntValue(value.compareTo(other.value));
+  }
+
+  @override
+  add(Value other) {
+    return DoubleValue(value + other.value);
+  }
+
+  @override
+  divide(Value denominator) {
+    return IntValue(value ~/ denominator.value);
+  }
+
+  @override
+  modulo(Value denominator) {
+    return DoubleValue(value % denominator.value);
+  }
+
+  @override
+  multiply(Value other) {
+    return DoubleValue(value * other.value);
+  }
+
+  @override
+  subtract(Value subtrahend) {
+    return DoubleValue(value - subtrahend.value);
   }
 }
