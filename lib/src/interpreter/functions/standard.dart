@@ -1,3 +1,5 @@
+import 'package:cel/src/common/types/bool.dart';
+import 'package:cel/src/common/types/traits/comparer.dart';
 import 'package:cel/src/common/types/traits/matcher.dart';
 import 'package:cel/src/common/types/traits/math.dart';
 
@@ -22,37 +24,37 @@ List<Overload> standardOverloads() {
     // Less than operator
     Overload(Operators.less.name,
         binaryOperator: (leftHandSide, rightHandSide) {
-      if (leftHandSide is! Comparable) {
-        throw StateError('$leftHandSide should be a Comparable');
+      if (leftHandSide is! Comparer) {
+        throw StateError('$leftHandSide should be a Comparer');
       }
-      return leftHandSide.compareTo(rightHandSide) < 0;
+      return BooleanValue(leftHandSide.compare(rightHandSide).value < 0);
     }),
 
     // Less than or equal operator
     Overload(Operators.lessEquals.name,
         binaryOperator: (leftHandSide, rightHandSide) {
-      if (leftHandSide is! Comparable) {
-        throw StateError('$leftHandSide should be a Comparable');
+      if (leftHandSide is! Comparer) {
+        throw StateError('$leftHandSide should be a Comparer');
       }
-      return leftHandSide.compareTo(rightHandSide) <= 0;
+      return BooleanValue(leftHandSide.compare(rightHandSide).value <= 0);
     }),
 
     // Greater than operator
     Overload(Operators.greater.name,
         binaryOperator: (leftHandSide, rightHandSide) {
-      if (leftHandSide is! Comparable) {
-        throw StateError('$leftHandSide should be a Comparable');
+      if (leftHandSide is! Comparer) {
+        throw StateError('$leftHandSide should be a Comparer');
       }
-      return leftHandSide.compareTo(rightHandSide) > 0;
+      return BooleanValue(leftHandSide.compare(rightHandSide).value > 0);
     }),
 
     // Greater than equal operators
     Overload(Operators.greaterEquals.name,
         binaryOperator: (leftHandSide, rightHandSide) {
-      if (leftHandSide is! Comparable) {
-        throw StateError('$leftHandSide should be a Comparable');
+      if (leftHandSide is! Comparer) {
+        throw StateError('$leftHandSide should be a Comparer');
       }
-      return leftHandSide.compareTo(rightHandSide) >= 0;
+      return BooleanValue(leftHandSide.compare(rightHandSide).value >= 0);
     }),
 
     // Add operator
