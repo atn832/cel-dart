@@ -19,14 +19,14 @@ class StdLibrary implements Library {
 
   @override
   List<EnvironmentOption> get environmentOptions => [
-        declarations(standardDeclarations)
+        _declarations(standardDeclarations)
         // TODO: implement macros.
       ];
 }
 
 /// Returns an EnvironmentOption that appends the given `declarations`.
 /// https://github.com/google/cel-go/blob/9e14003d8a7a856b250c5e6514647dee7d4fd9a2/cel/options.go#L110
-EnvironmentOption declarations(List<Declaration> declarations) {
+EnvironmentOption _declarations(List<Declaration> declarations) {
   return (Environment e) {
     e.declarations.addAll(declarations);
   };

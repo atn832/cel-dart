@@ -2,7 +2,6 @@
 /// inputs.
 library cel;
 
-export 'src/parser/parser.dart';
 export 'src/cel/environment.dart';
 export 'src/cel/program.dart';
 export 'src/cel/library.dart';

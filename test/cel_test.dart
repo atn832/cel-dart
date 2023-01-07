@@ -1,5 +1,6 @@
 import 'package:cel/cel.dart';
 import 'package:cel/src/cel/expr.dart';
+import 'package:cel/src/parser/parser.dart';
 import 'package:test/test.dart';
 
 void main() {

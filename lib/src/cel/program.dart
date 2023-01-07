@@ -55,11 +55,11 @@ class Program {
   }
 
   void _initInterpretable() {
-    final checkedExpression = astToCheckedExpr(ast);
+    final checkedExpression = _astToCheckedExpr(ast);
     interpretable = interpreter.interpet(checkedExpression);
   }
 }
 
-CheckedExpression astToCheckedExpr(Ast ast) {
+CheckedExpression _astToCheckedExpr(Ast ast) {
   return CheckedExpression(ast.expression);
 }
