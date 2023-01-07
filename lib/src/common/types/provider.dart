@@ -44,6 +44,24 @@ _nativeToValue(TypeAdapter adapter, dynamic value) {
   if (value == null) {
     return nullValue;
   }
+  // Pass-through all Value types.
+  // https://github.com/google/cel-go/blob/32ac6133c6b8eca8bb76e17e6ad50a1eb757778a/common/types/provider.go#L266-L289
+  if (value is BooleanValue) {
+    return value;
+  }
+  if (value is IntValue) {
+    return value;
+  }
+  if (value is DoubleValue) {
+    return value;
+  }
+  if (value is StringValue) {
+    return value;
+  }
+  if (value is MapValue) {
+    return value;
+  }
+  // Wrap primitives.
   if (value is bool) {
     return BooleanValue(value);
   }
