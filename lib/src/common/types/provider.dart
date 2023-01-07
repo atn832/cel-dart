@@ -79,7 +79,7 @@ _nativeToValue(TypeAdapter adapter, dynamic value) {
   if (value is Map<Value, Value>) {
     return MapValue(value, adapter);
   }
-  if (value is List) {
+  if (value is List<Value>) {
     return ListValue(value, adapter);
   }
   throw UnimplementedError('Unsupported type for $value: ${value.runtimeType}');
