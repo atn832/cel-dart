@@ -84,15 +84,15 @@ From https://github.com/google/cel-spec/blob/master/doc/langdef.md#functions.
 |  | (string, string) -> string | String concatenation. |  |
 |  | (bytes, bytes) -> bytes | bytes concatenation |  |
 |  | (list(A), list(A)) -> list(A) | List concatenation. |  |
-|  | (google.protobuf.Timestamp, google.protobuf.Duration) -> google.protobuf.Timestamp | arithmetic |  |
-|  | (google.protobuf.Duration, google.protobuf.Timestamp) -> google.protobuf.Timestamp | arithmetic |  |
-|  | (google.protobuf.Duration, google.protobuf.Duration) -> google.protobuf.Duration | arithmetic |  |
+|  | (google.protobuf.Timestamp, google.protobuf.Duration) -> google.protobuf.Timestamp | arithmetic | ❌ |
+|  | (google.protobuf.Duration, google.protobuf.Timestamp) -> google.protobuf.Timestamp | arithmetic | ❌ |
+|  | (google.protobuf.Duration, google.protobuf.Duration) -> google.protobuf.Duration | arithmetic | ❌ |
 | _-_ | (int, int) -> int | arithmetic | ✅ |
 |  | (uint, uint) -> uint | arithmetic |  |
 |  | (double, double) -> double | arithmetic |  |
-|  | (google.protobuf.Timestamp, google.protobuf.Timestamp) -> google.protobuf.Duration | arithmetic |  |
-|  | (google.protobuf.Timestamp, google.protobuf.Duration) -> google.protobuf.Timestamp | arithmetic |  |
-|  | (google.protobuf.Duration, google.protobuf.Duration) -> google.protobuf.Duration | arithmetic |  |
+|  | (google.protobuf.Timestamp, google.protobuf.Timestamp) -> google.protobuf.Duration | arithmetic | ❌ |
+|  | (google.protobuf.Timestamp, google.protobuf.Duration) -> google.protobuf.Timestamp | arithmetic | ❌ |
+|  | (google.protobuf.Duration, google.protobuf.Duration) -> google.protobuf.Duration | arithmetic | ❌ |
 | _/_ | (int, int) -> int | arithmetic | ✅ |
 |  | (uint, uint) -> uint | arithmetic |  |
 |  | (double, double) -> double | arithmetic |  |
@@ -102,16 +102,16 @@ From https://github.com/google/cel-spec/blob/master/doc/langdef.md#functions.
 |  | (double, double) -> bool | ordering | ✅ |
 |  | (string, string) -> bool | ordering |  |
 |  | (bytes, bytes) -> bool | ordering |  |
-|  | (google.protobuf.Timestamp, google.protobuf.Timestamp) -> bool | ordering |  |
-|  | (google.protobuf.Duration, google.protobuf.Duration) -> bool | ordering |  |
+|  | (google.protobuf.Timestamp, google.protobuf.Timestamp) -> bool | ordering | ❌ |
+|  | (google.protobuf.Duration, google.protobuf.Duration) -> bool | ordering | ❌ |
 | _<_ | (bool, bool) -> bool | ordering |  |
 |  | (int, int) -> bool | ordering | ✅ |
 |  | (uint, uint) -> bool | ordering |  |
 |  | (double, double) -> bool | ordering |  |
 |  | (string, string) -> bool | ordering |  |
 |  | (bytes, bytes) -> bool | ordering |  |
-|  | (google.protobuf.Timestamp, google.protobuf.Timestamp) -> bool | ordering |  |
-|  | (google.protobuf.Duration, google.protobuf.Duration) -> bool | ordering |  |
+|  | (google.protobuf.Timestamp, google.protobuf.Timestamp) -> bool | ordering | ❌ |
+|  | (google.protobuf.Duration, google.protobuf.Duration) -> bool | ordering | ❌ |
 | _==_ | (A, A) -> bool | equality |  |
 | _>=_ | (bool, bool) -> bool | ordering |  |
 |  | (int, int) -> bool | ordering |  |
@@ -119,91 +119,91 @@ From https://github.com/google/cel-spec/blob/master/doc/langdef.md#functions.
 |  | (double, double) -> bool | ordering |  |
 |  | (string, string) -> bool | ordering |  |
 |  | (bytes, bytes) -> bool | ordering |  |
-|  | (google.protobuf.Timestamp, google.protobuf.Timestamp) -> bool | ordering |  |
-|  | (google.protobuf.Duration, google.protobuf.Duration) -> bool | ordering |  |
+|  | (google.protobuf.Timestamp, google.protobuf.Timestamp) -> bool | ordering | ❌ |
+|  | (google.protobuf.Duration, google.protobuf.Duration) -> bool | ordering | ❌ |
 | _>_ | (bool, bool) -> bool | ordering |  |
 |  | (int, int) -> bool | ordering |  |
 |  | (uint, uint) -> bool | ordering |  |
 |  | (double, double) -> bool | ordering |  |
 |  | (string, string) -> bool | ordering |  |
 |  | (bytes, bytes) -> bool | ordering |  |
-|  | (google.protobuf.Timestamp, google.protobuf.Timestamp) -> bool | ordering |  |
-|  | (google.protobuf.Duration, google.protobuf.Duration) -> bool | ordering |  |
+|  | (google.protobuf.Timestamp, google.protobuf.Timestamp) -> bool | ordering | ❌ |
+|  | (google.protobuf.Duration, google.protobuf.Duration) -> bool | ordering | ❌ |
 | _?_:_ | (bool, A, A) -> A | The conditional operator. See above for evaluation semantics. Will evaluate the test and only one of the remaining sub-expressions. | ✅ |
 | _[_] | (list(A), int) -> A | list indexing. | ✅ |
-|  | (map(A, B), A) -> B | map indexing. |  |
+|  | (map(A, B), A) -> B | map indexing. | ✅ |
 | in | (A, list(A)) -> bool | list membership. | ✅ |
 |  | (A, map(A, B)) -> bool | map key membership. | ✅ |
 | _\|\|_ | (bool, bool) -> bool | logical or | ✅ |
 |  | (bool, ...) -> bool | logical or (variadic) |  |
-| bool | type(bool) | type denotation |  |
-| bytes | type(bytes) | type denotation |  |
-|  | (string) -> bytes | type conversion |  |
+| bool | type(bool) | type denotation | ❌ |
+| bytes | type(bytes) | type denotation | ❌ |
+|  | (string) -> bytes | type conversion | ❌ |
 | contains | string.(string) -> bool | Tests whether the string operand contains the substring. | ✅ |
-| double | type(double) | type denotation |  |
-|  | (int) -> double | type conversion |  |
-|  | (uint) -> double | type conversion |  |
-|  | (string) -> double | type conversion |  |
-| duration | (string) -> google.protobuf.Duration | Type conversion. Duration strings should support the following suffixes: "h" (hour), "m" (minute), "s" (second), "ms" (millisecond), "us" (microsecond), and "ns" (nanosecond). Duration strings may be zero, negative, fractional, and/or compound. Examples: "0", "-1.5h", "1m6s" |  |
-| dyn | type(dyn) | type denotation |  |
-|  | (A) -> dyn | type conversion |  |
+| double | type(double) | type denotation | ❌ |
+|  | (int) -> double | type conversion | ❌ |
+|  | (uint) -> double | type conversion | ❌ |
+|  | (string) -> double | type conversion | ❌ |
+| duration | (string) -> google.protobuf.Duration | Type conversion. Duration strings should support the following suffixes: "h" (hour), "m" (minute), "s" (second), "ms" (millisecond), "us" (microsecond), and "ns" (nanosecond). Duration strings may be zero, negative, fractional, and/or compound. Examples: "0", "-1.5h", "1m6s" | ❌ |
+| dyn | type(dyn) | type denotation | ❌ |
+|  | (A) -> dyn | type conversion | ❌ |
 | endsWith | string.(string) -> bool | Tests whether the string operand ends with the suffix argument. | ✅ |
-| getDate | google.protobuf.Timestamp.() -> int | get day of month from the date in UTC, one-based indexing |  |
-|  | google.protobuf.Timestamp.(string) -> int | get day of month from the date with timezone, one-based indexing |  |
-| getDayOfMonth | google.protobuf.Timestamp.() -> int | get day of month from the date in UTC, zero-based indexing |  |
-|  | google.protobuf.Timestamp.(string) -> int | get day of month from the date with timezone, zero-based indexing |  |
-| getDayOfWeek | google.protobuf.Timestamp.() -> int | get day of week from the date in UTC, zero-based, zero for Sunday |  |
-|  | google.protobuf.Timestamp.(string) -> int | get day of week from the date with timezone, zero-based, zero for Sunday |  |
-| getDayOfYear | google.protobuf.Timestamp.() -> int | get day of year from the date in UTC, zero-based indexing |  |
-|  | google.protobuf.Timestamp.(string) -> int | get day of year from the date with timezone, zero-based indexing |  |
-| getFullYear | google.protobuf.Timestamp.() -> int | get year from the date in UTC |  |
-|  | google.protobuf.Timestamp.(string) -> int | get year from the date with timezone |  |
-| getHours | google.protobuf.Timestamp.() -> int | get hours from the date in UTC, 0-23 |  |
-|  | google.protobuf.Timestamp.(string) -> int | get hours from the date with timezone, 0-23 |  |
-|  | google.protobuf.Duration.() -> int | get hours from duration |  |
-| getMilliseconds | google.protobuf.Timestamp.() -> int | get milliseconds from the date in UTC, 0-999 |  |
-|  | google.protobuf.Timestamp.(string) -> int | get milliseconds from the date with timezone, 0-999 |  |
-|  | google.protobuf.Duration.() -> int | milliseconds from duration, 0-999 |  |
-| getMinutes | google.protobuf.Timestamp.() -> int | get minutes from the date in UTC, 0-59 |  |
-|  | google.protobuf.Timestamp.(string) -> int | get minutes from the date with timezone, 0-59 |  |
-|  | google.protobuf.Duration.() -> int | get minutes from duration |  |
-| getMonth | google.protobuf.Timestamp.() -> int | get month from the date in UTC, 0-11 |  |
-|  | google.protobuf.Timestamp.(string) -> int | get month from the date with timezone, 0-11 |  |
-| getSeconds | google.protobuf.Timestamp.() -> int | get seconds from the date in UTC, 0-59 |  |
-|  | google.protobuf.Timestamp.(string) -> int | get seconds from the date with timezone, 0-59 |  |
-|  | google.protobuf.Duration.() -> int | get seconds from duration |  |
-| int | type(int) | type denotation |  |
-|  | (uint) -> int | type conversion |  |
-|  | (double) -> int | Type conversion. Rounds toward zero, then errors if result is out of range. |  |
-|  | (string) -> int | type conversion |  |
-|  | (enum E) -> int | type conversion |  |
-|  | (google.protobuf.Timestamp) -> int | Convert timestamp to int64 in seconds since Unix epoch. |  |
-| list | type(list(dyn)) | type denotation |  |
-| map | type(map(dyn, dyn)) | type denotation |  |
+| getDate | google.protobuf.Timestamp.() -> int | get day of month from the date in UTC, one-based indexing | ❌ |
+|  | google.protobuf.Timestamp.(string) -> int | get day of month from the date with timezone, one-based indexing | ❌ |
+| getDayOfMonth | google.protobuf.Timestamp.() -> int | get day of month from the date in UTC, zero-based indexing | ❌ |
+|  | google.protobuf.Timestamp.(string) -> int | get day of month from the date with timezone, zero-based indexing | ❌ |
+| getDayOfWeek | google.protobuf.Timestamp.() -> int | get day of week from the date in UTC, zero-based, zero for Sunday | ❌ |
+|  | google.protobuf.Timestamp.(string) -> int | get day of week from the date with timezone, zero-based, zero for Sunday | ❌ |
+| getDayOfYear | google.protobuf.Timestamp.() -> int | get day of year from the date in UTC, zero-based indexing | ❌ |
+|  | google.protobuf.Timestamp.(string) -> int | get day of year from the date with timezone, zero-based indexing | ❌ |
+| getFullYear | google.protobuf.Timestamp.() -> int | get year from the date in UTC | ❌ |
+|  | google.protobuf.Timestamp.(string) -> int | get year from the date with timezone | ❌ |
+| getHours | google.protobuf.Timestamp.() -> int | get hours from the date in UTC, 0-23 | ❌ |
+|  | google.protobuf.Timestamp.(string) -> int | get hours from the date with timezone, 0-23 | ❌ |
+|  | google.protobuf.Duration.() -> int | get hours from duration | ❌ |
+| getMilliseconds | google.protobuf.Timestamp.() -> int | get milliseconds from the date in UTC, 0-999 | ❌ |
+|  | google.protobuf.Timestamp.(string) -> int | get milliseconds from the date with timezone, 0-999 | ❌ |
+|  | google.protobuf.Duration.() -> int | milliseconds from duration, 0-999 | ❌ |
+| getMinutes | google.protobuf.Timestamp.() -> int | get minutes from the date in UTC, 0-59 | ❌ |
+|  | google.protobuf.Timestamp.(string) -> int | get minutes from the date with timezone, 0-59 | ❌ |
+|  | google.protobuf.Duration.() -> int | get minutes from duration | ❌ |
+| getMonth | google.protobuf.Timestamp.() -> int | get month from the date in UTC, 0-11 | ❌ |
+|  | google.protobuf.Timestamp.(string) -> int | get month from the date with timezone, 0-11 | ❌ |
+| getSeconds | google.protobuf.Timestamp.() -> int | get seconds from the date in UTC, 0-59 | ❌ |
+|  | google.protobuf.Timestamp.(string) -> int | get seconds from the date with timezone, 0-59 | ❌ |
+|  | google.protobuf.Duration.() -> int | get seconds from duration | ❌ |
+| int | type(int) | type denotation | ❌ |
+|  | (uint) -> int | type conversion | ❌ |
+|  | (double) -> int | Type conversion. Rounds toward zero, then errors if result is out of range. | ❌ |
+|  | (string) -> int | type conversion | ❌ |
+|  | (enum E) -> int | type conversion | ❌ |
+|  | (google.protobuf.Timestamp) -> int | Convert timestamp to int64 in seconds since Unix epoch. | ❌ |
+| list | type(list(dyn)) | type denotation | ❌ |
+| map | type(map(dyn, dyn)) | type denotation | ❌ |
 | matches | (string, string) -> bool | Matches first argument against regular expression in second argument. | ✅ |
 |  | string.(string) -> bool | Matches the self argument against regular expression in first argument. | ✅ |
-| null_type | type(null) | type denotation |  |
-| size | (string) -> int | string length |  |
-|  | (bytes) -> int | bytes length |  |
-|  | (list(A)) -> int | list size. |  |
-|  | (map(A, B)) -> int | map size. |  |
+| null_type | type(null) | type denotation | ❌ |
+| size | (string) -> int | string length | ❌ |
+|  | (bytes) -> int | bytes length | ❌ |
+|  | (list(A)) -> int | list size. | ❌ |
+|  | (map(A, B)) -> int | map size. | ❌ |
 | startsWith | string.(string) -> bool | Tests whether the string operand starts with the prefix argument. | ✅ |
-| string | type(string) | type denotation |  |
-|  | (int) -> string | type conversion |  |
-|  | (uint) -> string | type conversion |  |
-|  | (double) -> string | type conversion |  |
-|  | (bytes) -> string | type conversion |  |
-|  | (timestamp) -> string | type conversion, using the same format as timestamp string parsing |  |
-|  | (duration) -> string | type conversion, using the same format as duration string parsing |  |
-| timestamp | (string) -> google.protobuf.Timestamp | Type conversion of strings to timestamps according to RFC3339. Example: "1972-01-01T10:00:20.021-05:00" |  |
-| type | type(dyn) | type denotation |  |
-|  | (A) -> type(dyn) | returns type of value |  |
-| uint | type(uint) | type denotation |  |
-|  | (int) -> uint | type conversion |  |
-|  | (double) -> uint | Type conversion. Rounds toward zero, then errors if result is out of range. |  |
-|  | (string) -> uint | type conversion |  |
-| E (for fully-qualified enumeration E) | (int) -> enum E | type conversion when in int32 range, otherwise error |  |
-|  | (string) -> enum E | type conversion for unqualified symbolic name, otherwise error |  |
+| string | type(string) | type denotation | ❌ |
+|  | (int) -> string | type conversion | ❌ |
+|  | (uint) -> string | type conversion | ❌ |
+|  | (double) -> string | type conversion | ❌ |
+|  | (bytes) -> string | type conversion | ❌ |
+|  | (timestamp) -> string | type conversion, using the same format as timestamp string parsing | ❌ |
+|  | (duration) -> string | type conversion, using the same format as duration string parsing | ❌ |
+| timestamp | (string) -> google.protobuf.Timestamp | Type conversion of strings to timestamps according to RFC3339. Example: "1972-01-01T10:00:20.021-05:00" | ❌ |
+| type | type(dyn) | type denotation | ❌ |
+|  | (A) -> type(dyn) | returns type of value | ❌ |
+| uint | type(uint) | type denotation | ❌ |
+|  | (int) -> uint | type conversion | ❌ |
+|  | (double) -> uint | Type conversion. Rounds toward zero, then errors if result is out of range. | ❌ |
+|  | (string) -> uint | type conversion | ❌ |
+| E (for fully-qualified enumeration E) | (int) -> enum E | type conversion when in int32 range, otherwise error | ❌ |
+|  | (string) -> enum E | type conversion for unqualified symbolic name, otherwise error | ❌ |
 
 ## Usage
 
