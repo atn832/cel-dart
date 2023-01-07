@@ -6,7 +6,7 @@ import 'ref/value.dart';
 
 final boolType = Type_('bool', {Traits.ComparerType, Traits.NegatorType});
 
-class BooleanValue implements Value, Negater {
+class BooleanValue extends Value implements Negater {
   BooleanValue(this.value);
 
   @override

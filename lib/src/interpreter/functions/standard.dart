@@ -1,5 +1,6 @@
 import 'package:cel/src/common/types/bool.dart';
 import 'package:cel/src/common/types/traits/comparer.dart';
+import 'package:cel/src/common/types/traits/indexer.dart';
 import 'package:cel/src/common/types/traits/matcher.dart';
 import 'package:cel/src/common/types/traits/math.dart';
 
@@ -106,7 +107,10 @@ List<Overload> standardOverloads() {
     // Index operator
     // https://github.com/google/cel-go/blob/92fda7d38a37f42d4154147896cfd4ebbf8f846e/interpreter/functions/standard.go#L149
     Overload(Operators.index_.name, binaryOperator: (target, index) {
-      return target[index];
+      if (target is! Indexer) {
+        throw StateError('$target should be an Indexer');
+      }
+      return target.get(index);
     }),
 
     // TODO: implement size.

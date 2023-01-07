@@ -234,3 +234,7 @@ If you are curious how it was made, or want to contribute, you may find this rea
 * [CEL language definition](https://github.com/google/cel-go/blob/master/parser/gen/CEL.g4)
 * [Expr protobuf](https://github.com/googleapis/googleapis/tree/master/google/api/expr/v1beta1)
 * <https://github.com/google/cel-go>
+
+### Implementation details
+
+* Difference between [Value.value] and [Value.convertToNative]. While both are the same in the case of primitive wrappers such as IntValue, DoubleValue... they are different for ListValue and MapValue. For example for a ListValue, ListValue.value is a List<Value>, while Value.convertToNative will return List<whatever>, whatever being a non-Value type.

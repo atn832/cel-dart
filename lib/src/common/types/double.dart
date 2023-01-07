@@ -15,8 +15,8 @@ final doubleType = Type_('double', {
   Traits.SubtractorType
 });
 
-class DoubleValue
-    implements Value, Comparer, Adder, Divider, Multiplier, Subtractor, Modder {
+class DoubleValue extends Value
+    implements Comparer, Adder, Divider, Multiplier, Subtractor, Modder {
   DoubleValue(this.value);
 
   @override

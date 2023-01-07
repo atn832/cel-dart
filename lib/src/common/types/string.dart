@@ -16,7 +16,7 @@ final stringType = Type_('string', {
   Traits.SizerType
 });
 
-class StringValue implements Value, Receiver, Matcher {
+class StringValue extends Value implements Receiver, Matcher {
   StringValue(this.value);
 
   @override

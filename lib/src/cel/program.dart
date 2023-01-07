@@ -51,7 +51,7 @@ class Program {
     // Skipped porting Pools since there is no concurrency in this
     // implementation.
     final Activation vars = EvalActivation(input);
-    return interpretable.evaluate(vars).value;
+    return interpretable.evaluate(vars).convertToNative();
   }
 
   void _initInterpretable() {

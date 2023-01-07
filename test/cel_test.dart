@@ -228,6 +228,7 @@ void main() {
       final environment = Environment();
       final ast =
           environment.compile("{'name': 'cel', 'useful': true, 5: 7}['name']");
+      print(ast.expression);
       final p = Program(environment, ast, StdLibrary().programOptions);
       expect(p.evaluate({}), 'cel');
     });

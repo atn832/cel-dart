@@ -7,7 +7,7 @@ final nullType = Type_("null_type");
 // NullValue singleton.
 final nullValue = NullValue();
 
-class NullValue implements Value {
+class NullValue extends Value {
   @override
   Type_ get type => nullType;
 
