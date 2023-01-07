@@ -59,31 +59,46 @@ List<Overload> standardOverloads() {
 
     // Add operator
     Overload(Operators.add.name, binaryOperator: (leftHandSide, rightHandSide) {
-      return leftHandSide + rightHandSide;
+      if (leftHandSide is! Adder) {
+        throw StateError('$leftHandSide should be an Adder');
+      }
+      return leftHandSide.add(rightHandSide);
     }),
 
     // Subtract operators
     Overload(Operators.subtract.name,
         binaryOperator: (leftHandSide, rightHandSide) {
-      return leftHandSide - rightHandSide;
+      if (leftHandSide is! Subtractor) {
+        throw StateError('$leftHandSide should be an Subtractor');
+      }
+      return leftHandSide.subtract(rightHandSide);
     }),
 
     // Multiply operator
     Overload(Operators.multiply.name,
         binaryOperator: (leftHandSide, rightHandSide) {
-      return leftHandSide * rightHandSide;
+      if (leftHandSide is! Multiplier) {
+        throw StateError('$leftHandSide should be an Multiplier');
+      }
+      return leftHandSide.multiply(rightHandSide);
     }),
 
     // Divide operator
     Overload(Operators.divide.name,
         binaryOperator: (leftHandSide, rightHandSide) {
-      return leftHandSide / rightHandSide;
+      if (leftHandSide is! Divider) {
+        throw StateError('$leftHandSide should be an Divider');
+      }
+      return leftHandSide.divide(rightHandSide);
     }),
 
     // Modulo operator
     Overload(Operators.modulo.name,
         binaryOperator: (leftHandSide, rightHandSide) {
-      return leftHandSide % rightHandSide;
+      if (leftHandSide is! Modder) {
+        throw StateError('$leftHandSide should be an Modder');
+      }
+      return leftHandSide.modulo(rightHandSide);
     }),
 
     // TODO: implement Negate.

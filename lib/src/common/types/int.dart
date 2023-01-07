@@ -1,10 +1,11 @@
-import 'package:cel/src/common/types/bool.dart';
 import 'package:cel/src/common/types/ref/value.dart';
 import 'package:cel/src/common/types/traits/comparer.dart';
+import 'package:cel/src/common/types/traits/math.dart';
 
 final intType = Type_('int');
 
-class IntValue implements Value, Comparer {
+class IntValue
+    implements Value, Comparer, Adder, Divider, Multiplier, Subtractor, Modder {
   IntValue(this.value);
 
   @override
@@ -18,5 +19,30 @@ class IntValue implements Value, Comparer {
   Value compare(Value other) {
     // Not as exhaustive as cel-go regarding very large or very small numbers.
     return IntValue(value.compareTo(other.value));
+  }
+
+  @override
+  add(Value other) {
+    return IntValue((value + other.value).toInt());
+  }
+
+  @override
+  divide(Value denominator) {
+    return IntValue(value ~/ denominator.value);
+  }
+
+  @override
+  modulo(Value denominator) {
+    return IntValue((value % denominator.value).toInt());
+  }
+
+  @override
+  multiply(Value other) {
+    return IntValue((value * other.value).toInt());
+  }
+
+  @override
+  subtract(Value subtrahend) {
+    return IntValue((value - subtrahend.value).toInt());
   }
 }
