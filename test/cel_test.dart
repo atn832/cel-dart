@@ -228,7 +228,6 @@ void main() {
       final environment = Environment();
       final ast =
           environment.compile("{'name': 'cel', 'useful': true, 5: 7}['name']");
-      print(ast.expression);
       final p = Program(environment, ast, StdLibrary().programOptions);
       expect(p.evaluate({}), 'cel');
     });
@@ -256,38 +255,40 @@ void main() {
     test('a.matches(b)', () {
       final environment = Environment();
       final ast = environment.compile("'hello'.matches('he')");
-      print(ast.expression);
       final p = Program(environment, ast, StdLibrary().programOptions);
       expect(p.evaluate({}), true);
     });
     test('a.matches(b)', () {
       final environment = Environment();
       final ast = environment.compile("'hello world'.matches('[a-z]+ .*')");
-      print(ast.expression);
       final p = Program(environment, ast, StdLibrary().programOptions);
       expect(p.evaluate({}), true);
     });
     test('matches(a, b)', () {
       final environment = Environment();
       final ast = environment.compile("matches('hello', 'he')");
-      print(ast.expression);
       final p = Program(environment, ast, StdLibrary().programOptions);
       expect(p.evaluate({}), true);
     });
     test('startsWith', () {
       final environment = Environment();
       final ast = environment.compile("'hello'.startsWith('he')");
-      print(ast.expression);
       final p = Program(environment, ast, StdLibrary().programOptions);
       expect(p.evaluate({}), true);
     });
     test('endsWith', () {
       final environment = Environment();
       final ast = environment.compile("value.endsWith('lo')");
-      print(ast.expression);
       final p = Program(environment, ast, StdLibrary().programOptions);
       expect(p.evaluate({'value': 'hello'}), true);
       expect(p.evaluate({'value': 'low'}), false);
+    });
+    test('contains', () {
+      final environment = Environment();
+      final ast = environment.compile("value.contains('are')");
+      final p = Program(environment, ast, StdLibrary().programOptions);
+      expect(p.evaluate({'value': 'rare'}), true);
+      expect(p.evaluate({'value': 'donut'}), false);
     });
   });
 }

@@ -48,7 +48,7 @@ This table comes from <https://firebase.google.com/docs/rules/rules-language#ope
 | Operator | Description | Supported |
 | --- | --- | --- |
 | a.f | field access | ✅ |
-| a() | call | ❌ |
+| a() | call | ✅ |
 | a[i] | Index | ✅ |
 | !a -a | Unary negation | ✅ |
 | a/b a%b a*b | Multiplicative operators | ✅ |
@@ -129,7 +129,7 @@ From https://github.com/google/cel-spec/blob/master/doc/langdef.md#functions.
 |  | (bytes, bytes) -> bool | ordering |  |
 |  | (google.protobuf.Timestamp, google.protobuf.Timestamp) -> bool | ordering |  |
 |  | (google.protobuf.Duration, google.protobuf.Duration) -> bool | ordering |  |
-| _?_:_ | (bool, A, A) -> A | The conditional operator. See above for evaluation semantics. Will evaluate the test and only one of the remaining sub-expressions. |  |
+| _?_:_ | (bool, A, A) -> A | The conditional operator. See above for evaluation semantics. Will evaluate the test and only one of the remaining sub-expressions. | ✅ |
 | _[_] | (list(A), int) -> A | list indexing. | ✅ |
 |  | (map(A, B), A) -> B | map indexing. |  |
 | in | (A, list(A)) -> bool | list membership. | ✅ |
@@ -139,7 +139,7 @@ From https://github.com/google/cel-spec/blob/master/doc/langdef.md#functions.
 | bool | type(bool) | type denotation |  |
 | bytes | type(bytes) | type denotation |  |
 |  | (string) -> bytes | type conversion |  |
-| contains | string.(string) -> bool | Tests whether the string operand contains the substring. |  |
+| contains | string.(string) -> bool | Tests whether the string operand contains the substring. | ✅ |
 | double | type(double) | type denotation |  |
 |  | (int) -> double | type conversion |  |
 |  | (uint) -> double | type conversion |  |
