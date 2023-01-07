@@ -17,6 +17,17 @@ final mapType = Type_("map", {
 class MapValue extends Value implements Indexer, Container {
   MapValue(this.value, this.typeAdapter);
 
+  factory MapValue.fromNativeKeyValues(
+      Map<dynamic, dynamic> map, TypeAdapter typeAdapter) {
+    // Skipped the MapAccessor and Mapper code.
+    // https://github.com/google/cel-go/blob/051835c9903525b656a438f778510d9b619b3702/common/types/map.go#L80
+    return MapValue(
+        Map.fromEntries(map.entries.map((e) => MapEntry(
+            typeAdapter.nativeToValue(e.key),
+            typeAdapter.nativeToValue(e.value)))),
+        typeAdapter);
+  }
+
   final TypeAdapter typeAdapter;
 
   @override

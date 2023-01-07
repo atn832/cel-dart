@@ -79,6 +79,10 @@ _nativeToValue(TypeAdapter adapter, dynamic value) {
   if (value is Map<Value, Value>) {
     return MapValue(value, adapter);
   }
+  // https://github.com/google/cel-go/blob/051835c9903525b656a438f778510d9b619b3702/common/types/provider.go#L366-L369
+  if (value is Map) {
+    return MapValue.fromNativeKeyValues(value, adapter);
+  }
   if (value is List<Value>) {
     return ListValue(value, adapter);
   }
