@@ -232,12 +232,21 @@ void main() {
       final p = Program(environment, ast, StdLibrary().programOptions);
       expect(p.evaluate({}), 'cel');
     });
-    test('existence in list', () {
-      final environment = Environment();
-      final ast = environment.compile('value in [1, 2]');
-      final p = Program(environment, ast, StdLibrary().programOptions);
-      expect(p.evaluate({'value': 1}), true);
-      expect(p.evaluate({'value': 3}), false);
+    group('existence in list', () {
+      test('int', () {
+        final environment = Environment();
+        final ast = environment.compile('value in [1, 2]');
+        final p = Program(environment, ast, StdLibrary().programOptions);
+        expect(p.evaluate({'value': 1}), true);
+        expect(p.evaluate({'value': 3}), false);
+      });
+      test('string', () {
+        final environment = Environment();
+        final ast = environment.compile("value in ['london', 'paris']");
+        final p = Program(environment, ast, StdLibrary().programOptions);
+        expect(p.evaluate({'value': 'london'}), true);
+        expect(p.evaluate({'value': 'stockholm'}), false);
+      });
     });
     test('existence a map', () {
       final environment = Environment();
