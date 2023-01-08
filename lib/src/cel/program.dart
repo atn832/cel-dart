@@ -1,5 +1,6 @@
 import 'package:cel/src/interpreter/attribute_factory.dart';
 import 'package:cel/src/interpreter/dispatcher.dart';
+import 'package:equatable/equatable.dart';
 
 import '../interpreter/activation.dart';
 import '../interpreter/interpretable.dart';
@@ -9,7 +10,7 @@ import 'checked_expression.dart';
 import 'environment.dart';
 import 'options.dart';
 
-class Program {
+class Program extends Equatable {
   // Port of
   // https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/cel/program.go#L150.
   Program(this.environment, this.ast,
@@ -57,6 +58,12 @@ class Program {
     final checkedExpression = _astToCheckedExpr(ast);
     _interpretable = _interpreter.interpet(checkedExpression);
   }
+
+  @override
+  List<Object?> get props => [environment, ast, dispatcher];
+
+  @override
+  bool? get stringify => true;
 }
 
 CheckedExpression _astToCheckedExpr(Ast ast) {
