@@ -94,29 +94,29 @@ void main() {
 
   group('program', () {
     test('Const', () {
-      final environment = Environment();
+      final environment = Environment.standard();
       final ast = environment.compile('true');
-      final p = Program(environment, ast);
+      final p = environment.makeProgram(ast);
       expect(p.evaluate({}), true);
     });
 
     test('Ident', () {
-      final environment = Environment();
+      final environment = Environment.standard();
       final ast = environment.compile('animal');
-      final p = Program(environment, ast);
+      final p = environment.makeProgram(ast);
       expect(p.evaluate({'animal': 'elephant'}), 'elephant');
     });
     test('==', () {
-      final environment = Environment();
+      final environment = Environment.standard();
       final ast = environment.compile('uid=="abc"');
-      final p = Program(environment, ast);
+      final p = environment.makeProgram(ast);
       expect(p.evaluate({'uid': 'abc'}), true);
       expect(p.evaluate({'uid': 'def'}), false);
     });
     test('Select and Qualifiers', () {
-      final environment = Environment();
+      final environment = Environment.standard();
       final ast = environment.compile('user.uid=="abc"');
-      final p = Program(environment, ast);
+      final p = environment.makeProgram(ast);
       expect(
           p.evaluate({
             'user': {'uid': 'abc'}
@@ -124,10 +124,10 @@ void main() {
           true);
     });
     test('Null and LogicalAnd', () {
-      final environment = Environment();
+      final environment = Environment.standard();
       final ast = environment
           .compile('request.auth != null && request.auth.uid == "abc"');
-      final p = Program(environment, ast);
+      final p = environment.makeProgram(ast);
 
       expect(p.evaluate({'request': {}}), false);
       expect(
@@ -146,24 +146,24 @@ void main() {
           true);
     });
     test('LogicalOr', () {
-      final environment = Environment();
+      final environment = Environment.standard();
       final ast = environment.compile('0 == 1 || true');
-      final p = Program(environment, ast);
+      final p = environment.makeProgram(ast);
       expect(p.evaluate({}), true);
     });
     group('Comparisons', () {
       test('<', () {
-        final environment = Environment();
+        final environment = Environment.standard();
         final ast = environment.compile('value < 1');
-        final p = Program(environment, ast, StdLibrary().programOptions);
+        final p = environment.makeProgram(ast);
         expect(p.evaluate({'value': 0}), true);
         expect(p.evaluate({'value': 1}), false);
         expect(p.evaluate({'value': 2}), false);
       });
       test('<=', () {
-        final environment = Environment();
+        final environment = Environment.standard();
         final ast = environment.compile('value <= 1.5');
-        final p = Program(environment, ast, StdLibrary().programOptions);
+        final p = environment.makeProgram(ast);
         expect(p.evaluate({'value': 1.4}), true);
         expect(p.evaluate({'value': 1.5}), true);
         expect(p.evaluate({'value': 2}), false);
@@ -171,132 +171,132 @@ void main() {
     });
     group('arithmetic operations', () {
       test('+', () {
-        final environment = Environment();
+        final environment = Environment.standard();
         final ast = environment.compile('1 + 1');
-        final p = Program(environment, ast, StdLibrary().programOptions);
+        final p = environment.makeProgram(ast);
         expect(p.evaluate({}), 2);
       });
       test('-', () {
-        final environment = Environment();
+        final environment = Environment.standard();
         final ast = environment.compile('1.5 - 2');
-        final p = Program(environment, ast, StdLibrary().programOptions);
+        final p = environment.makeProgram(ast);
         expect(p.evaluate({}), -.5);
       });
       test('Multiply', () {
-        final environment = Environment();
+        final environment = Environment.standard();
         final ast = environment.compile('-1.5 * 2');
-        final p = Program(environment, ast, StdLibrary().programOptions);
+        final p = environment.makeProgram(ast);
         expect(p.evaluate({}), -3);
       });
       test('Divide', () {
-        final environment = Environment();
+        final environment = Environment.standard();
         final ast = environment.compile('27 / 10');
-        final p = Program(environment, ast, StdLibrary().programOptions);
+        final p = environment.makeProgram(ast);
         expect(p.evaluate({}), 2);
       });
       test('Modulo', () {
-        final environment = Environment();
+        final environment = Environment.standard();
         final ast = environment.compile('27 % 10');
-        final p = Program(environment, ast, StdLibrary().programOptions);
+        final p = environment.makeProgram(ast);
         expect(p.evaluate({}), 7);
       });
     });
     test('! unary', () {
-      final environment = Environment();
+      final environment = Environment.standard();
       final ast = environment.compile('!true');
-      final p = Program(environment, ast, StdLibrary().programOptions);
+      final p = environment.makeProgram(ast);
       expect(p.evaluate({}), false);
     });
     test('list', () {
-      final environment = Environment();
+      final environment = Environment.standard();
       final ast = environment.compile('[1, 2, value]');
-      final p = Program(environment, ast, StdLibrary().programOptions);
+      final p = environment.makeProgram(ast);
       expect(p.evaluate({'value': 3}), [1, 2, 3]);
     });
     test('map', () {
-      final environment = Environment();
+      final environment = Environment.standard();
       final ast = environment.compile("{'name': 'cel', 'useful': true, 5: 7}");
-      final p = Program(environment, ast, StdLibrary().programOptions);
+      final p = environment.makeProgram(ast);
       expect(p.evaluate({}), {'name': 'cel', 'useful': true, 5: 7});
     });
     test('index a list', () {
-      final environment = Environment();
+      final environment = Environment.standard();
       final ast = environment.compile('[1, 2, value][2]');
-      final p = Program(environment, ast, StdLibrary().programOptions);
+      final p = environment.makeProgram(ast);
       expect(p.evaluate({'value': 3}), 3);
     });
     test('index a map', () {
-      final environment = Environment();
+      final environment = Environment.standard();
       final ast =
           environment.compile("{'name': 'cel', 'useful': true, 5: 7}['name']");
-      final p = Program(environment, ast, StdLibrary().programOptions);
+      final p = environment.makeProgram(ast);
       expect(p.evaluate({}), 'cel');
     });
     group('existence in list', () {
       test('int', () {
-        final environment = Environment();
+        final environment = Environment.standard();
         final ast = environment.compile('value in [1, 2]');
-        final p = Program(environment, ast, StdLibrary().programOptions);
+        final p = environment.makeProgram(ast);
         expect(p.evaluate({'value': 1}), true);
         expect(p.evaluate({'value': 3}), false);
       });
       test('string', () {
-        final environment = Environment();
+        final environment = Environment.standard();
         final ast = environment.compile("value in ['london', 'paris']");
-        final p = Program(environment, ast, StdLibrary().programOptions);
+        final p = environment.makeProgram(ast);
         expect(p.evaluate({'value': 'london'}), true);
         expect(p.evaluate({'value': 'stockholm'}), false);
       });
     });
     test('existence a map', () {
-      final environment = Environment();
+      final environment = Environment.standard();
       final ast =
           environment.compile("key in {'name': 'cel', 'useful': true, 5: 7}");
-      final p = Program(environment, ast, StdLibrary().programOptions);
+      final p = environment.makeProgram(ast);
       expect(p.evaluate({'key': 'name'}), true);
       expect(p.evaluate({'key': 'description'}), false);
     });
     test('ternary operator', () {
-      final environment = Environment();
+      final environment = Environment.standard();
       final ast = environment.compile("true ? 1: -1");
-      final p = Program(environment, ast, StdLibrary().programOptions);
+      final p = environment.makeProgram(ast);
       expect(p.evaluate({}), 1);
     });
     test('a.matches(b)', () {
-      final environment = Environment();
+      final environment = Environment.standard();
       final ast = environment.compile("'hello'.matches('he')");
-      final p = Program(environment, ast, StdLibrary().programOptions);
+      final p = environment.makeProgram(ast);
       expect(p.evaluate({}), true);
     });
     test('a.matches(b)', () {
-      final environment = Environment();
+      final environment = Environment.standard();
       final ast = environment.compile("'hello world'.matches('[a-z]+ .*')");
-      final p = Program(environment, ast, StdLibrary().programOptions);
+      final p = environment.makeProgram(ast);
       expect(p.evaluate({}), true);
     });
     test('matches(a, b)', () {
-      final environment = Environment();
+      final environment = Environment.standard();
       final ast = environment.compile("matches('hello', 'he')");
-      final p = Program(environment, ast, StdLibrary().programOptions);
+      final p = environment.makeProgram(ast);
       expect(p.evaluate({}), true);
     });
     test('startsWith', () {
-      final environment = Environment();
+      final environment = Environment.standard();
       final ast = environment.compile("'hello'.startsWith('he')");
-      final p = Program(environment, ast, StdLibrary().programOptions);
+      final p = environment.makeProgram(ast);
       expect(p.evaluate({}), true);
     });
     test('endsWith', () {
-      final environment = Environment();
+      final environment = Environment.standard();
       final ast = environment.compile("value.endsWith('lo')");
-      final p = Program(environment, ast, StdLibrary().programOptions);
+      final p = environment.makeProgram(ast);
       expect(p.evaluate({'value': 'hello'}), true);
       expect(p.evaluate({'value': 'low'}), false);
     });
     test('contains', () {
-      final environment = Environment();
+      final environment = Environment.standard();
       final ast = environment.compile("value.contains('are')");
-      final p = Program(environment, ast, StdLibrary().programOptions);
+      final p = environment.makeProgram(ast);
       expect(p.evaluate({'value': 'rare'}), true);
       expect(p.evaluate({'value': 'donut'}), false);
     });
