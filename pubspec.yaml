@@ -1,6 +1,6 @@
 name: cel
 description: This project parses and evaluates Common Expression Language (CEL) programs against some inputs.
-version: 0.5.0
+version: 0.5.0+1
 repository: https://github.com/atn832/cel-dart
 homepage: https://www.wafrat.com
 
@@ -9,7 +9,7 @@ environment:
 
 dependencies:
   antlr4: ^4.11.1
-  collection: ^1.17.0
+  collection: ^1.16.0
   equatable: ^2.0.5
 
 dev_dependencies:
