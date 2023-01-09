@@ -20,8 +20,8 @@ class Environment {
   /// Creates a program environment configured with the standard library of CEL
   /// functions and macros. The Env value returned can parse and check any CEL
   /// program which builds upon the core features documented in the CEL
-  /// specification.
-  /// https://github.com/google/cel-go/blob/9e14003d8a7a856b250c5e6514647dee7d4fd9a2/cel/env.go#L127
+  /// specification. See
+  /// https://github.com/google/cel-go/blob/9e14003d8a7a856b250c5e6514647dee7d4fd9a2/cel/env.go#L127.
   /// In cel-dart, it is not entirely standard as we do not support timestamp
   /// protos nor macros.
   Environment.standard()

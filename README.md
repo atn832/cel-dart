@@ -1,5 +1,8 @@
 # cel-dart
 
+[![pub package](https://img.shields.io/pub/v/cel.svg)](https://pub.dartlang.org/packages/cel)
+[![Unit Tests](https://github.com/atn832/cel-dart/actions/workflows/dart.yml/badge.svg)](https://github.com/atn832/cel-dart/actions/workflows/dart.yml)
+
 This project parses and evaluates Common Expression Language (CEL) programs against some inputs. For example, based on the code `request.auth.claims.group=='admin'` and a `request` object as input, the library will evaluate whether the statement is `true` or `false`. CEL (see the [spec](https://github.com/google/cel-spec)) is a language used by many security projects such as Firestore and Firebase Storage. This project is a simplified port of <https://github.com/google/cel-go>.
 
 ## Usage
@@ -41,7 +44,7 @@ The meat of the code is in [Parser.visit] and [Planner.plan].
 
 ## Differences with cel-go
 
-The main difference besides being incomplete is that cel-go defines the `Expr` architecture with Protobuf, while this project defines `Expr` as native Dart. This is mostly for convenience, but we might integrate Protobuf later for feature parity.
+The main difference besides being incomplete is that cel-go defines the `Expr` architecture with Protobuf, while this project defines `Expr` as native Dart. This is mostly to save time. We might integrate Protobuf later if the need arises.
 
 ## Features
 
@@ -241,7 +244,7 @@ If you are curious how it was made, or want to contribute, you may find this rea
 
 ### Implementation details
 
-* Difference between [Value.value] and [Value.convertToNative]: While both are the same in the case of primitive wrappers such as IntValue, DoubleValue... they are different for ListValue and MapValue. For example for a ListValue, ListValue.value is a List<Value>, while Value.convertToNative will return List<whatever>, whatever being a non-Value type.
+* Difference between [Value.value] and [Value.convertToNative]: While both are the same in the case of primitive wrappers such as [IntValue], [DoubleValue]... they are different for [ListValue] and [MapValue]. For example for a [ListValue], [ListValue.value] is a `List<Value>`, while [Value.convertToNative] will return `List<non-Value type>`.
 * `environmentOptions` and [`standardDeclarations`](https://github.com/atn832/cel-dart/blob/f40cde8793c4c5a1f16be186de3c859ff1cead0e/lib/src/checker/standard.dart) don't actually do anything yet. In the future, they may be used to check whether some function has indeed been declared in [Interpretable.planCall](https://github.com/atn832/cel-dart/blob/85646886e5c829832bed9a5e5b23a519c403e4ce/lib/src/interpreter/planner.dart#L53) when it calls resolveFunction. Doing so might help throw an Exception early if the function name is not an declared function.
 * In cel-go, [`Parser.visit`](https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/parser/parser.go#L359-L443) returns `any`. In cel-dart, we return [`Expr`](https://github.com/atn832/cel-dart/blob/a0502299bf58d0869f9620d51b6af35bf10d8f0b/lib/src/parser/parser.dart#L24), making it more type safe.
-* How does `a in b` get processed? `in` is listed in [standardOverloads](https://github.com/atn832/cel-dart/blob/79a049cd9e9b40a31dc6165e6864d04261189b16/lib/src/interpreter/functions/standard.dart#L121). It is used in [StdLibrary](https://github.com/atn832/cel-dart/blob/7a251505c44ce6d8501f4c7967dfddf3d5294691/lib/src/cel/library.dart#L18) to [add them to the Dispatcher](https://github.com/atn832/cel-dart/blob/85ccf2ac813129679823621c16d43bf50680305b/lib/src/cel/options.dart#L13) during initialization. During evaluation, the planner finds the Overload implementation by calling [Dispatcher.findOverload](https://github.com/atn832/cel-dart/blob/85646886e5c829832bed9a5e5b23a519c403e4ce/lib/src/interpreter/planner.dart#L76). Eventually, the CallExpr('@in') calls the Overload implementation with the call to [contains](https://github.com/atn832/cel-dart/blob/493bdc9ff1cef90f27573fbf304f30e3e0bb6265/lib/src/interpreter/functions/standard.dart#L125).
+* How does `a in b` get processed? `in` is listed in [standardOverloads](https://github.com/atn832/cel-dart/blob/79a049cd9e9b40a31dc6165e6864d04261189b16/lib/src/interpreter/functions/standard.dart#L121). It is used in [StdLibrary](https://github.com/atn832/cel-dart/blob/7a251505c44ce6d8501f4c7967dfddf3d5294691/lib/src/cel/library.dart#L18) to [add them to the Dispatcher](https://github.com/atn832/cel-dart/blob/85ccf2ac813129679823621c16d43bf50680305b/lib/src/cel/options.dart#L13) during initialization. During evaluation, the planner finds the Overload implementation by calling [Dispatcher.findOverload](https://github.com/atn832/cel-dart/blob/85646886e5c829832bed9a5e5b23a519c403e4ce/lib/src/interpreter/planner.dart#L76). Eventually, the `CallExpr('@in')` calls the [Overload] implementation with the call to [contains](https://github.com/atn832/cel-dart/blob/493bdc9ff1cef90f27573fbf304f30e3e0bb6265/lib/src/interpreter/functions/standard.dart#L125).
