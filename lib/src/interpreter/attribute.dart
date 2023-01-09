@@ -1,9 +1,13 @@
 import 'package:cel/src/interpreter/activation.dart';
 import 'package:cel/src/interpreter/interpretable.dart';
+import 'package:equatable/equatable.dart';
 
-abstract class Attribute {
+abstract class Attribute extends Equatable {
   dynamic resolve(Activation activation);
   void addQualifier(Qualifier qualifier);
+
+  @override
+  bool? get stringify => true;
 }
 
 class MaybeAttribute extends Attribute {
@@ -29,8 +33,11 @@ class MaybeAttribute extends Attribute {
         continue;
       }
     }
-    throw Exception('Not found');
+    throw Exception('Attribute not found on ${toString()}');
   }
+
+  @override
+  List<Object?> get props => [namespaceAttributes];
 }
 
 abstract class NamespaceAttribute extends Attribute {}
@@ -66,6 +73,9 @@ class AbsoluteAttribute extends NamespaceAttribute {
     }
     return result;
   }
+
+  @override
+  List<Object?> get props => [namespaceName, qualifiers];
 }
 
 class RelativeAttribute extends Attribute {
@@ -86,10 +96,17 @@ class RelativeAttribute extends Attribute {
     // TODO: implement addQualifier
     throw UnimplementedError();
   }
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => throw UnimplementedError();
 }
 
-abstract class Qualifier {
+abstract class Qualifier extends Equatable {
   qualify(Activation activation, object);
+
+  @override
+  bool? get stringify => true;
 }
 
 class StringQualifier extends Qualifier {
@@ -99,8 +116,14 @@ class StringQualifier extends Qualifier {
 
   @override
   qualify(Activation activation, object) {
+    if (object == null) {
+      throw StateError('Trying to read value of key $value on $object');
+    }
     return object[value];
   }
+
+  @override
+  List<Object?> get props => [value];
 }
 
 class ConditionalAttribute extends Attribute {
@@ -127,4 +150,7 @@ class ConditionalAttribute extends Attribute {
         ? truthy.evaluate(activation)
         : falsy.evaluate(activation);
   }
+
+  @override
+  List<Object?> get props => [condition, truthy, falsy];
 }
