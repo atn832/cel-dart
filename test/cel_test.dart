@@ -188,13 +188,31 @@ void main() {
       expect(p.evaluate({}), true);
     });
     group('Comparisons', () {
-      test('<', () {
-        final environment = Environment.standard();
-        final ast = environment.compile('value < 1');
-        final p = environment.makeProgram(ast);
-        expect(p.evaluate({'value': 0}), true);
-        expect(p.evaluate({'value': 1}), false);
-        expect(p.evaluate({'value': 2}), false);
+      group('<', () {
+        test('int', () {
+          final environment = Environment.standard();
+          final ast = environment.compile('value < 1');
+          final p = environment.makeProgram(ast);
+          expect(p.evaluate({'value': 0}), true);
+          expect(p.evaluate({'value': 1}), false);
+          expect(p.evaluate({'value': 2}), false);
+        });
+        test('double', () {
+          final environment = Environment.standard();
+          final ast = environment.compile('value < 1.5');
+          final p = environment.makeProgram(ast);
+          expect(p.evaluate({'value': 0}), true);
+          expect(p.evaluate({'value': 1}), true);
+          expect(p.evaluate({'value': 2}), false);
+        });
+        test('uint', () {
+          final environment = Environment.standard();
+          final ast = environment.compile('value < 1u');
+          final p = environment.makeProgram(ast);
+          expect(p.evaluate({'value': 0}), true);
+          expect(p.evaluate({'value': 1}), false);
+          expect(p.evaluate({'value': 2}), false);
+        });
       });
       test('<=', () {
         final environment = Environment.standard();
