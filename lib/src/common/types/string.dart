@@ -1,4 +1,6 @@
 import 'package:cel/src/common/types/bool.dart';
+import 'package:cel/src/common/types/int.dart';
+import 'package:cel/src/common/types/traits/comparer.dart';
 import 'package:cel/src/common/types/traits/matcher.dart';
 import 'package:cel/src/common/types/traits/math.dart';
 import 'package:cel/src/common/types/traits/traits.dart';
@@ -17,7 +19,7 @@ final stringType = Type_('string', {
   Traits.SizerType
 });
 
-class StringValue extends Value implements Receiver, Matcher, Adder {
+class StringValue extends Value implements Receiver, Matcher, Adder, Comparer {
   StringValue(this.value);
 
   @override
@@ -39,6 +41,11 @@ class StringValue extends Value implements Receiver, Matcher, Adder {
   @override
   add(Value other) {
     return StringValue(value + other.value);
+  }
+
+  @override
+  Value compare(Value other) {
+    return IntValue(value.compareTo(other.value));
   }
 }
 

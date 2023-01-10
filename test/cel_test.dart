@@ -220,6 +220,14 @@ void main() {
           expect(p.evaluate({'value': false}), true);
           expect(p.evaluate({'value': true}), false);
         });
+        test('string', () {
+          final environment = Environment.standard();
+          final ast = environment.compile('value < "basket"');
+          final p = environment.makeProgram(ast);
+          expect(p.evaluate({'value': 'alpha'}), true);
+          expect(p.evaluate({'value': 'basket'}), false);
+          expect(p.evaluate({'value': 'casket'}), false);
+        });
       });
       test('<=', () {
         final environment = Environment.standard();
