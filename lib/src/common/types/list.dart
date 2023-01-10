@@ -3,6 +3,7 @@ import 'package:cel/src/common/types/ref/provider.dart';
 import 'package:cel/src/common/types/ref/value.dart';
 import 'package:cel/src/common/types/traits/container.dart';
 import 'package:cel/src/common/types/traits/indexer.dart';
+import 'package:cel/src/common/types/traits/math.dart';
 import 'package:cel/src/common/types/traits/traits.dart';
 
 // https://github.com/google/cel-go/blob/377a0bba20d07926e0583b4e604509ca7f3583b7/common/types/list.go
@@ -15,7 +16,7 @@ final listType = Type_("list", {
   Traits.SizerType
 });
 
-class ListValue extends Value implements Indexer, Container {
+class ListValue extends Value implements Indexer, Container, Adder {
   ListValue(this.value, this.typeAdapter);
 
   final TypeAdapter typeAdapter;
@@ -39,5 +40,10 @@ class ListValue extends Value implements Indexer, Container {
   @override
   BooleanValue contains(Value value) {
     return BooleanValue(this.value.contains(value));
+  }
+
+  @override
+  add(Value other) {
+    return ListValue([...value, ...other.value], typeAdapter);
   }
 }

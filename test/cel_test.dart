@@ -239,6 +239,12 @@ void main() {
             p.evaluate({});
           }, throwsUnimplementedError);
         });
+        test('lists', () {
+          final environment = Environment.standard();
+          final ast = environment.compile('[1] + [2, 3]');
+          final p = environment.makeProgram(ast);
+          expect(p.evaluate({}), [1, 2, 3]);
+        });
       });
       test('-', () {
         final environment = Environment.standard();
