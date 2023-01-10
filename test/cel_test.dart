@@ -213,6 +213,12 @@ void main() {
           final p = environment.makeProgram(ast);
           expect(p.evaluate({}), 2);
         });
+        test('uint', () {
+          final environment = Environment.standard();
+          final ast = environment.compile('145u + 12u');
+          final p = environment.makeProgram(ast);
+          expect(p.evaluate({}), 157);
+        });
         test('double', () {
           final environment = Environment.standard();
           final ast = environment.compile('1.5 + 1.1');
