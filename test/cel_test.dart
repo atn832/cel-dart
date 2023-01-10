@@ -206,11 +206,19 @@ void main() {
       });
     });
     group('arithmetic operations', () {
-      test('+', () {
-        final environment = Environment.standard();
-        final ast = environment.compile('1 + 1');
-        final p = environment.makeProgram(ast);
-        expect(p.evaluate({}), 2);
+      group('+', () {
+        test('int', () {
+          final environment = Environment.standard();
+          final ast = environment.compile('1 + 1');
+          final p = environment.makeProgram(ast);
+          expect(p.evaluate({}), 2);
+        });
+        test('double', () {
+          final environment = Environment.standard();
+          final ast = environment.compile('1.5 + 1.1');
+          final p = environment.makeProgram(ast);
+          expect(p.evaluate({}), 2.6);
+        });
       });
       test('-', () {
         final environment = Environment.standard();

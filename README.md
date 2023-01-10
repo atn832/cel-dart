@@ -106,7 +106,7 @@ From <https://github.com/google/cel-spec/blob/master/doc/langdef.md#functions>.
 |  | (uint, uint) -> uint | arithmetic | ✅ |
 |  | (double, double) -> double | arithmetic | ✅ |
 | _+_ | (int, int) -> int | arithmetic | ✅ |
-|  | (uint, uint) -> uint | arithmetic |  |
+|  | (uint, uint) -> uint | arithmetic | ✅ |
 |  | (double, double) -> double | arithmetic |  |
 |  | (string, string) -> string | String concatenation. |  |
 |  | (bytes, bytes) -> bytes | bytes concatenation |  |
