@@ -9,6 +9,7 @@ void main() {
 
     test('String', () {
       expect(p.parse('"Hello World!"'), StringLiteralExpr('Hello World!'));
+      expect(p.parse("'Hello World!'"), StringLiteralExpr('Hello World!'));
     });
 
     test('Booleans', () {
@@ -134,6 +135,41 @@ void main() {
           p.evaluate({
             'request': {
               'auth': {'uid': 'DEF'}
+            }
+          }),
+          false);
+      expect(
+          p.evaluate({
+            'request': {
+              'auth': {'uid': 'abc'}
+            }
+          }),
+          true);
+    });
+    test('LogicalAnd (variadic)', () {
+      final environment = Environment.standard();
+      final ast = environment.compile(
+          'request != null && request.auth != null && request.auth.uid == "abc"');
+      final p = environment.makeProgram(ast);
+
+      expect(p.evaluate({'request': null}), false);
+      expect(p.evaluate({'request': {}}), false);
+      expect(
+          p.evaluate({
+            'request': {'auth': null}
+          }),
+          false);
+      expect(
+          p.evaluate({
+            'request': {
+              'auth': {'something': 123}
+            }
+          }),
+          false);
+      expect(
+          p.evaluate({
+            'request': {
+              'auth': {'uid': 123}
             }
           }),
           false);

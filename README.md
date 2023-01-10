@@ -101,7 +101,7 @@ From <https://github.com/google/cel-spec/blob/master/doc/langdef.md#functions>.
 | _%_ | (int, int) -> int | arithmetic | ✅ |
 |  | (uint, uint) -> uint | arithmetic | untested |
 | _&&_ | (bool, bool) -> bool | logical and | ✅ |
-|  | (bool, ...) -> bool | logical and (variadic) |  |
+|  | (bool, ...) -> bool | logical and (variadic) | ✅ |
 | _*_ | (int, int) -> int | arithmetic |  |
 |  | (uint, uint) -> uint | arithmetic |  |
 |  | (double, double) -> double | arithmetic | ✅ |
