@@ -231,6 +231,14 @@ void main() {
           final p = environment.makeProgram(ast);
           expect(p.evaluate({}), 'abcd');
         });
+        test('bytes concatenation is not supported', () {
+          final environment = Environment.standard();
+          final ast = environment.compile('b"ab" + b"cd"');
+          expect(() {
+            final p = environment.makeProgram(ast);
+            p.evaluate({});
+          }, throwsUnimplementedError);
+        });
       });
       test('-', () {
         final environment = Environment.standard();
