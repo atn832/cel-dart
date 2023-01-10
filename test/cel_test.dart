@@ -218,11 +218,25 @@ void main() {
         final p = environment.makeProgram(ast);
         expect(p.evaluate({}), -.5);
       });
-      test('Multiply', () {
-        final environment = Environment.standard();
-        final ast = environment.compile('-1.5 * 2');
-        final p = environment.makeProgram(ast);
-        expect(p.evaluate({}), -3);
+      group('Multiply', () {
+        test('double', () {
+          final environment = Environment.standard();
+          final ast = environment.compile('-1.5 * 2');
+          final p = environment.makeProgram(ast);
+          expect(p.evaluate({}), -3);
+        });
+        test('int', () {
+          final environment = Environment.standard();
+          final ast = environment.compile('-15 * 2');
+          final p = environment.makeProgram(ast);
+          expect(p.evaluate({}), -30);
+        });
+        test('uint', () {
+          final environment = Environment.standard();
+          final ast = environment.compile('15u * 2u');
+          final p = environment.makeProgram(ast);
+          expect(p.evaluate({}), 30);
+        });
       });
       test('Divide', () {
         final environment = Environment.standard();
