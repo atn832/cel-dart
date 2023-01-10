@@ -140,20 +140,20 @@ From <https://github.com/google/cel-spec/blob/master/doc/langdef.md#functions>.
 |  | (google.protobuf.Timestamp, google.protobuf.Timestamp) -> bool | ordering | ❌ |
 |  | (google.protobuf.Duration, google.protobuf.Duration) -> bool | ordering | ❌ |
 | _==_ | (A, A) -> bool | equality | ✅ |
-| _>=_ | (bool, bool) -> bool | ordering |  |
-|  | (int, int) -> bool | ordering |  |
-|  | (uint, uint) -> bool | ordering |  |
-|  | (double, double) -> bool | ordering |  |
-|  | (string, string) -> bool | ordering |  |
-|  | (bytes, bytes) -> bool | ordering |  |
+| _>=_ | (bool, bool) -> bool | ordering | ✅ |
+|  | (int, int) -> bool | ordering | ✅ |
+|  | (uint, uint) -> bool | ordering | ✅ |
+|  | (double, double) -> bool | ordering | ✅ |
+|  | (string, string) -> bool | ordering | ✅ |
+|  | (bytes, bytes) -> bool | ordering | ❌ |
 |  | (google.protobuf.Timestamp, google.protobuf.Timestamp) -> bool | ordering | ❌ |
 |  | (google.protobuf.Duration, google.protobuf.Duration) -> bool | ordering | ❌ |
-| _>_ | (bool, bool) -> bool | ordering |  |
-|  | (int, int) -> bool | ordering |  |
-|  | (uint, uint) -> bool | ordering |  |
-|  | (double, double) -> bool | ordering |  |
-|  | (string, string) -> bool | ordering |  |
-|  | (bytes, bytes) -> bool | ordering |  |
+| _>_ | (bool, bool) -> bool | ordering | ✅ |
+|  | (int, int) -> bool | ordering | ✅ |
+|  | (uint, uint) -> bool | ordering | ✅ |
+|  | (double, double) -> bool | ordering | ✅ |
+|  | (string, string) -> bool | ordering | ✅ |
+|  | (bytes, bytes) -> bool | ordering | ❌ |
 |  | (google.protobuf.Timestamp, google.protobuf.Timestamp) -> bool | ordering | ❌ |
 |  | (google.protobuf.Duration, google.protobuf.Duration) -> bool | ordering | ❌ |
 | _?_:_ | (bool, A, A) -> A | The conditional operator. See above for evaluation semantics. Will evaluate the test and only one of the remaining sub-expressions. | ✅ |

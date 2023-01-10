@@ -270,6 +270,88 @@ void main() {
           expect(p.evaluate({'value': 'basket'}), true);
         });
       });
+      group('>', () {
+        test('int', () {
+          final environment = Environment.standard();
+          final ast = environment.compile('value > 1');
+          final p = environment.makeProgram(ast);
+          expect(p.evaluate({'value': 0}), false);
+          expect(p.evaluate({'value': 1}), false);
+          expect(p.evaluate({'value': 2}), true);
+        });
+        test('double', () {
+          final environment = Environment.standard();
+          final ast = environment.compile('value > 1.5');
+          final p = environment.makeProgram(ast);
+          expect(p.evaluate({'value': 0}), false);
+          expect(p.evaluate({'value': 1}), false);
+          expect(p.evaluate({'value': 2}), true);
+        });
+        test('uint', () {
+          final environment = Environment.standard();
+          final ast = environment.compile('value > 1u');
+          final p = environment.makeProgram(ast);
+          expect(p.evaluate({'value': 0}), false);
+          expect(p.evaluate({'value': 1}), false);
+          expect(p.evaluate({'value': 2}), true);
+        });
+        test('bool', () {
+          final environment = Environment.standard();
+          final ast = environment.compile('value > true');
+          final p = environment.makeProgram(ast);
+          expect(p.evaluate({'value': false}), false);
+          expect(p.evaluate({'value': true}), false);
+        });
+        test('string', () {
+          final environment = Environment.standard();
+          final ast = environment.compile('value > "basket"');
+          final p = environment.makeProgram(ast);
+          expect(p.evaluate({'value': 'alpha'}), false);
+          expect(p.evaluate({'value': 'basket'}), false);
+          expect(p.evaluate({'value': 'casket'}), true);
+        });
+      });
+      group('>=', () {
+        test('int', () {
+          final environment = Environment.standard();
+          final ast = environment.compile('value >= 1');
+          final p = environment.makeProgram(ast);
+          expect(p.evaluate({'value': 0}), false);
+          expect(p.evaluate({'value': 1}), true);
+          expect(p.evaluate({'value': 2}), true);
+        });
+        test('double', () {
+          final environment = Environment.standard();
+          final ast = environment.compile('value >= 1.5');
+          final p = environment.makeProgram(ast);
+          expect(p.evaluate({'value': 0}), false);
+          expect(p.evaluate({'value': 1.5}), true);
+          expect(p.evaluate({'value': 2}), true);
+        });
+        test('uint', () {
+          final environment = Environment.standard();
+          final ast = environment.compile('value >= 1u');
+          final p = environment.makeProgram(ast);
+          expect(p.evaluate({'value': 0}), false);
+          expect(p.evaluate({'value': 1}), true);
+          expect(p.evaluate({'value': 2}), true);
+        });
+        test('bool', () {
+          final environment = Environment.standard();
+          final ast = environment.compile('value >= true');
+          final p = environment.makeProgram(ast);
+          expect(p.evaluate({'value': false}), false);
+          expect(p.evaluate({'value': true}), true);
+        });
+        test('string', () {
+          final environment = Environment.standard();
+          final ast = environment.compile('value >= "basket"');
+          final p = environment.makeProgram(ast);
+          expect(p.evaluate({'value': 'alpha'}), false);
+          expect(p.evaluate({'value': 'basker'}), false);
+          expect(p.evaluate({'value': 'basket'}), true);
+        });
+      });
     });
     group('arithmetic operations', () {
       group('+', () {
