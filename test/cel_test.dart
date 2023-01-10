@@ -286,11 +286,25 @@ void main() {
           expect(p.evaluate({}), 30);
         });
       });
-      test('Divide', () {
-        final environment = Environment.standard();
-        final ast = environment.compile('27 / 10');
-        final p = environment.makeProgram(ast);
-        expect(p.evaluate({}), 2);
+      group('Divide', () {
+        test('int', () {
+          final environment = Environment.standard();
+          final ast = environment.compile('27 / 10');
+          final p = environment.makeProgram(ast);
+          expect(p.evaluate({}), 2);
+        });
+        test('double', () {
+          final environment = Environment.standard();
+          final ast = environment.compile('27.5 / 10.');
+          final p = environment.makeProgram(ast);
+          expect(p.evaluate({}), 2.75);
+        });
+        test('uint', () {
+          final environment = Environment.standard();
+          final ast = environment.compile('27u / 10u');
+          final p = environment.makeProgram(ast);
+          expect(p.evaluate({}), 2);
+        });
       });
       test('Modulo', () {
         final environment = Environment.standard();

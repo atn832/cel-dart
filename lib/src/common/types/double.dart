@@ -39,7 +39,7 @@ class DoubleValue extends Value
 
   @override
   divide(Value denominator) {
-    return IntValue(value ~/ denominator.value);
+    return DoubleValue(value / denominator.value);
   }
 
   @override
