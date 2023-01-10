@@ -115,8 +115,8 @@ From <https://github.com/google/cel-spec/blob/master/doc/langdef.md#functions>.
 |  | (google.protobuf.Duration, google.protobuf.Timestamp) -> google.protobuf.Timestamp | arithmetic | ❌ |
 |  | (google.protobuf.Duration, google.protobuf.Duration) -> google.protobuf.Duration | arithmetic | ❌ |
 | _-_ | (int, int) -> int | arithmetic | ✅ |
-|  | (uint, uint) -> uint | arithmetic |  |
-|  | (double, double) -> double | arithmetic |  |
+|  | (uint, uint) -> uint | arithmetic | ✅ |
+|  | (double, double) -> double | arithmetic | ✅ |
 |  | (google.protobuf.Timestamp, google.protobuf.Timestamp) -> google.protobuf.Duration | arithmetic | ❌ |
 |  | (google.protobuf.Timestamp, google.protobuf.Duration) -> google.protobuf.Timestamp | arithmetic | ❌ |
 |  | (google.protobuf.Duration, google.protobuf.Duration) -> google.protobuf.Duration | arithmetic | ❌ |

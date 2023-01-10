@@ -246,11 +246,25 @@ void main() {
           expect(p.evaluate({}), [1, 2, 3]);
         });
       });
-      test('-', () {
-        final environment = Environment.standard();
-        final ast = environment.compile('1.5 - 2');
-        final p = environment.makeProgram(ast);
-        expect(p.evaluate({}), -.5);
+      group('-', () {
+        test('double', () {
+          final environment = Environment.standard();
+          final ast = environment.compile('1.5 - 2');
+          final p = environment.makeProgram(ast);
+          expect(p.evaluate({}), -.5);
+        });
+        test('int', () {
+          final environment = Environment.standard();
+          final ast = environment.compile('15 - 2');
+          final p = environment.makeProgram(ast);
+          expect(p.evaluate({}), 13);
+        });
+        test('uint', () {
+          final environment = Environment.standard();
+          final ast = environment.compile('15u - 2u');
+          final p = environment.makeProgram(ast);
+          expect(p.evaluate({}), 13);
+        });
       });
       group('Multiply', () {
         test('double', () {
