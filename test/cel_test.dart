@@ -219,6 +219,12 @@ void main() {
           final p = environment.makeProgram(ast);
           expect(p.evaluate({}), 2.6);
         });
+        test('string', () {
+          final environment = Environment.standard();
+          final ast = environment.compile('"ab" + "cd"');
+          final p = environment.makeProgram(ast);
+          expect(p.evaluate({}), 'abcd');
+        });
       });
       test('-', () {
         final environment = Environment.standard();

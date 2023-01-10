@@ -108,7 +108,7 @@ From <https://github.com/google/cel-spec/blob/master/doc/langdef.md#functions>.
 | _+_ | (int, int) -> int | arithmetic | ✅ |
 |  | (uint, uint) -> uint | arithmetic | ✅ |
 |  | (double, double) -> double | arithmetic |  |
-|  | (string, string) -> string | String concatenation. |  |
+|  | (string, string) -> string | String concatenation. | ✅ |
 |  | (bytes, bytes) -> bytes | bytes concatenation |  |
 |  | (list(A), list(A)) -> list(A) | List concatenation. |  |
 |  | (google.protobuf.Timestamp, google.protobuf.Duration) -> google.protobuf.Timestamp | arithmetic | ❌ |
