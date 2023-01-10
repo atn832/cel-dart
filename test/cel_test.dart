@@ -213,6 +213,13 @@ void main() {
           expect(p.evaluate({'value': 1}), false);
           expect(p.evaluate({'value': 2}), false);
         });
+        test('bool', () {
+          final environment = Environment.standard();
+          final ast = environment.compile('value < true');
+          final p = environment.makeProgram(ast);
+          expect(p.evaluate({'value': false}), true);
+          expect(p.evaluate({'value': true}), false);
+        });
       });
       test('<=', () {
         final environment = Environment.standard();

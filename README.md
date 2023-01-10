@@ -131,7 +131,7 @@ From <https://github.com/google/cel-spec/blob/master/doc/langdef.md#functions>.
 |  | (bytes, bytes) -> bool | ordering |  |
 |  | (google.protobuf.Timestamp, google.protobuf.Timestamp) -> bool | ordering | ❌ |
 |  | (google.protobuf.Duration, google.protobuf.Duration) -> bool | ordering | ❌ |
-| _<_ | (bool, bool) -> bool | ordering |  |
+| _<_ | (bool, bool) -> bool | ordering | ✅ |
 |  | (int, int) -> bool | ordering | ✅ |
 |  | (uint, uint) -> bool | ordering | ✅ |
 |  | (double, double) -> bool | ordering | ✅ |
