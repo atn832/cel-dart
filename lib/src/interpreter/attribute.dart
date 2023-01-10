@@ -33,7 +33,7 @@ class MaybeAttribute extends Attribute {
         continue;
       }
     }
-    throw Exception('Attribute not found on ${toString()}');
+    throw Exception('Could not find ${toString()} in environment $activation.');
   }
 
   @override

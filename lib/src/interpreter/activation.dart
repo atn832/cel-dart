@@ -1,5 +1,10 @@
-abstract class Activation {
+import 'package:equatable/equatable.dart';
+
+abstract class Activation extends Equatable {
   resolveName(namespaceName);
+
+  @override
+  bool? get stringify => true;
 }
 
 class EvalActivation extends Activation {
@@ -14,4 +19,7 @@ class EvalActivation extends Activation {
     }
     return input[namespaceName];
   }
+
+  @override
+  List<Object?> get props => [input];
 }
