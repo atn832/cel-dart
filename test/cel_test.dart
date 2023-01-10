@@ -187,6 +187,12 @@ void main() {
       final p = environment.makeProgram(ast);
       expect(p.evaluate({}), true);
     });
+    test('LogicalOr (variadic)', () {
+      final environment = Environment.standard();
+      final ast = environment.compile('0 == 1 || 1 > 3 || false');
+      final p = environment.makeProgram(ast);
+      expect(p.evaluate({}), false);
+    });
     group('Comparisons', () {
       group('<', () {
         test('int', () {

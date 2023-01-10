@@ -162,7 +162,7 @@ From <https://github.com/google/cel-spec/blob/master/doc/langdef.md#functions>.
 | in | (A, list(A)) -> bool | list membership. | ✅ |
 |  | (A, map(A, B)) -> bool | map key membership. | ✅ |
 | _\|\|_ | (bool, bool) -> bool | logical or | ✅ |
-|  | (bool, ...) -> bool | logical or (variadic) |  |
+|  | (bool, ...) -> bool | logical or (variadic) | ✅ |
 | bool | type(bool) | type denotation | ❌ |
 | bytes | type(bytes) | type denotation | ❌ |
 |  | (string) -> bytes | type conversion | ❌ |
