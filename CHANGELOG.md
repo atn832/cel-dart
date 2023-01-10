@@ -1,3 +1,7 @@
+## 0.5.1+1
+
+Cleaned up README.
+
 ## 0.5.1
 
 - Improved display of runtime exceptions.
