@@ -3,7 +3,7 @@ import 'package:cel/src/common/types/map.dart';
 import 'package:cel/src/common/types/bool.dart';
 import 'package:cel/src/common/types/double.dart';
 import 'package:cel/src/common/types/int.dart';
-import 'package:cel/src/common/types/null.dart';
+import 'package:cel/src/common/types/null_.dart';
 import 'package:cel/src/common/types/ref/provider.dart';
 import 'package:cel/src/common/types/ref/value.dart';
 import 'package:cel/src/common/types/string.dart';

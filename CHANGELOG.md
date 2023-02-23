@@ -1,3 +1,7 @@
+## 0.5.2
+
+Fixed runtime error when running cel in Flutter Web in debug mode.
+
 ## 0.5.1+1
 
 Cleaned up README.
