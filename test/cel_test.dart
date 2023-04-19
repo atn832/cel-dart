@@ -1,5 +1,6 @@
 import 'package:cel/cel.dart';
 import 'package:cel/src/cel/expr.dart';
+import 'package:cel/src/parser/bitwise.dart';
 import 'package:cel/src/parser/parser.dart';
 import 'package:test/test.dart';
 
@@ -566,5 +567,10 @@ void main() {
       expect(p.evaluate({'value': 'rare'}), true);
       expect(p.evaluate({'value': 'donut'}), false);
     });
+  });
+
+  test('bitwise and', () {
+    expect(bitwiseAnd(35, 283), 35 & 283);
+    expect(bitwiseAnd(1 << 34, 135763153920), 1 << 34 & 135763153920);
   });
 }
