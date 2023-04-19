@@ -8,7 +8,9 @@ import 'dart:math';
 /// This treatment can lead to surprising results on larger numbers. In
 /// particular, if operands are negative or don’t fit into 32 bits, they’re
 /// likely to produce different results between native and web."
-num bitwiseAnd(num n1, num n2) {
-  return (n1 ~/ pow(2, 32) & n2 ~/ pow(2, 32)) * pow(2, 32) +
-      ((n1 % pow(2, 32)).toInt() & (n2 % pow(2, 32)).toInt());
-}
+num bitwiseAnd(num n1, num n2) =>
+    // Perform & on the 32 leftmost bits and shift the result 32 bits to the
+    // left.
+    (n1 ~/ pow(2, 32) & n2 ~/ pow(2, 32)) * pow(2, 32) +
+    // Perform & on the 32 rightmost bits and add it to the previous result
+    ((n1 % pow(2, 32)).toInt() & (n2 % pow(2, 32)).toInt());
