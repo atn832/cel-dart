@@ -1,10 +1,10 @@
 ## 0.5.3
 
-Fixed lists, indexing and function calls on Web.
+Fixed lists, indexing and function calls on Web ([PR 3](https://github.com/atn832/cel-dart/pull/3)).
 
 ## 0.5.2
 
-Fixed runtime error when running cel in Flutter Web in debug mode.
+Fixed runtime error when running cel in Flutter Web in debug mode (commit [e957ae3](https://github.com/atn832/cel-dart/commit/e957ae325f1798dab2ad3648aa61ed9ca0bfda9d)).
 
 ## 0.5.1+1
 
