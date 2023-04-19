@@ -1,6 +1,9 @@
 // Generated from CEL.g4 by ANTLR 4.11.1
 // ignore_for_file: unused_import, unused_local_variable, prefer_single_quotes
+import 'dart:math';
+
 import 'package:antlr4/antlr4.dart';
+import 'package:cel/src/parser/bitwise.dart';
 
 import 'CELListener.dart';
 import 'CELBaseListener.dart';
@@ -326,7 +329,7 @@ class CELParser extends Parser {
           state = 63;
           _localctx.op = tokenStream.LT(1);
           _la = tokenStream.LA(1)!;
-          if (!(((_la) & ~0x3f) == 0 && ((1 << _la) & 254) != 0)) {
+          if (!(((_la) & ~0x3f) == 0 && bitwiseAnd(pow(2, _la), 254) != 0)) {
             _localctx.op = errorHandler.recoverInline(this);
           } else {
             if (tokenStream.LA(1)! == IntStream.EOF) matchedEOF = true;
@@ -384,7 +387,8 @@ class CELParser extends Parser {
               state = 74;
               _localctx.op = tokenStream.LT(1);
               _la = tokenStream.LA(1)!;
-              if (!(((_la) & ~0x3f) == 0 && ((1 << _la) & 58720256) != 0)) {
+              if (!(((_la) & ~0x3f) == 0 &&
+                  bitwiseAnd(pow(2, _la), 58720256) != 0)) {
                 _localctx.op = errorHandler.recoverInline(this);
               } else {
                 if (tokenStream.LA(1)! == IntStream.EOF) matchedEOF = true;
@@ -562,7 +566,8 @@ class CELParser extends Parser {
               state = 113;
               errorHandler.sync(this);
               _la = tokenStream.LA(1)!;
-              if (((_la) & ~0x3f) == 0 && ((1 << _la) & 135762105344) != 0) {
+              if (((_la) & ~0x3f) == 0 &&
+                  bitwiseAnd(pow(2, _la), 135762105344) != 0) {
                 state = 112;
                 _localctx.args = exprList();
               }
@@ -639,7 +644,8 @@ class CELParser extends Parser {
               state = 135;
               errorHandler.sync(this);
               _la = tokenStream.LA(1)!;
-              if (((_la) & ~0x3f) == 0 && ((1 << _la) & 135762105344) != 0) {
+              if (((_la) & ~0x3f) == 0 &&
+                  bitwiseAnd(pow(2, _la), 135762105344) != 0) {
                 state = 134;
                 _localctx.args = exprList();
               }
@@ -667,7 +673,8 @@ class CELParser extends Parser {
           state = 146;
           errorHandler.sync(this);
           _la = tokenStream.LA(1)!;
-          if (((_la) & ~0x3f) == 0 && ((1 << _la) & 135763153920) != 0) {
+          if (((_la) & ~0x3f) == 0 &&
+              bitwiseAnd(pow(2, _la), 135763153920) != 0) {
             state = 145;
             _localctx.elems = listInit();
           }
@@ -691,7 +698,8 @@ class CELParser extends Parser {
           state = 154;
           errorHandler.sync(this);
           _la = tokenStream.LA(1)!;
-          if (((_la) & ~0x3f) == 0 && ((1 << _la) & 135763153920) != 0) {
+          if (((_la) & ~0x3f) == 0 &&
+              bitwiseAnd(pow(2, _la), 135763153920) != 0) {
             state = 153;
             _localctx.entries = mapInitializerList();
           }

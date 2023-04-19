@@ -1,3 +1,7 @@
+## 0.5.3
+
+Fixed lists, indexing and function calls on Web.
+
 ## 0.5.2
 
 Fixed runtime error when running cel in Flutter Web in debug mode.
