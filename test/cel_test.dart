@@ -507,12 +507,31 @@ void main() {
         expect(p.evaluate({'value': 1}), true);
         expect(p.evaluate({'value': 3}), false);
       });
-      test('string', () {
-        final environment = Environment.standard();
-        final ast = environment.compile("value in ['london', 'paris']");
-        final p = environment.makeProgram(ast);
-        expect(p.evaluate({'value': 'london'}), true);
-        expect(p.evaluate({'value': 'stockholm'}), false);
+      group('string', () {
+        test('with hard coded list', () {
+          final environment = Environment.standard();
+          final ast = environment.compile("value in ['london', 'paris']");
+          final p = environment.makeProgram(ast);
+          expect(p.evaluate({'value': 'london'}), true);
+          expect(p.evaluate({'value': 'stockholm'}), false);
+        });
+        test('with variable list', () {
+          final environment = Environment.standard();
+          final ast = environment.compile("value in cities");
+          final p = environment.makeProgram(ast);
+          expect(
+              p.evaluate({
+                'value': 'london',
+                'cities': ['london', 'paris']
+              }),
+              true);
+          expect(
+              p.evaluate({
+                'value': 'stockholm',
+                'cities': ['london', 'paris']
+              }),
+              false);
+        });
       });
     });
     test('existence a map', () {

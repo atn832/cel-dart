@@ -83,6 +83,9 @@ _nativeToValue(TypeAdapter adapter, dynamic value) {
   if (value is Map) {
     return MapValue.fromNativeKeyValues(value, adapter);
   }
+  if (value is List<String>) {    
+    return ListValue(value.map((e) => StringValue(e)).toList(), adapter);
+  }
   if (value is List<Value>) {
     return ListValue(value, adapter);
   }
