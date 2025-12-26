@@ -2,14 +2,14 @@ import 'package:cel/src/common/types/ref/value.dart';
 import 'package:cel/src/common/types/traits/comparer.dart';
 import 'package:cel/src/common/types/traits/math.dart';
 
-final intType = Type_('int');
+final intType = ValueType('int');
 
 class IntValue extends Value
     implements Comparer, Adder, Divider, Multiplier, Subtractor, Modder {
   IntValue(this.value);
 
   @override
-  Type_ get type => intType;
+  ValueType get type => intType;
 
   @override
   final int value;

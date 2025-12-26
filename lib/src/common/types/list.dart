@@ -8,7 +8,7 @@ import 'package:cel/src/common/types/traits/traits.dart';
 
 // https://github.com/google/cel-go/blob/377a0bba20d07926e0583b4e604509ca7f3583b7/common/types/list.go
 
-final listType = Type_("list", {
+final listType = ValueType("list", {
   Traits.AdderType,
   Traits.ContainerType,
   Traits.IndexerType,
@@ -25,7 +25,7 @@ class ListValue extends Value implements Indexer, Container, Adder {
   final List<Value> value;
 
   @override
-  Type_ get type => listType;
+  ValueType get type => listType;
 
   @override
   Value get(Value index) {

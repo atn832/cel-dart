@@ -7,7 +7,7 @@ import 'package:cel/src/common/types/traits/traits.dart';
 
 // https://github.com/google/cel-go/blob/377a0bba20d07926e0583b4e604509ca7f3583b7/common/types/map.go
 
-final mapType = Type_("map", {
+final mapType = ValueType("map", {
   Traits.ContainerType,
   Traits.IndexerType,
   Traits.IterableType,
@@ -34,7 +34,7 @@ class MapValue extends Value implements Indexer, Container {
   final Map<Value, Value> value;
 
   @override
-  Type_ get type => mapType;
+  ValueType get type => mapType;
 
   @override
   Value get(Value index) {

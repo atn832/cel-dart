@@ -32,7 +32,7 @@ TypeAdapter newRegistry() {
 }
 
 class TypeRegistry implements TypeAdapter {
-  registerTypes(List<Type_> types) {}
+  registerTypes(List<ValueType> types) {}
 
   @override
   Value nativeToValue(value) {
