@@ -1,4 +1,4 @@
-## 0.5.4
+## 0.5.4+1
 
 Fixed string list variables ([PR 5](https://github.com/atn832/cel-dart/pull/5)). Thank you [gatzsche](https://github.com/gatzsche)!
 
