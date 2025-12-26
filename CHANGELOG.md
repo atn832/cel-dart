@@ -1,3 +1,7 @@
+## 0.5.4
+
+Fixed string list variables ([PR 5](https://github.com/atn832/cel-dart/pull/5)). Thank you [gatzsche](https://github.com/gatzsche)!
+
 ## 0.5.3
 
 Fixed lists, indexing and function calls on Web ([PR 3](https://github.com/atn832/cel-dart/pull/3)).

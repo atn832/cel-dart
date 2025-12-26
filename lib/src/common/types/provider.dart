@@ -83,9 +83,11 @@ _nativeToValue(TypeAdapter adapter, dynamic value) {
   if (value is Map) {
     return MapValue.fromNativeKeyValues(value, adapter);
   }
-  if (value is List<String>) {    
+  // https://github.com/google/cel-go/blob/051835c9903525b656a438f778510d9b619b3702/common/types/provider.go#L361-L362
+  if (value is List<String>) {
     return ListValue(value.map((e) => StringValue(e)).toList(), adapter);
   }
+  // https://github.com/google/cel-go/blob/051835c9903525b656a438f778510d9b619b3702/common/types/provider.go#L363-L364
   if (value is List<Value>) {
     return ListValue(value, adapter);
   }
