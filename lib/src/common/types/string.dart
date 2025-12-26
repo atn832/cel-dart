@@ -11,12 +11,12 @@ import 'traits/receiver.dart';
 
 // https://github.com/google/cel-go/blob/377a0bba20d07926e0583b4e604509ca7f3583b7/common/types/string.go
 
-final stringType = Type_('string', {
-  Traits.AdderType,
-  Traits.ComparerType,
-  Traits.MatcherType,
-  Traits.ReceiverType,
-  Traits.SizerType
+final stringType = ValueType('string', {
+  Traits.adderType,
+  Traits.comparerType,
+  Traits.matcherType,
+  Traits.receiverType,
+  Traits.sizerType
 });
 
 class StringValue extends Value implements Receiver, Matcher, Adder, Comparer {
@@ -31,7 +31,7 @@ class StringValue extends Value implements Receiver, Matcher, Adder, Comparer {
   final String value;
 
   @override
-  Type_ get type => stringType;
+  ValueType get type => stringType;
 
   @override
   BooleanValue match(Value pattern) {

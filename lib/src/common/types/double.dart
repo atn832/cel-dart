@@ -6,13 +6,13 @@ import 'package:cel/src/common/types/traits/traits.dart';
 
 // https://github.com/google/cel-go/blob/377a0bba20d07926e0583b4e604509ca7f3583b7/common/types/double.go
 
-final doubleType = Type_('double', {
-  Traits.AdderType,
-  Traits.ComparerType,
-  Traits.DividerType,
-  Traits.MultiplierType,
-  Traits.NegatorType,
-  Traits.SubtractorType
+final doubleType = ValueType('double', {
+  Traits.adderType,
+  Traits.comparerType,
+  Traits.dividerType,
+  Traits.multiplierType,
+  Traits.negatorType,
+  Traits.subtractorType
 });
 
 class DoubleValue extends Value
@@ -20,7 +20,7 @@ class DoubleValue extends Value
   DoubleValue(this.value);
 
   @override
-  Type_ get type => doubleType;
+  ValueType get type => doubleType;
 
   @override
   final double value;
