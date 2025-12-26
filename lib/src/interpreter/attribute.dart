@@ -81,12 +81,12 @@ class AbsoluteAttribute extends NamespaceAttribute {
 class RelativeAttribute extends Attribute {
   RelativeAttribute(this.operand);
 
-  Interpretable operand;
+  final Interpretable operand;
 
   // https://github.com/google/cel-go/blob/32ac6133c6b8eca8bb76e17e6ad50a1eb757778a/interpreter/attributes.go#L570
   @override
   resolve(Activation activation) {
-    final value = operand.evaluate(activation);
+    // final value = operand.evaluate(activation);
     // TODO: support qualifiers.
     throw UnimplementedError();
   }
