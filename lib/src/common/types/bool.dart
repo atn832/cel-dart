@@ -6,7 +6,7 @@ import 'package:cel/src/common/types/traits/traits.dart';
 
 import 'ref/value.dart';
 
-final boolType = ValueType('bool', {Traits.ComparerType, Traits.NegatorType});
+final boolType = ValueType('bool', {Traits.comparerType, Traits.negatorType});
 
 class BooleanValue extends Value implements Negater, Comparer {
   BooleanValue(this.value);

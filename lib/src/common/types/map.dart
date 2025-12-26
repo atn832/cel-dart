@@ -8,10 +8,10 @@ import 'package:cel/src/common/types/traits/traits.dart';
 // https://github.com/google/cel-go/blob/377a0bba20d07926e0583b4e604509ca7f3583b7/common/types/map.go
 
 final mapType = ValueType("map", {
-  Traits.ContainerType,
-  Traits.IndexerType,
-  Traits.IterableType,
-  Traits.SizerType
+  Traits.containerType,
+  Traits.indexerType,
+  Traits.iterableType,
+  Traits.sizerType
 });
 
 class MapValue extends Value implements Indexer, Container {

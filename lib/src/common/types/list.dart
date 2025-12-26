@@ -9,11 +9,11 @@ import 'package:cel/src/common/types/traits/traits.dart';
 // https://github.com/google/cel-go/blob/377a0bba20d07926e0583b4e604509ca7f3583b7/common/types/list.go
 
 final listType = ValueType("list", {
-  Traits.AdderType,
-  Traits.ContainerType,
-  Traits.IndexerType,
-  Traits.IterableType,
-  Traits.SizerType
+  Traits.adderType,
+  Traits.containerType,
+  Traits.indexerType,
+  Traits.iterableType,
+  Traits.sizerType
 });
 
 class ListValue extends Value implements Indexer, Container, Adder {

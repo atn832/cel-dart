@@ -2,33 +2,33 @@
 
 enum Traits {
   // AdderType types provide a '+' operator overload.
-  AdderType,
+  adderType,
   // ComparerType types support ordering comparisons '<', '<=', '>', '>='.
-  ComparerType,
+  comparerType,
   // ContainerType types support 'in' operations.
-  ContainerType,
+  containerType,
   // DividerType types support '/' operations.
-  DividerType,
+  dividerType,
   // FieldTesterType types support the detection of field value presence.
-  FieldTesterType,
+  fieldTesterType,
   // IndexerType types support index access with dynamic values.
-  IndexerType,
+  indexerType,
   // IterableType types can be iterated over in comprehensions.
-  IterableType,
+  iterableType,
   // IteratorType types support iterator semantics.
-  IteratorType,
+  iteratorType,
   // MatcherType types support pattern matching via 'matches' method.
-  MatcherType,
+  matcherType,
   // ModderType types support modulus operations '%'
-  ModderType,
+  modderType,
   // MultiplierType types support '*' operations.
-  MultiplierType,
+  multiplierType,
   // NegatorType types support either negation via '!' or '-'
-  NegatorType,
+  negatorType,
   // ReceiverType types support dynamic dispatch to instance methods.
-  ReceiverType,
+  receiverType,
   // SizerType types support the size() method.
-  SizerType,
+  sizerType,
   // SubtractorType type support '-' operations.
-  SubtractorType
+  subtractorType
 }
