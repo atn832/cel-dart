@@ -2,9 +2,10 @@ import 'package:collection/collection.dart';
 import 'package:antlr4/antlr4.dart';
 import 'package:cel/src/operators/operators.dart';
 
+import 'package:cel/gen/CELLexer.dart';
+import 'package:cel/gen/CELParser.dart';
+
 import '../cel/expr.dart';
-import 'gen/CELLexer.dart';
-import 'gen/CELParser.dart';
 
 /// Low-level Parser that parses CEL code into an [Expr]. Exposed for testing
 /// purposes. Most users should use [Environment.compile] insetad. Based on
