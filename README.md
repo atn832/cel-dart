@@ -1,7 +1,7 @@
 # cel-dart
 
 [![pub package](https://img.shields.io/pub/v/cel.svg)](https://pub.dartlang.org/packages/cel)
-[![Unit Tests](https://github.com/atn832/cel-dart/actions/workflows/dart.yml/badge.svg)](https://github.com/atn832/cel-dart/actions/workflows/dart.yml)
+[![Unit Tests](https://github.com/atn832/cel-dart/actions/workflows/test.yml/badge.svg)](https://github.com/atn832/cel-dart/actions/workflows/test.yml)
 
 This project parses and evaluates Common Expression Language (CEL) programs against some inputs. For example, based on the code `request.auth.claims.group=='admin'` and a `request` object as input, the library will evaluate whether the statement is `true` or `false`. CEL (see the [spec](https://github.com/google/cel-spec)) is a language used by many security projects such as Firestore and Firebase Storage. This project is a simplified port of <https://github.com/google/cel-go>.
 
