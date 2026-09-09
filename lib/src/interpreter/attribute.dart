@@ -33,7 +33,9 @@ class MaybeAttribute extends Attribute {
         continue;
       }
     }
-    throw Exception('Could not find ${toString()} in environment $activation.');
+    // Do not include the activation: it can hold credentials or other
+    // sensitive input, and error messages are commonly logged or displayed.
+    throw Exception('Could not find ${toString()} in the environment.');
   }
 
   @override
