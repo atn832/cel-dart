@@ -47,6 +47,9 @@ _nativeToValue(TypeAdapter adapter, dynamic value) {
   }
   // Pass-through all Value types.
   // https://github.com/google/cel-go/blob/32ac6133c6b8eca8bb76e17e6ad50a1eb757778a/common/types/provider.go#L266-L289
+  if (value is NullValue) {
+    return value;
+  }
   if (value is BooleanValue) {
     return value;
   }
@@ -60,6 +63,9 @@ _nativeToValue(TypeAdapter adapter, dynamic value) {
     return value;
   }
   if (value is MapValue) {
+    return value;
+  }
+  if (value is ListValue) {
     return value;
   }
   // Wrap primitives.
@@ -90,6 +96,13 @@ _nativeToValue(TypeAdapter adapter, dynamic value) {
   // https://github.com/google/cel-go/blob/051835c9903525b656a438f778510d9b619b3702/common/types/provider.go#L363-L364
   if (value is List<Value>) {
     return ListValue(value, adapter);
+  }
+  // Any other list, including a decoded JSON List<dynamic>, converts
+  // element-wise like a map's values do.
+  if (value is List) {
+    return ListValue(
+        value.map((e) => _nativeToValue(adapter, e) as Value).toList(),
+        adapter);
   }
   throw UnimplementedError('Unsupported type for $value: ${value.runtimeType}');
 }
