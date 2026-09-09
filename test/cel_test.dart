@@ -610,6 +610,18 @@ void main() {
       final ast = environment.compile('"abc".contains()');
       expect(() => environment.makeProgram(ast), throwsUnsupportedError);
     });
+    test('unimplemented binary function', () {
+      final environment = Environment.standard();
+      final ast = environment.compile('foo(1, 2)');
+      final p = environment.makeProgram(ast);
+      expect(() => p.evaluate({}), throwsUnsupportedError);
+    });
+    test('unimplemented arity of a string receiver function', () {
+      final environment = Environment.standard();
+      final ast = environment.compile('"abc".size(1)');
+      final p = environment.makeProgram(ast);
+      expect(() => p.evaluate({}), throwsUnsupportedError);
+    });
     group('existence in list', () {
       test('int', () {
         final environment = Environment.standard();
