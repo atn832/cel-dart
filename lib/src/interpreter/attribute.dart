@@ -119,6 +119,12 @@ class StringQualifier extends Qualifier {
     if (object == null) {
       throw StateError('Trying to read value of key $value on $object');
     }
+    // A missing key is a no_such_field error, not null. An explicit null
+    // value is fine.
+    // https://github.com/cel-expr/cel-spec/blob/master/doc/langdef.md#field-selection
+    if (object is Map && !object.containsKey(value)) {
+      throw StateError('no_such_field: the map has no key $value.');
+    }
     return object[value];
   }
 
