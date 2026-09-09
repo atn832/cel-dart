@@ -1,4 +1,8 @@
 import 'package:cel/src/common/types/bool.dart';
+import 'package:cel/src/common/types/int.dart';
+import 'package:cel/src/common/types/list.dart';
+import 'package:cel/src/common/types/map.dart';
+import 'package:cel/src/common/types/string.dart';
 import 'package:cel/src/common/types/traits/comparer.dart';
 import 'package:cel/src/common/types/traits/container.dart';
 import 'package:cel/src/common/types/traits/indexer.dart';
@@ -114,7 +118,26 @@ List<Overload> standardOverloads() {
       return target.get(index);
     }),
 
-    // TODO: implement size.
+    // Size function
+    // https://github.com/google/cel-go/blob/92fda7d38a37f42d4154147896cfd4ebbf8f846e/interpreter/functions/standard.go#L156
+    Overload(
+      'size',
+      unaryOperator: (value) {
+        if (value is StringValue) {
+          // The spec counts Unicode code points, not UTF-16 code units.
+          // https://github.com/cel-expr/cel-spec/blob/master/doc/langdef.md#strings
+          return IntValue(value.value.runes.length);
+        }
+        if (value is ListValue) {
+          return IntValue(value.value.length);
+        }
+        if (value is MapValue) {
+          return IntValue(value.value.length);
+        }
+        throw StateError(
+            '${value.type.name} should be a string, list, or map.');
+      },
+    ),
 
     // In operator
     // https://github.com/google/cel-go/blob/92fda7d38a37f42d4154147896cfd4ebbf8f846e/interpreter/functions/standard.go#L163
