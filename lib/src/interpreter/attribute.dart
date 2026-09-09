@@ -29,7 +29,10 @@ class MaybeAttribute extends Attribute {
     for (final attribute in namespaceAttributes) {
       try {
         return attribute.resolve(activation);
-      } catch (_) {
+      } on MissingNamespaceException {
+        // Only an unresolved namespace is worth trying the next candidate
+        // for. A qualifier error, such as a missing map key, is the answer
+        // and must reach the caller unchanged.
         continue;
       }
     }
@@ -42,6 +45,17 @@ class MaybeAttribute extends Attribute {
 
 abstract class NamespaceAttribute extends Attribute {}
 
+/// Thrown when a namespace candidate does not resolve at all, so
+/// [MaybeAttribute] may try the next one.
+class MissingNamespaceException implements Exception {
+  MissingNamespaceException(this.message);
+
+  final String message;
+
+  @override
+  String toString() => message;
+}
+
 class AbsoluteAttribute extends NamespaceAttribute {
   AbsoluteAttribute(this.namespaceName);
 
@@ -51,13 +65,17 @@ class AbsoluteAttribute extends NamespaceAttribute {
   // See https://github.com/google/cel-go/blob/32ac6133c6b8eca8bb76e17e6ad50a1eb757778a/interpreter/attributes.go#L294.
   @override
   resolve(Activation activation) {
+    final dynamic object;
     try {
       // https://github.com/google/cel-go/blob/32ac6133c6b8eca8bb76e17e6ad50a1eb757778a/interpreter/attributes.go#L300
-      final object = activation.resolveName(namespaceName);
-      return applyQualifiers(activation, object, qualifiers);
+      object = activation.resolveName(namespaceName);
     } catch (e) {
-      throw Exception("Missing attribute $this.");
+      throw MissingNamespaceException("Missing attribute $this.");
     }
+    // Deliberately outside the catch: once the namespace resolves, a
+    // qualifier error is the result of the expression, not a reason to try
+    // another candidate or to report the whole attribute as missing.
+    return applyQualifiers(activation, object, qualifiers);
   }
 
   @override
@@ -118,6 +136,12 @@ class StringQualifier extends Qualifier {
   qualify(Activation activation, object) {
     if (object == null) {
       throw StateError('Trying to read value of key $value on $object');
+    }
+    // A missing key is a no_such_field error, not null. An explicit null
+    // value is fine.
+    // https://github.com/cel-expr/cel-spec/blob/master/doc/langdef.md#field-selection
+    if (object is Map && !object.containsKey(value)) {
+      throw StateError('no_such_field: the map has no key $value.');
     }
     return object[value];
   }

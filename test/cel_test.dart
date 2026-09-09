@@ -131,7 +131,13 @@ void main() {
           .compile('request.auth != null && request.auth.uid == "abc"');
       final p = environment.makeProgram(ast);
 
-      expect(p.evaluate({'request': {}}), false);
+      // A missing key is an error, an explicit null is not.
+      expect(() => p.evaluate({'request': {}}), throwsStateError);
+      expect(
+          p.evaluate({
+            'request': {'auth': null}
+          }),
+          false);
       expect(
           p.evaluate({
             'request': {
@@ -154,16 +160,24 @@ void main() {
       final p = environment.makeProgram(ast);
 
       expect(p.evaluate({'request': null}), false);
-      expect(p.evaluate({'request': {}}), false);
+      // A missing key is an error, an explicit null is not.
+      expect(() => p.evaluate({'request': {}}), throwsStateError);
       expect(
           p.evaluate({
             'request': {'auth': null}
           }),
           false);
       expect(
+          () => p.evaluate({
+                'request': {
+                  'auth': {'something': 123}
+                }
+              }),
+          throwsStateError);
+      expect(
           p.evaluate({
             'request': {
-              'auth': {'something': 123}
+              'auth': {'uid': null}
             }
           }),
           false);
@@ -532,6 +546,76 @@ void main() {
               }),
               false);
         });
+      });
+    });
+    group('missing map keys', () {
+      // A missing key is a no_such_field error, not null.
+      // https://github.com/cel-expr/cel-spec/blob/master/doc/langdef.md#field-selection
+      test('field selection', () {
+        final environment = Environment.standard();
+        final ast = environment.compile('data.missing');
+        final p = environment.makeProgram(ast);
+        expect(() => p.evaluate({'data': {}}), throwsStateError);
+      });
+      test('field selection reports the missing key, not a missing variable',
+          () {
+        final environment = Environment.standard();
+        final ast = environment.compile('data.missing');
+        final p = environment.makeProgram(ast);
+        // Attribute resolution must not mask the qualifier error, which
+        // would report the whole attribute as missing and, on the way,
+        // repeat the activation back to the caller.
+        expect(
+            () => p.evaluate({
+                  'data': {'apiKey': 'sk-secret'}
+                }),
+            throwsA(isA<StateError>().having(
+                (e) => e.message,
+                'message',
+                allOf(
+                    contains('no_such_field'), isNot(contains('sk-secret'))))));
+      });
+      test('an unresolved variable is still a missing attribute', () {
+        final environment = Environment.standard();
+        final ast = environment.compile('nosuchvar.field');
+        final p = environment.makeProgram(ast);
+        expect(() => p.evaluate({}), throwsException);
+      });
+      test('index a map', () {
+        final environment = Environment.standard();
+        final ast = environment.compile("data['missing']");
+        final p = environment.makeProgram(ast);
+        expect(() => p.evaluate({'data': {}}), throwsStateError);
+      });
+      test('index a map literal', () {
+        final environment = Environment.standard();
+        final ast = environment.compile("{'a': 1}['missing']");
+        final p = environment.makeProgram(ast);
+        expect(() => p.evaluate({}), throwsStateError);
+      });
+      test('an explicit null value is not a missing key', () {
+        final environment = Environment.standard();
+        final ast = environment.compile('data.present == null');
+        final p = environment.makeProgram(ast);
+        expect(
+            p.evaluate({
+              'data': {'present': null}
+            }),
+            true);
+      });
+      test('presence can be tested with in', () {
+        final environment = Environment.standard();
+        final ast = environment
+            .compile("'auth' in request && request.auth.uid == 'abc'");
+        final p = environment.makeProgram(ast);
+        expect(p.evaluate({'request': {}}), false);
+        expect(
+            p.evaluate({
+              'request': {
+                'auth': {'uid': 'abc'}
+              }
+            }),
+            true);
       });
     });
     test('existence a map', () {
