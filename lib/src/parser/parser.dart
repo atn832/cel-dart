@@ -245,10 +245,13 @@ Expr visitMemberCall(MemberCallContext tree) {
 
   // Skipped porting visitExprList and visitSlice. They don't seem to be useful.
   // Skipped receiverCallOrMacro.
+  // A receiver call with no arguments, such as `tags.size()`, carries no
+  // argument list at all, so read a missing list as empty instead of
+  // dereferencing null. Same as visitIdentOrGlobalCall.
   return CallExpr(
       function: id,
       target: operand,
-      args: tree.args!.e.map((e) => visit(e)).toList());
+      args: tree.args?.e.map((e) => visit(e)).toList() ?? []);
 }
 
 Expr visitSelect(SelectContext tree) {
@@ -321,8 +324,10 @@ Expr visitIdentOrGlobalCall(IdentOrGlobalCallContext tree) {
   final name = '${tree.leadingDot?.text ?? ''}${tree.id!.text!}';
   if (tree.op != null) {
     // TODO: Handle global call or macro properly.
+    // A call with no arguments, such as `f()`, carries no argument list at
+    // all, so read a missing list as empty instead of dereferencing null.
     return CallExpr(
-        function: name, args: tree.args!.e.map((e) => visit(e)).toList());
+        function: name, args: tree.args?.e.map((e) => visit(e)).toList() ?? []);
   }
   // TODO: Check for reserved identifiers and throw errors.
 
