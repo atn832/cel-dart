@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cel/cel.dart';
 import 'package:cel/src/cel/expr.dart';
 import 'package:cel/src/parser/bitwise.dart';
@@ -73,6 +75,15 @@ void main() {
                     (SelectExpr(field: 'auth', operand: IdentExpr('request')))),
             StringLiteralExpr('abc')
           ]));
+    });
+
+    test('Receiver call without arguments', () {
+      expect(p.parse('tags.size()'),
+          CallExpr(function: 'size', target: IdentExpr('tags'), args: []));
+    });
+
+    test('Global call without arguments', () {
+      expect(p.parse('f()'), CallExpr(function: 'f', args: []));
     });
 
     test('LogicalAnd', () {
@@ -499,6 +510,118 @@ void main() {
       final p = environment.makeProgram(ast);
       expect(p.evaluate({}), 'cel');
     });
+    test('index a map with a null value', () {
+      final environment = Environment.standard();
+      final ast = environment.compile("data['present'] == null");
+      final p = environment.makeProgram(ast);
+      expect(
+          p.evaluate({
+            'data': {'present': null}
+          }),
+          true);
+    });
+    group('list variables', () {
+      test('decoded JSON', () {
+        final environment = Environment.standard();
+        final ast = environment.compile('tags[1] == "b" && "a" in tags');
+        final p = environment.makeProgram(ast);
+        expect(p.evaluate({'tags': jsonDecode('["a", "b"]')}), true);
+      });
+      test('ints', () {
+        final environment = Environment.standard();
+        final ast = environment.compile('value in numbers');
+        final p = environment.makeProgram(ast);
+        expect(
+            p.evaluate({
+              'value': 2,
+              'numbers': [1, 2]
+            }),
+            true);
+      });
+      test('nested', () {
+        final environment = Environment.standard();
+        final ast = environment.compile('items[0][1]');
+        final p = environment.makeProgram(ast);
+        expect(
+            p.evaluate({
+              'items': [
+                [1, 2]
+              ]
+            }),
+            2);
+      });
+    });
+    group('size', () {
+      test('string', () {
+        final environment = Environment.standard();
+        final ast = environment.compile('size(value)');
+        final p = environment.makeProgram(ast);
+        expect(p.evaluate({'value': 'abc'}), 3);
+      });
+      test('string (receiver call)', () {
+        final environment = Environment.standard();
+        final ast = environment.compile('value.size()');
+        final p = environment.makeProgram(ast);
+        expect(p.evaluate({'value': 'abc'}), 3);
+      });
+      test('string counts code points, not UTF-16 code units', () {
+        final environment = Environment.standard();
+        final ast = environment.compile('size(value)');
+        final p = environment.makeProgram(ast);
+        expect(p.evaluate({'value': '\u{1F600}'}), 1);
+        expect(p.evaluate({'value': 'h\u00e9llo'}), 5);
+      });
+      test('list', () {
+        final environment = Environment.standard();
+        final ast = environment.compile('size([1, 2, 3])');
+        final p = environment.makeProgram(ast);
+        expect(p.evaluate({}), 3);
+      });
+      test('list (receiver call)', () {
+        final environment = Environment.standard();
+        final ast = environment.compile('tags.size()');
+        final p = environment.makeProgram(ast);
+        expect(
+            p.evaluate({
+              'tags': ['a', 'b']
+            }),
+            2);
+      });
+      test('map', () {
+        final environment = Environment.standard();
+        final ast = environment.compile("size({'a': 1, 'b': 2})");
+        final p = environment.makeProgram(ast);
+        expect(p.evaluate({}), 2);
+      });
+      test('other types are not supported', () {
+        final environment = Environment.standard();
+        final ast = environment.compile('size(1)');
+        final p = environment.makeProgram(ast);
+        expect(() => p.evaluate({}), throwsStateError);
+      });
+    });
+    test('unimplemented function', () {
+      final environment = Environment.standard();
+      final ast = environment.compile('type(1)');
+      expect(() => environment.makeProgram(ast), throwsUnsupportedError);
+    });
+    test('unimplemented arity of an existing function', () {
+      final environment = Environment.standard();
+      final ast = environment.compile('"abc".contains()');
+      expect(() => environment.makeProgram(ast), throwsUnsupportedError);
+    });
+    test('unimplemented binary function', () {
+      final environment = Environment.standard();
+      final ast = environment.compile('foo(1, 2)');
+      final p = environment.makeProgram(ast);
+      expect(() => p.evaluate({}), throwsUnsupportedError);
+    });
+    test('unimplemented arity of a string receiver function', () {
+      final environment = Environment.standard();
+      final ast = environment.compile('"abc".size(1)');
+      final p = environment.makeProgram(ast);
+      expect(() => p.evaluate({}), throwsUnsupportedError);
+    });
     group('existence in list', () {
       test('int', () {
         final environment = Environment.standard();
@@ -547,6 +670,18 @@ void main() {
       final ast = environment.compile("true ? 1: -1");
       final p = environment.makeProgram(ast);
       expect(p.evaluate({}), 1);
+    });
+    test('ternary operator with a null result', () {
+      final environment = Environment.standard();
+      final ast = environment.compile('true ? null : 1');
+      final p = environment.makeProgram(ast);
+      expect(p.evaluate({}), null);
+    });
+    test('ternary operator with a list result', () {
+      final environment = Environment.standard();
+      final ast = environment.compile('true ? [1, 2] : []');
+      final p = environment.makeProgram(ast);
+      expect(p.evaluate({}), [1, 2]);
     });
     test('a.matches(b)', () {
       final environment = Environment.standard();

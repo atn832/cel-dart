@@ -195,10 +195,10 @@ From <https://github.com/google/cel-spec/blob/master/doc/langdef.md#functions>.
 | `matches` | (string, string) -> bool | Matches first argument against regular expression in second argument. | ✅ |
 |  | string.(string) -> bool | Matches the self argument against regular expression in first argument. | ✅ |
 | `null_type` | type(null) | type denotation | ❌ |
-| `size` | (string) -> int | string length | ❌ |
+| `size` | (string) -> int | string length | ✅ |
 |  | (bytes) -> int | bytes length | ❌ |
-|  | (list(A)) -> int | list size. | ❌ |
-|  | (map(A, B)) -> int | map size. | ❌ |
+|  | (list(A)) -> int | list size. | ✅ |
+|  | (map(A, B)) -> int | map size. | ✅ |
 | `startsWith` | string.(string) -> bool | Tests whether the string operand starts with the prefix argument. | ✅ |
 | `string` | type(string) | type denotation | ❌ |
 |  | (int) -> string | type conversion | ❌ |
