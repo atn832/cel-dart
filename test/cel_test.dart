@@ -132,7 +132,7 @@ void main() {
       final p = environment.makeProgram(ast);
 
       // A missing key is an error, an explicit null is not.
-      expect(() => p.evaluate({'request': {}}), throwsException);
+      expect(() => p.evaluate({'request': {}}), throwsStateError);
       expect(
           p.evaluate({
             'request': {'auth': null}
@@ -161,7 +161,7 @@ void main() {
 
       expect(p.evaluate({'request': null}), false);
       // A missing key is an error, an explicit null is not.
-      expect(() => p.evaluate({'request': {}}), throwsException);
+      expect(() => p.evaluate({'request': {}}), throwsStateError);
       expect(
           p.evaluate({
             'request': {'auth': null}
@@ -173,7 +173,7 @@ void main() {
                   'auth': {'something': 123}
                 }
               }),
-          throwsException);
+          throwsStateError);
       expect(
           p.evaluate({
             'request': {
@@ -555,7 +555,31 @@ void main() {
         final environment = Environment.standard();
         final ast = environment.compile('data.missing');
         final p = environment.makeProgram(ast);
-        expect(() => p.evaluate({'data': {}}), throwsException);
+        expect(() => p.evaluate({'data': {}}), throwsStateError);
+      });
+      test('field selection reports the missing key, not a missing variable',
+          () {
+        final environment = Environment.standard();
+        final ast = environment.compile('data.missing');
+        final p = environment.makeProgram(ast);
+        // Attribute resolution must not mask the qualifier error, which
+        // would report the whole attribute as missing and, on the way,
+        // repeat the activation back to the caller.
+        expect(
+            () => p.evaluate({
+                  'data': {'apiKey': 'sk-secret'}
+                }),
+            throwsA(isA<StateError>().having(
+                (e) => e.message,
+                'message',
+                allOf(
+                    contains('no_such_field'), isNot(contains('sk-secret'))))));
+      });
+      test('an unresolved variable is still a missing attribute', () {
+        final environment = Environment.standard();
+        final ast = environment.compile('nosuchvar.field');
+        final p = environment.makeProgram(ast);
+        expect(() => p.evaluate({}), throwsException);
       });
       test('index a map', () {
         final environment = Environment.standard();
