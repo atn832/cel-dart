@@ -542,6 +542,15 @@ void main() {
       expect(p.evaluate({'key': 'name'}), true);
       expect(p.evaluate({'key': 'description'}), false);
     });
+    test('missing attribute errors do not include the activation', () {
+      final environment = Environment.standard();
+      final ast = environment.compile('nosuchvar');
+      final p = environment.makeProgram(ast);
+      expect(
+          () => p.evaluate({'apiKey': 'sk-secret'}),
+          throwsA(isA<Exception>().having((e) => e.toString(), 'message',
+              allOf(contains('nosuchvar'), isNot(contains('sk-secret'))))));
+    });
     test('ternary operator', () {
       final environment = Environment.standard();
       final ast = environment.compile("true ? 1: -1");
