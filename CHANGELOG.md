@@ -1,3 +1,9 @@
+## 0.6.0
+
+Thank you [leoafarias](https://github.com/leoafarias) for this change!
+
+* **BREAKING CHANGE**: Make a missing map key throw a `no_such_field` error instead of null. ([PR-15](https://github.com/atn832/cel-dart/pull/15))
+
 ## 0.5.6
 
 Thank you [leoafarias](https://github.com/leoafarias) for these changes! [PR-12](https://github.com/atn832/cel-dart/pull/12)
