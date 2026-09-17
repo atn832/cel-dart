@@ -77,7 +77,13 @@ class Planner {
     switch (interpretableArguments.length) {
       // TODO: handle zero functions.
       case 1:
-        return planCallUnary(expression, functionName, functionImplementation!,
+        if (functionImplementation == null) {
+          // Either the function is missing entirely (`type`) or it only has
+          // a receiver overload with more arguments (`"a".contains()`).
+          throw UnsupportedError('Function $functionName with one argument '
+              'is not implemented by this runtime.');
+        }
+        return planCallUnary(expression, functionName, functionImplementation,
             interpretableArguments);
       case 2:
         return planCallBinary(expression, functionName, functionImplementation,
@@ -168,6 +174,11 @@ class Planner {
   }
 
   Interpretable planConst(ConstExpression constant) {
+    // There is no bytes value type yet. Fail here rather than let the
+    // List<int> literal silently become a list of ints.
+    if (constant is BytesLiteralExpr) {
+      throw UnimplementedError('Bytes literals are not supported yet.');
+    }
     // https://github.com/google/cel-go/blob/32ac6133c6b8eca8bb76e17e6ad50a1eb757778a/interpreter/planner.go#L644
     final constantValue = adapter.nativeToValue(constant.value);
     return InterpretableConst(constantValue);

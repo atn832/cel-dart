@@ -73,8 +73,7 @@ class LogicalAndInterpretable implements Interpretable {
 
   @override
   evaluate(Activation activation) {
-    return BooleanValue(leftHandSide.evaluate(activation).value &&
-        rightHandSide.evaluate(activation).value);
+    return _evaluateLogical(activation, leftHandSide, rightHandSide, false);
   }
 }
 
@@ -86,9 +85,33 @@ class LogicalOrInterpretable implements Interpretable {
 
   @override
   evaluate(Activation activation) {
-    return BooleanValue(leftHandSide.evaluate(activation).value ||
-        rightHandSide.evaluate(activation).value);
+    return _evaluateLogical(activation, leftHandSide, rightHandSide, true);
   }
+}
+
+// CEL logical operators are commutative with respect to runtime errors:
+// either decisive operand absorbs the other's error. Keep conditional
+// evaluation separate: its untaken branch must never affect the result.
+BooleanValue _evaluateLogical(Activation activation, Interpretable left,
+    Interpretable right, bool decisive) {
+  Object? firstError;
+  StackTrace? firstStack;
+  for (final operand in [left, right]) {
+    try {
+      final value = operand.evaluate(activation);
+      if (value is! BooleanValue) {
+        throw StateError('no_matching_overload: expected boolean operand.');
+      }
+      if (value.value == decisive) return BooleanValue(decisive);
+    } catch (error, stack) {
+      firstError ??= error;
+      firstStack ??= stack;
+    }
+  }
+  if (firstError != null) {
+    Error.throwWithStackTrace(firstError, firstStack!);
+  }
+  return BooleanValue(!decisive);
 }
 
 class UnaryInterpretable implements Interpretable {
@@ -119,10 +142,16 @@ class BinaryInterpretable implements Interpretable {
   evaluate(Activation activation) {
     final leftValue = leftHandSide.evaluate(activation);
     final rightValue = rightHandSide.evaluate(activation);
-    assert(binaryOperator != null || leftValue is Receiver);
-    return binaryOperator != null
-        ? binaryOperator!(leftValue, rightValue)
-        : (leftValue as Receiver).receive(functionName, '', [rightValue]);
+    if (binaryOperator != null) {
+      return binaryOperator!(leftValue, rightValue);
+    }
+    // An assert would be stripped in release builds and leave the receiver
+    // call to fail as a cast error, so reject the call explicitly.
+    if (leftValue is! Receiver) {
+      throw UnsupportedError('Function $functionName with two arguments is '
+          'not implemented by this runtime.');
+    }
+    return (leftValue as Receiver).receive(functionName, '', [rightValue]);
   }
 }
 
