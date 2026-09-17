@@ -1,3 +1,13 @@
+## 0.5.6
+
+Thank you [leoafarias](https://github.com/leoafarias) for these changes! [PR-12](https://github.com/atn832/cel-dart/pull/12)
+
+- Implemented `size()` for strings, lists and maps.
+- Fixed exception when making calls without arguments.
+- `type(1)` and any other unimplemented unary function now throw `UnsupportedError('Function type with one argument is not implemented by this runtime.')`.
+- Fixed conversion of lists. It now supports any kind of List, including `List<dynamic>`. Also added `NullValue` and `ListValue` to the pass-through list.
+- Fixed a few null exceptions and throw Errors with actual messages instead.
+
 ## 0.5.5
 
 Thank you [leoafarias](https://github.com/leoafarias) for these changes!
