@@ -205,6 +205,43 @@ void main() {
       final p = environment.makeProgram(ast);
       expect(p.evaluate({}), false);
     });
+    group('runtime errors in logical operators', () {
+      // https://github.com/google/cel-spec/blob/master/doc/langdef.md#runtime-errors
+      // Either decisive operand absorbs the other's error, regardless of
+      // order. Otherwise the error propagates.
+      Program program(String input) {
+        final environment = Environment.standard();
+        return environment.makeProgram(environment.compile(input));
+      }
+
+      test('a decisive operand absorbs an error', () {
+        expect(program('false && nosuchvar').evaluate({}), false);
+        expect(program('nosuchvar && false').evaluate({}), false);
+        expect(program('true || nosuchvar').evaluate({}), true);
+        expect(program('nosuchvar || true').evaluate({}), true);
+      });
+      test('a non-decisive operand propagates an error', () {
+        expect(
+            () => program('true && nosuchvar').evaluate({}), throwsException);
+        expect(
+            () => program('nosuchvar && true').evaluate({}), throwsException);
+        expect(
+            () => program('false || nosuchvar').evaluate({}), throwsException);
+        expect(
+            () => program('nosuchvar || false').evaluate({}), throwsException);
+      });
+      test('a non-boolean operand is an error', () {
+        expect(program('1 && false').evaluate({}), false);
+        expect(() => program('1 && true').evaluate({}), throwsStateError);
+        expect(program('"a" || true').evaluate({}), true);
+        expect(() => program('"a" || false').evaluate({}), throwsStateError);
+      });
+      test('the conditional operator only evaluates the selected branch', () {
+        expect(program('true ? 1 : nosuchvar').evaluate({}), 1);
+        expect(() => program('false ? 1 : nosuchvar').evaluate({}),
+            throwsException);
+      });
+    });
     group('Comparisons', () {
       group('<', () {
         test('int', () {
@@ -664,6 +701,15 @@ void main() {
       final p = environment.makeProgram(ast);
       expect(p.evaluate({'key': 'name'}), true);
       expect(p.evaluate({'key': 'description'}), false);
+    });
+    test('missing attribute errors do not include the activation', () {
+      final environment = Environment.standard();
+      final ast = environment.compile('nosuchvar');
+      final p = environment.makeProgram(ast);
+      expect(
+          () => p.evaluate({'apiKey': 'sk-secret'}),
+          throwsA(isA<Exception>().having((e) => e.toString(), 'message',
+              allOf(contains('nosuchvar'), isNot(contains('sk-secret'))))));
     });
     test('ternary operator', () {
       final environment = Environment.standard();

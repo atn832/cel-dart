@@ -73,8 +73,7 @@ class LogicalAndInterpretable implements Interpretable {
 
   @override
   evaluate(Activation activation) {
-    return BooleanValue(leftHandSide.evaluate(activation).value &&
-        rightHandSide.evaluate(activation).value);
+    return _evaluateLogical(activation, leftHandSide, rightHandSide, false);
   }
 }
 
@@ -86,9 +85,33 @@ class LogicalOrInterpretable implements Interpretable {
 
   @override
   evaluate(Activation activation) {
-    return BooleanValue(leftHandSide.evaluate(activation).value ||
-        rightHandSide.evaluate(activation).value);
+    return _evaluateLogical(activation, leftHandSide, rightHandSide, true);
   }
+}
+
+// CEL logical operators are commutative with respect to runtime errors:
+// either decisive operand absorbs the other's error. Keep conditional
+// evaluation separate: its untaken branch must never affect the result.
+BooleanValue _evaluateLogical(Activation activation, Interpretable left,
+    Interpretable right, bool decisive) {
+  Object? firstError;
+  StackTrace? firstStack;
+  for (final operand in [left, right]) {
+    try {
+      final value = operand.evaluate(activation);
+      if (value is! BooleanValue) {
+        throw StateError('no_matching_overload: expected boolean operand.');
+      }
+      if (value.value == decisive) return BooleanValue(decisive);
+    } catch (error, stack) {
+      firstError ??= error;
+      firstStack ??= stack;
+    }
+  }
+  if (firstError != null) {
+    Error.throwWithStackTrace(firstError, firstStack!);
+  }
+  return BooleanValue(!decisive);
 }
 
 class UnaryInterpretable implements Interpretable {
