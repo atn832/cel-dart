@@ -24,7 +24,15 @@ class StringValue extends Value implements Receiver, Matcher, Adder, Comparer {
 
   @override
   receive(String function, String overload, List<Value> arguments) {
-    return stringOneArgOverloads[function]!(value, arguments.first);
+    final implementation = stringOneArgOverloads[function];
+    if (implementation == null) {
+      // Reached by a receiver call that no string overload accepts, such as
+      // `"abc".size(1)`. Name the problem instead of dereferencing null.
+      throw UnsupportedError(
+          'Function $function with one argument is not implemented for '
+          'strings.');
+    }
+    return implementation(value, arguments.first);
   }
 
   @override
