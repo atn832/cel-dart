@@ -103,6 +103,21 @@ void main() {
             ])
           ]));
     });
+
+    group('malformed expressions', () {
+      for (final input in [
+        '((',
+        '1 +* 2',
+        'data..x',
+        '&&',
+        'flag +',
+        '"unterminated',
+      ]) {
+        test(input, () {
+          expect(() => p.parse(input), throwsFormatException);
+        });
+      }
+    });
   });
 
   group('program', () {
@@ -512,7 +527,7 @@ void main() {
         });
         test('double', () {
           final environment = Environment.standard();
-          final ast = environment.compile('27.5 / 10.');
+          final ast = environment.compile('27.5 / 10.0');
           final p = environment.makeProgram(ast);
           expect(p.evaluate({}), 2.75);
         });
@@ -850,6 +865,27 @@ void main() {
       final p = environment.makeProgram(ast);
       expect(p.evaluate({'value': 'rare'}), true);
       expect(p.evaluate({'value': 'donut'}), false);
+    });
+    group('malformed expressions', () {
+      test('valid control', () {
+        final environment = Environment.standard();
+        final ast = environment.compile('1 + 2');
+        final p = environment.makeProgram(ast);
+        expect(p.evaluate({}), 3);
+      });
+      for (final input in [
+        '((',
+        '1 +* 2',
+        'data..x',
+        '&&',
+        'flag +',
+        '"unterminated',
+      ]) {
+        test(input, () {
+          final environment = Environment.standard();
+          expect(() => environment.compile(input), throwsFormatException);
+        });
+      }
     });
   });
 

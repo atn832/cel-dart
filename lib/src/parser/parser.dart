@@ -12,13 +12,36 @@ import '../cel/expr.dart';
 /// https://github.com/google/cel-go/blob/442811f1e440a2052c68733a4dca0ab3e8898948/parser/parser.go#L359-L443.
 class Parser {
   Expr parse(String input) {
+    // ANTLR's default listeners log syntax errors to stderr and recover,
+    // which lets malformed input evaluate to a value (for example `((` and
+    // `"unterminated` evaluate to `'<<error>>'`, and `1 +* 2` evaluates to
+    // `3`). Replace them on both the lexer and parser so any syntax error
+    // throws a FormatException instead.
+    final errorListener = _ThrowingErrorListener();
     final lexer = CELLexer(InputStream.fromString(input));
+    lexer.removeErrorListeners();
+    lexer.addErrorListener(errorListener);
     final tokens = CommonTokenStream(lexer);
     final parser = CELParser(tokens);
-    parser.addErrorListener(DiagnosticErrorListener());
+    parser.removeErrorListeners();
+    parser.addErrorListener(errorListener);
     parser.buildParseTree = true;
     final tree = parser.start();
     return visit(tree);
+  }
+}
+
+class _ThrowingErrorListener extends BaseErrorListener {
+  @override
+  void syntaxError(
+    Recognizer<ATNSimulator> recognizer,
+    Object? offendingSymbol,
+    int? line,
+    int charPositionInLine,
+    String msg,
+    RecognitionException? e,
+  ) {
+    throw FormatException('line $line:$charPositionInLine $msg');
   }
 }
 
