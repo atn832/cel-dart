@@ -1,3 +1,7 @@
+## 0.6.1
+
+Throw `FormatException` on syntax and lexer errors instead of recovering ([PR-16](https://github.com/atn832/cel-dart/pull/16)). Thank you [leoafarias](https://github.com/leoafarias)!
+
 ## 0.6.0
 
 Thank you [leoafarias](https://github.com/leoafarias) for this change!
